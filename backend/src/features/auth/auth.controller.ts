@@ -1,13 +1,21 @@
-export const signUp = async (req: any, res: any) => {
-  try {
-    const { name } = req.body;
+import { Request, Response } from "express";
+import { signUpServ } from "./auth.service";
 
-    if (!name) {
-      return res.status(400).json({ message: 'Name is required' });
+export const signUp = async(req:Request, res:Response)=>{
+    try{
+        const data = req.body;
+        const userData = await signUpServ(data);
+        res.status(201).json({
+            success:true,
+            message: 'successfully create this account',
+            data:userData
+        })
     }
-
-    res.status(200).send(`Hi ${name}`);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message || 'Something went wrong' });
-  }
-};
+    catch(err){
+        res.status(500).send({
+            success:false, 
+            message: 'Error occured into auth controller!!!!!'
+        });
+        console.log('Error occured into auth controller!!!!!', err);
+    }
+}
