@@ -11,10 +11,10 @@ export const signUp = async(req:Request, res:Response)=>{
             data:userData
         })
     }
-    catch(err){
+    catch(err:any){
         res.status(500).send({
             success:false, 
-            message: 'Error occured into auth controller!!!!!'
+            message: err.message
         });
         console.log('Error occured into auth controller!!!!!', err);
     }
