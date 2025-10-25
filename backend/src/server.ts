@@ -1,9 +1,16 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { dbConncet } from './config/db';
+import { authRouter } from './features/auth/auth.route';
 
 const app = express();
 dotenv.config();
+app.use(express.json());
+
+
+
+
+app.use('/api/auth', authRouter);
 
 
 
