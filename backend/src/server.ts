@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import { dbConncet } from './config/db';
 
 const app = express();
 dotenv.config();
-
 
 
 
@@ -12,6 +12,7 @@ app.get('/', (req,res)=>{
 })
 
 const port = process.env.PORT || 5000;
-app.listen(port, ()=>{
+app.listen(port, async()=>{
+    await dbConncet();
     console.log('Server running at port', port);
 })
