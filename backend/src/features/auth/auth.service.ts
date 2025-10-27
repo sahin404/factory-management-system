@@ -1,6 +1,9 @@
 import User from './auth.model';
 import bcrypt from 'bcrypt';
 import { IUserCreate } from './auth.types';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const signUpServ = async (data: IUserCreate) => {
   try {
@@ -32,3 +35,33 @@ export const signUpServ = async (data: IUserCreate) => {
     throw err;
   }
 };
+
+export const loginServ = async({email,password}:{email:string, password:string})=>{
+  try{
+    //check if email doesnot exists
+    const existingUser = await User.findOne({
+      email
+    })
+    if(!existingUser) throw new Error("Email does not exists! Please sign up first.");
+
+    //check the password
+    const passwordOk = await bcrypt.compare(password, existingUser.password);
+    if(!passwordOk) throw new Error("Incorrect Email or password! please try again");
+
+    //json token creation
+    const token = jwt.sign({id:existingUser.id, email:existingUser.email}, process.env.SECRET_KEY || "", {expiresIn:'1d'});
+
+    return {
+      success:true,
+      token,
+      data:{
+        name: existingUser.name,
+        email: existingUser.email,
+        role: existingUser.role,
+      }
+    }
+  }
+  catch(err:any){
+    throw err;
+  }
+}
