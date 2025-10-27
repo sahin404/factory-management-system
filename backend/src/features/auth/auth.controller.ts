@@ -5,7 +5,6 @@ import { singupValidation } from "./aut.validation";
 export const signUp = async (req: Request, res: Response) => {
   try {
     const data = req.body;
-    
     //validation
     const validate = singupValidation.safeParse(data);
     if(!validate.success){
