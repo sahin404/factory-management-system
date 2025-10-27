@@ -1,9 +1,21 @@
 import { Request, Response } from "express";
 import { signUpServ, loginServ } from "./auth.service";
+import { singupValidation } from "./aut.validation";
 
 export const signUp = async (req: Request, res: Response) => {
   try {
     const data = req.body;
+    
+    //validation
+    const validate = singupValidation.safeParse(data);
+    if(!validate.success){
+        return res.status(400).json({
+            success:false,
+            message: validate.error.issues[0].message,
+        })
+    }
+
+    // call for function
     const userData = await signUpServ(data);
     res.status(201).json({
       success: true,
