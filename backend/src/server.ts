@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { dbConncet } from './config/db';
 import { authRouter } from './features/auth/auth.route';
 import employeeRouter from './features/employee/employee.route';
+import { balanceRouter } from './features/balance/balance.route';
 
 const app = express();
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRouter);
 app.use('/api/employee', employeeRouter);
+app.use('/api/balance', balanceRouter);
 
 
 
