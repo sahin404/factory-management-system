@@ -1,5 +1,5 @@
 import express from 'express';
-import { addExpenseController, getExpenseController } from './expense.controller';
+import { addExpenseController, getExpenseController, updateExpenseController } from './expense.controller';
 
 
 export const expenseRouter = express.Router();
@@ -7,5 +7,5 @@ export const expenseRouter = express.Router();
 
 expenseRouter.get('/', getExpenseController);
 expenseRouter.post('/', addExpenseController);
-// expenseRouter.patch('/', );
+expenseRouter.put('/:id', updateExpenseController);
 // expenseRouter.delete('/', );

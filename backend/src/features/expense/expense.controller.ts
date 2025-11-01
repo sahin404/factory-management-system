@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addExpense, getExpense } from "./expense.service";
+import { addExpense, getExpense, updateExpense } from "./expense.service";
 
 //get top 10 expenses
 export const getExpenseController = async (req: Request, res: Response) => {
@@ -29,12 +29,33 @@ export const addExpenseController = async (req: Request, res: Response) => {
       success: true,
       message: "Added Expense Successfully",
     });
-
   } catch (err: any) {
     console.log(err);
     res.status(500).json({
       success: false,
       message: "An error occured to adding expenses",
+      error: err,
+    });
+  }
+};
+
+// update expense
+export const updateExpenseController = async (req: Request, res: Response) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+    data.amount = Number(data.amount);
+    const result = await updateExpense({id, ...data});
+    res.status(200).json({
+        success:true,
+        data: result,
+        message:'Update Amount Successfully!',
+    })
+  } catch (err: any) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "An error occured to update expenses",
       error: err,
     });
   }

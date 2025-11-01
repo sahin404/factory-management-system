@@ -22,3 +22,26 @@ export const addExpense = async(data:{title:string, description:string, amount:n
 
     return newExpense;
 }
+
+//update expense
+export const updateExpense = async(data:{id:string, title:string,description:string,amount:number})=>{
+    const {id, title, description, amount} = data;
+    
+    const expense  = await Expense.findById(id);
+    if(!expense) throw new Error('Expense is not found!');
+
+    const balance = await Balance.findOne();
+    if(!balance) throw new Error('Balance is not found!');
+
+    // update main balance
+    balance.balance += expense.amount -amount;
+    await balance.save();
+
+    //update expense field
+    expense.title = title;
+    expense.description = description;
+    expense.amount = amount;
+    await expense.save();
+    
+    return expense;
+}
