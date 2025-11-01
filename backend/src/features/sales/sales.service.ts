@@ -37,3 +37,4 @@ export const sellProduct = async (data: SaleData) => {
     balance: balance.balance,
   };
 };
+

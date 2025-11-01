@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { sellProduct } from "./selles.service";
+import { saleProduct } from "./sales.service";
 
 // Sell product
-export const sellProductController = async (req: Request, res: Response) => {
+export const saleProductController = async (req: Request, res: Response) => {
   try {
     const { quantity } = req.body;
 
@@ -13,7 +13,7 @@ export const sellProductController = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await sellProduct({ quantity: Number(quantity) });
+    const result = await saleProduct({ quantity: Number(quantity) });
 
     res.status(200).json({
       success: true,
