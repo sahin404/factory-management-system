@@ -1,11 +1,11 @@
 import express from 'express';
-import { getExpenseController } from './expense.controller';
+import { addExpenseController, getExpenseController } from './expense.controller';
 
 
 export const expenseRouter = express.Router();
 
 
 expenseRouter.get('/', getExpenseController);
+expenseRouter.post('/', addExpenseController);
 // expenseRouter.patch('/', );
 // expenseRouter.delete('/', );
-// expenseRouter.post('/', );
