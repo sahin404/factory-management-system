@@ -10,6 +10,7 @@ export const getExpense = async() =>{
 // Add expenses
 export const addExpense = async(data:{title:string, description:string, amount:number})=>{
     // data: title, description, amount
+    data.amount = Number(data.amount);
     const newExpense = new Expense(data);
     await newExpense.save();
 
