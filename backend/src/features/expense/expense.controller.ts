@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addExpense, getExpense, updateExpense } from "./expense.service";
+import { addExpense, deleteExpense, getExpense, updateExpense } from "./expense.service";
 
 //get top 10 expenses
 export const getExpenseController = async (req: Request, res: Response) => {
@@ -57,6 +57,28 @@ export const updateExpenseController = async (req: Request, res: Response) => {
       success: false,
       message: "An error occured to update expenses",
       error: err,
+    });
+  }
+};
+
+
+//delete expense
+export const deleteExpenseController = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const result = await deleteExpense(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Expense deleted successfully!",
+      data: result,
+    });
+  } catch (err: any) {
+    console.error("Error deleting expense:", err.message || err);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while deleting expense",
+      error: err.message || err,
     });
   }
 };

@@ -45,3 +45,17 @@ export const updateExpense = async(data:{id:string, title:string,description:str
     
     return expense;
 }
+
+//delete expense
+export const deleteExpense = async(id:string)=>{
+    const result = await Expense.findByIdAndDelete(id);
+    if(!result) throw new Error('Expense Not found!');
+
+    //update main balance
+    const balance = await Balance.findOne();
+    if(!balance) throw new Error('Balance is not found!');
+
+    balance.balance += result.amount;
+    balance.save();
+    return result;
+}
