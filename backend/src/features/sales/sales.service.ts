@@ -7,7 +7,7 @@ interface SaleData {
 }
 
 // Sell product
-export const sellProduct = async (data: SaleData) => {
+export const saleProduct = async (data: SaleData) => {
   const { quantity } = data;
 
   const product = await Production.findOne();

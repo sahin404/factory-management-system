@@ -50,4 +50,5 @@ const userSchema = new mongoose.Schema({
 // Auto increment employeeId
 userSchema.plugin(AutoIncrement, { inc_field: 'employeeId' });
 
-export default mongoose.model('User', userSchema);
+const User =  mongoose.model('User', userSchema);
+export default User;

@@ -54,7 +54,7 @@ export const loginServ = async({email,password}:{email:string, password:string})
     return {
       success:true,
       token,
-      data:{
+      user:{
         name: existingUser.name,
         email: existingUser.email,
         role: existingUser.role,

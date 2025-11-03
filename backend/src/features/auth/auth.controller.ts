@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { signUpServ, loginServ } from "./auth.service";
 import { singupValidation } from "./aut.validation";
 
+// signup
 export const signUp = async (req: Request, res: Response) => {
   try {
     const data = req.body;
@@ -30,6 +31,7 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
+// login
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -46,3 +48,22 @@ export const login = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+// find logged in user
+export const checkAuth = async(req:Request, res:Response)=>{
+  try{
+    console.log("hello");
+    res.status(200).json({
+      success:true,
+      data: (req as any).user
+    })
+  }
+  catch(err:any){
+    res.status(400).json({
+      success:false,
+      message:"No logged in user found!"
+    })
+    console.log("No logged in user found!", err);
+  }
+}

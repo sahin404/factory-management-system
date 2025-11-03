@@ -17,4 +17,4 @@ const productionSchema = new mongoose.Schema({
 
 const Production = mongoose.model('Production', productionSchema);
 
-export default Production;
+export default Production; 

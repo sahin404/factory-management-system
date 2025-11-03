@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import { dbConncet } from './config/db';
 import { authRouter } from './features/auth/auth.route';
 import employeeRouter from './features/employee/employee.route';
@@ -13,7 +14,10 @@ dotenv.config();
 app.use(express.json());
 
 
-
+app.use(cors({
+  origin: 'http://localhost:3001',
+  credentials: true
+}));
 
 app.use('/api/auth', authRouter);
 app.use('/api/employee', employeeRouter);
