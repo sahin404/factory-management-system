@@ -12,7 +12,15 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    
   ]),
+  ...compat.config({
+    extends: ['next'],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "error"
+    },
+  }),
+  
 ]);
 
 export default eslintConfig;
