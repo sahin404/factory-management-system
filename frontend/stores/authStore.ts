@@ -16,6 +16,10 @@ interface LoginResponse{
     }
 }
 
+interface CheckAuth{
+    data:User
+}
+
 interface AuthState {
   user: User | null;
   isLoading: boolean;
@@ -30,13 +34,30 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoading: true,
   isLoggingIn: false,
 
-  // Login user
+  
+  // check current user
+  checkCurrentUser: async()=>{
+    set({isLoading:true});
+
+    try{
+        const res = await axiosInstance.get<CheckAuth>('/auth/me');
+        set({user:res.data.data});
+    }
+    catch(err:any){
+
+    }
+    finally{
+        set({isLoading:false});
+    }
+  },
+
+  // login user
   login: async (data) => {
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post<LoginResponse>("/auth/login", data);
       set({ user: res.data.data.user });
-
+    
       // set jwt token into local storage
       localStorage.setItem('token', res.data.data.token);
       toast.success("Logged in successfully!");

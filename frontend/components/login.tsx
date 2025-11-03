@@ -22,7 +22,6 @@ function Login5() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(formData);
-    console.log(user);
   };
 
   return (
