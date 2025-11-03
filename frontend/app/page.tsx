@@ -1,16 +1,8 @@
+import React from 'react'
 
-import Login5 from "@/components/login"
-import { useAuthStore } from "@/stores/authStore"
-
-
-const page = async() => {
-  // const {checkCurrentUser} = useAuthStore();
-  // const user = await checkCurrentUser();
-  // console.log(user);
+const page = () => {
   return (
-    <div>
-      <Login5></Login5>
-    </div>
+    <div>page</div>
   )
 }
 
