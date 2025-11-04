@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { Eye, EyeOff, Loader } from "lucide-react";
+import { Divide, Eye, EyeOff, Loader } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
 
@@ -14,7 +14,7 @@ function Login5() {
   const router = useRouter();
 
   //call auth store
-  const { user, checkCurrentUser, login, isLoggingIn } = useAuthStore();
+  const { user, checkCurrentUser, login, isLoggingIn, errorMessage} = useAuthStore();
 
   useEffect(()=>{
     const checkUser = async() =>{
@@ -90,7 +90,11 @@ function Login5() {
               </button>
             </div>
       </div>
-
+      {/* show error message */}
+      <div>
+        {errorMessage && <div className="text-sm text-red-500">{errorMessage}</div>}
+        
+      </div>
       <button
         type="submit"
         className="w-full h-10 text-center bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"

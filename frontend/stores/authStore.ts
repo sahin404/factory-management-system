@@ -24,6 +24,7 @@ interface AuthState {
   user: User | null;
   isLoading: boolean;
   isLoggingIn: boolean;
+  errorMessage:string;
   checkCurrentUser: () => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
   //   logout: () => Promise<void>;
@@ -33,6 +34,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   isLoading: true,
   isLoggingIn: false,
+  errorMessage:'',
 
   // check current user
   checkCurrentUser: async () => {
@@ -59,7 +61,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       toast.success("Logged in successfully!");
     } catch (err: any) {
       console.log(err.response?.data || err.message);
-      toast.error("Invalid credentials");
+      set({errorMessage:"Invalid Credentials. Try Again!"})
     } finally {
       set({ isLoggingIn: false });
     }
