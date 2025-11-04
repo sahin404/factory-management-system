@@ -9,24 +9,24 @@ interface User {
   role: string;
 }
 
-interface LoginResponse{
-    data:{
-        token:string,
-        user:User
-    }
+interface LoginResponse {
+  data: {
+    token: string;
+    user: User;
+  };
 }
 
-interface CheckAuth{
-    data:User
+interface CheckAuth {
+  data: User;
 }
 
 interface AuthState {
   user: User | null;
   isLoading: boolean;
   isLoggingIn: boolean;
- // checkAuth: () => Promise<void>;
+  checkCurrentUser: () => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
-//   logout: () => Promise<void>;
+  //   logout: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -34,20 +34,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoading: true,
   isLoggingIn: false,
 
-  
   // check current user
-  checkCurrentUser: async()=>{
-    set({isLoading:true});
+  checkCurrentUser: async () => {
+    set({ isLoading: true });
 
-    try{
-        const res = await axiosInstance.get<CheckAuth>('/auth/me');
-        set({user:res.data.data});
-    }
-    catch(err:any){
-
-    }
-    finally{
-        set({isLoading:false});
+    try {
+      const res = await axiosInstance.get<CheckAuth>("/auth/me");
+      set({ user: res.data.data });
+    } catch (err: any) {
+    } finally {
+      set({ isLoading: false });
     }
   },
 
@@ -57,18 +53,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const res = await axiosInstance.post<LoginResponse>("/auth/login", data);
       set({ user: res.data.data.user });
-    
+
       // set jwt token into local storage
-      localStorage.setItem('token', res.data.data.token);
+      localStorage.setItem("token", res.data.data.token);
       toast.success("Logged in successfully!");
-    }
-    catch (err: any) {
+    } catch (err: any) {
       console.log(err.response?.data || err.message);
       toast.error("Invalid credentials");
-    }
-    finally {
+    } finally {
       set({ isLoggingIn: false });
     }
   },
-
 }));
