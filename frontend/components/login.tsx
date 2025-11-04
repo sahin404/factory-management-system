@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
 
@@ -86,9 +86,10 @@ function Login5() {
 
       <button
         type="submit"
-        className="w-full h-10 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"
+        className="w-full h-10 text-center bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition"
+        disabled={isLoggingIn}
       >
-        Sign In
+        {isLoggingIn? <div className="flex gap-2 justify-center"> Signing In <Loader className="animate-spin" /></div>: 'Sign In'}
       </button>
     </form>
   </div>
