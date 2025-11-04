@@ -53,7 +53,6 @@ export const login = async (req: Request, res: Response) => {
 // find logged in user
 export const checkAuth = async(req:Request, res:Response)=>{
   try{
-    console.log("hello");
     res.status(200).json({
       success:true,
       data: (req as any).user
