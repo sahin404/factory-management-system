@@ -1,19 +1,24 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
+import { useRouter } from "next/navigation";
 
 
 function Login5() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-
   const [formData, setFormData] = useState({
     email:"",
     password:""
   })
+  const router = useRouter();
 
   //call auth store
-  const {user, login} = useAuthStore();
+  const { user, login, isLoggingIn } = useAuthStore();
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
 
   const togglePassword = () => {
     setPasswordVisible(!passwordVisible);
@@ -24,6 +29,7 @@ function Login5() {
     login(formData);
   };
 
+ 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
   <div className="w-full max-w-md mx-auto border rounded-xl shadow-md p-10 space-y-6 bg-white">
