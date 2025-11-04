@@ -14,7 +14,14 @@ function Login5() {
   const router = useRouter();
 
   //call auth store
-  const { user, login, isLoggingIn } = useAuthStore();
+  const { user, checkCurrentUser, login, isLoggingIn } = useAuthStore();
+
+  useEffect(()=>{
+    const checkUser = async() =>{
+      await checkCurrentUser();
+    }
+    checkUser();
+  },[checkCurrentUser])
 
   useEffect(() => {
     if (user) router.push("/");
