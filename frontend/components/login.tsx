@@ -24,7 +24,12 @@ function Login5() {
   },[checkCurrentUser])
 
   useEffect(() => {
-    if (user) router.push("/");
+    if (user) {
+      if(user.role === 'admin') router.push('/dashboard/overview/admin');
+      if(user.role === 'manager') router.push('/dashboard/overview/manager');
+      if(user.role === 'accountant') router.push('/dashboard/overview/accountant');
+      if(user.role === 'employee') router.push('/dashboard/overview/employee');
+    }
   }, [user, router]);
 
   const togglePassword = () => {

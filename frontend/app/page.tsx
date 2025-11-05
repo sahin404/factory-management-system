@@ -19,13 +19,13 @@ const HomePage = () => {
     }
   }, [user, isLoading, router]);
 
-  if (isLoading) return <CustomLoading></CustomLoading>;
+  if (isLoading || !user) return <CustomLoading></CustomLoading>;
 
-  if (!user) return <CustomLoading></CustomLoading>;
+
 
   return (
     <div>
-      Hello, {user?.name}. You are {user?.role}
+      
     </div>
   );
 };
