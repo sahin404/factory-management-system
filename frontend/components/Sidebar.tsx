@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/stores/authStore";
 import { useEffect, useState } from "react";
 import { Separator } from "./ui/separator";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, User } from "lucide-react";
 import Link from "next/link";
 import {
   Home,
@@ -15,6 +15,8 @@ import {
   Package,
 } from "lucide-react";
 import SidebarSkeleton from "./SidebarSkeleton";
+import Image from "next/image";
+import { Button } from "./ui/button";
 
 const Sidebar = () => {
   const { user, isLoading, checkCurrentUser } = useAuthStore();
@@ -241,18 +243,17 @@ const Sidebar = () => {
             })}
           </div>
         )}
-
       </ul>
 
-      {/* Footer / Logout */}
+      {/* footer */}
       <div className="mt-auto pt-4">
-        <Separator className="bg-gray-400 my-2" />
-        <button
-          onClick={() => console.log("Logout")}
-          className="w-full text-left px-4 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-200"
-        >
-          Logout
-        </button>
+        <Separator className="bg-gray-400 my-4" />
+        <div className="flex items-center gap-2 px-4 py-2 bg-green-800/70 rounded-lg">
+          <span> <User></User> </span>
+          <span className="text-green-100 font-medium text-sm">
+            {user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard
+          </span>
+        </div>
       </div>
     </div>
   );
