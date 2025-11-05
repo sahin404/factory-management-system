@@ -14,6 +14,7 @@ import {
   FileText,
   Package,
 } from "lucide-react";
+import SidebarSkeleton from "./SidebarSkeleton";
 
 const Sidebar = () => {
   const { user, isLoading, checkCurrentUser } = useAuthStore();
@@ -26,7 +27,7 @@ const Sidebar = () => {
     checkAuth();
   }, [checkCurrentUser]);
 
-  if (!user || isLoading) return <div className="p-5">Loading Sidebar...</div>;
+  if (!user || isLoading) return <SidebarSkeleton></SidebarSkeleton>;
 
   // Admin
   const AdminMenus = [
@@ -240,7 +241,7 @@ const Sidebar = () => {
             })}
           </div>
         )}
-        
+
       </ul>
 
       {/* Footer / Logout */}
