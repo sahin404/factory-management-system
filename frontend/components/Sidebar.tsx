@@ -63,6 +63,7 @@ const Sidebar = () => {
       icon: Package,
     },
   ];
+
   // Accountant menus
   const AccountantMenus = [
     {
@@ -96,7 +97,8 @@ const Sidebar = () => {
 
       {/* Menu Items */}
       <ul className="flex-1 overflow-y-auto">
-        {user.role === "employee" && (
+        {/* if user is admin */}
+        {user.role === "admin" && (
           <div className="space-y-3">
             {AdminMenus.map((menu) => {
               const Icon = menu.icon; // icon component
@@ -130,6 +132,115 @@ const Sidebar = () => {
             })}
           </div>
         )}
+
+        {/* if user is manager */}
+        {user.role === "manager" && (
+          <div className="space-y-3">
+            {ManagerMenus.map((menu) => {
+              const Icon = menu.icon; // icon component
+              const isActive = menu.name === activeMenu;
+
+              return (
+                <li key={menu.id}>
+                  <Link
+                    href={menu.link}
+                    onClick={() => setActiveMenu(menu.name)}
+                    className={`
+            flex items-center justify-between w-full px-4 py-2 rounded-lg
+            ${
+              isActive
+                ? "bg-green-700 text-white font-medium"
+                : "hover:bg-green-800 hover:text-white"
+            }
+            transition-colors duration-200
+          `}
+                  >
+                    <span className="flex items-center gap-3">
+                      <Icon className="w-5 h-5" /> {/* Lucide icon */}
+                      {menu.name}
+                    </span>
+                    {isActive && (
+                      <ChevronRight size={16} className="text-white" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </div>
+        )}
+
+        {/* if user is accountant */}
+        {user.role === "accountant" && (
+          <div className="space-y-3">
+            {AccountantMenus.map((menu) => {
+              const Icon = menu.icon; // icon component
+              const isActive = menu.name === activeMenu;
+
+              return (
+                <li key={menu.id}>
+                  <Link
+                    href={menu.link}
+                    onClick={() => setActiveMenu(menu.name)}
+                    className={`
+            flex items-center justify-between w-full px-4 py-2 rounded-lg
+            ${
+              isActive
+                ? "bg-green-700 text-white font-medium"
+                : "hover:bg-green-800 hover:text-white"
+            }
+            transition-colors duration-200
+          `}
+                  >
+                    <span className="flex items-center gap-3">
+                      <Icon className="w-5 h-5" /> {/* Lucide icon */}
+                      {menu.name}
+                    </span>
+                    {isActive && (
+                      <ChevronRight size={16} className="text-white" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </div>
+        )}
+
+        {/* if user is employee */}
+        {user.role === "employee" && (
+          <div className="space-y-3">
+            {EmployeeMenus.map((menu) => {
+              const Icon = menu.icon; // icon component
+              const isActive = menu.name === activeMenu;
+
+              return (
+                <li key={menu.id}>
+                  <Link
+                    href={menu.link}
+                    onClick={() => setActiveMenu(menu.name)}
+                    className={`
+            flex items-center justify-between w-full px-4 py-2 rounded-lg
+            ${
+              isActive
+                ? "bg-green-700 text-white font-medium"
+                : "hover:bg-green-800 hover:text-white"
+            }
+            transition-colors duration-200
+          `}
+                  >
+                    <span className="flex items-center gap-3">
+                      <Icon className="w-5 h-5" /> {/* Lucide icon */}
+                      {menu.name}
+                    </span>
+                    {isActive && (
+                      <ChevronRight size={16} className="text-white" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </div>
+        )}
+        
       </ul>
 
       {/* Footer / Logout */}
