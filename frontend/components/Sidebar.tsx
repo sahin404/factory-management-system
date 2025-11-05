@@ -5,6 +5,15 @@ import { useEffect, useState } from "react";
 import { Separator } from "./ui/separator";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import {
+  Home,
+  Clock,
+  Users,
+  DollarSign,
+  ShoppingCart,
+  FileText,
+  Package,
+} from "lucide-react";
 
 const Sidebar = () => {
   const { user, isLoading, checkCurrentUser } = useAuthStore();
@@ -21,34 +30,59 @@ const Sidebar = () => {
 
   // Admin
   const AdminMenus = [
-    { id: 1, name: "Overview", link: "/dashboard/overview/admin" },
-    { id: 2, name: "Attendance", link: "/dashboard/attendance" },
-    { id: 3, name: "Employees", link: "/dashboard/employee" },
-    { id: 4, name: "Expense", link: "/dashboard/expense" },
-    { id: 5, name: "Sales", link: "/dashboard/sales" },
-    { id: 6, name: "Salary", link: "/dashboard/salary" },
-    { id: 7, name: "Productions", link: "/dashboard/production" },
+    { id: 1, name: "Overview", link: "/dashboard/overview/admin", icon: Home },
+    {
+      id: 7,
+      name: "Productions",
+      link: "/dashboard/production",
+      icon: Package,
+    },
+    { id: 5, name: "Sales", link: "/dashboard/sales", icon: ShoppingCart },
+    { id: 4, name: "Expense", link: "/dashboard/expense", icon: DollarSign },
+    { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
+    { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },
+
+    { id: 6, name: "Salary", link: "/dashboard/salary", icon: FileText },
   ];
 
-  // manager menus
+  // Manager menus
   const ManagerMenus = [
-    { id: 1, name: "Overview", link: "/dashboard/overview/manager" },
-    { id: 2, name: "Attendance", link: "/dashboard/attendance" },
-    { id: 3, name: "Employees", link: "/dashboard/employees" },
-    { id: 4, name: "Sales", link: "/dashboard/sales" },
-    { id: 5, name: "Productions", link: "/dashboard/production" },
+    {
+      id: 1,
+      name: "Overview",
+      link: "/dashboard/overview/manager",
+      icon: Home,
+    },
+    { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
+    { id: 3, name: "Employees", link: "/dashboard/employees", icon: Users },
+    { id: 4, name: "Sales", link: "/dashboard/sales", icon: ShoppingCart },
+    {
+      id: 5,
+      name: "Productions",
+      link: "/dashboard/production",
+      icon: Package,
+    },
   ];
-
-  // accountant
+  // Accountant menus
   const AccountantMenus = [
-    { id: 1, name: "Overview", link: "/dashboard/overview/accountant" },
-    { id: 2, name: "Expense", link: "/dashboard/expense" },
-    { id: 3, name: "Salary", link: "/dashboard/salary" },
+    {
+      id: 1,
+      name: "Overview",
+      link: "/dashboard/overview/accountant",
+      icon: Home,
+    },
+    { id: 2, name: "Expense", link: "/dashboard/expense", icon: DollarSign },
+    { id: 3, name: "Salary", link: "/dashboard/salary", icon: FileText },
   ];
 
-  // employee
+  // Employee menus
   const EmployeeMenus = [
-    { id: 1, name: "Overview", link: "/dashboard/overview/employee" },
+    {
+      id: 1,
+      name: "Overview",
+      link: "/dashboard/overview/employee",
+      icon: Home,
+    },
   ];
 
   return (
@@ -61,27 +95,32 @@ const Sidebar = () => {
       <Separator className="bg-gray-400 my-4" />
 
       {/* Menu Items */}
-      <ul className="flex-1 space-y-1 overflow-y-auto">
+      <ul className="flex-1 overflow-y-auto">
         {user.role === "employee" && (
-          <div>
+          <div className="space-y-3">
             {AdminMenus.map((menu) => {
+              const Icon = menu.icon; // icon component
               const isActive = menu.name === activeMenu;
+
               return (
                 <li key={menu.id}>
                   <Link
                     href={menu.link}
                     onClick={() => setActiveMenu(menu.name)}
                     className={`
-                  flex items-center justify-between w-full px-4 py-2 rounded-lg
-                  ${
-                    isActive
-                      ? "bg-green-700 text-white font-medium"
-                      : "hover:bg-green-800 hover:text-white"
-                  }
-                  transition-colors duration-200
-                `}
+            flex items-center justify-between w-full px-4 py-2 rounded-lg
+            ${
+              isActive
+                ? "bg-green-700 text-white font-medium"
+                : "hover:bg-green-800 hover:text-white"
+            }
+            transition-colors duration-200
+          `}
                   >
-                    {menu.name}
+                    <span className="flex items-center gap-3">
+                      <Icon className="w-5 h-5" /> {/* Lucide icon */}
+                      {menu.name}
+                    </span>
                     {isActive && (
                       <ChevronRight size={16} className="text-white" />
                     )}
