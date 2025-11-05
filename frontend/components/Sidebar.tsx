@@ -1,8 +1,9 @@
-import React from 'react'
 
 const Sidebar = () => {
   return (
-    <div>This is Dynamic Sidebar</div>
+    <div className="bg-green-800 h-screen w-full p-5">
+        lgin
+    </div>
   )
 }
 
