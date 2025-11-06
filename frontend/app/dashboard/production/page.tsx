@@ -1,4 +1,4 @@
-
+//server component
 const production = async() => {
   
   return (
