@@ -1,12 +1,22 @@
-import { LogOut } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeSwitch } from "./ui/theme-switch";
 
 const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
   return (
     <div className="flex items-center gap-3">
       {/* dark mood */}
-      <div></div>
+      <div>
+        <ThemeSwitch
+          modes={["light", "dark"]}
+          icons={[
+            <Sun key="sun-icon" size={16} />,
+            <Moon key="moon-icon" size={16} />,
+          ]}
+          showInactiveIcons="none"
+        />
+      </div>
       {/* Name and Avatar */}
       <div className="flex items-center justify-end gap-3 p-2 rounded-lg ">
         {/* name */}
@@ -18,7 +28,7 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
             Online
           </span>
         </div>
-        
+
         {/* Avatar on the right */}
         <div className="w-12 h-12 relative">
           <Avatar className="w-full h-full" variant="close-friends">
@@ -30,8 +40,6 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
             <AvatarFallback>PAI</AvatarFallback>
           </Avatar>
         </div>
-
-        
       </div>
 
       {/* Logout */}
