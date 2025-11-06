@@ -7,7 +7,7 @@ const Navbar = async () => {
   return (
     <div className="flex justify-between">
       <h1 className="text-3xl font-semibold uppercase">{user.role} Dashboard</h1>
-    <div><NavbarRightPart></NavbarRightPart></div>
+    <div><NavbarRightPart name={user.name} image ={user.image}></NavbarRightPart></div>
     </div>
   );
 };
