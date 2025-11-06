@@ -1,11 +1,17 @@
+'use client'
+
 import { LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeSwitch } from "./ui/theme-switch";
-import { Separator } from "./ui/separator";
 
 const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
-  return (
+    
+    const handleLogout = ()=>{
+        console.log('hi');
+    }
+  
+    return (
     <div className="flex items-center gap-3">
       {/* dark mood */}
       <div>
@@ -45,7 +51,7 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
 
       {/* Logout */}
       <div>
-        <Button variant="destructive">
+        <Button className="hover:cursor-pointer" onClick={handleLogout} variant="destructive">
           {" "}
           <LogOut /> Logout
         </Button>
