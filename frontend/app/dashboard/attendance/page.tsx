@@ -1,4 +1,6 @@
-const attendance = () => {
+
+const attendance = async() => {
+
   return (
     <div>attendance</div>
   )

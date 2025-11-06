@@ -1,7 +1,5 @@
-"use client";
 
 import { ShieldAlert } from "lucide-react";
-import Link from "next/link";
 
 const Unauthorized = () => {
   return (
@@ -18,13 +16,6 @@ const Unauthorized = () => {
         administrator if you think this is a mistake.
       </p>
 
-      {/* Back to dashboard */}
-      <Link
-        href="/dashboard"
-        className="mt-6 bg-green-700 text-white px-5 py-2 rounded-lg hover:bg-green-800 transition-colors duration-200"
-      >
-        Go Back to Dashboard
-      </Link>
     </div>
   );
 };

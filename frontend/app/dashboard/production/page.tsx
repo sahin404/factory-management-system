@@ -1,5 +1,6 @@
 
-const production = () => {
+const production = async() => {
+  
   return (
     <div>production</div>
   )

@@ -1,6 +1,7 @@
 
 
 const sales = () => {
+  
   return (
     <div>sales</div>
   )

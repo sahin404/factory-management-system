@@ -1,3 +1,5 @@
+// This is only for theose call whose are call from cliend component
+
 import axios from 'axios';
 
 const axiosInstance = axios.create({
