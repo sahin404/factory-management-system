@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import { Separator } from "@/components/ui/separator";
 import { checkUser } from "@/lib/checkUserServerConfig";
 import { redirect } from "next/navigation";
 
@@ -21,6 +22,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
       <div  className="w-5/6 p-5">
         {/* Navbar */}
         <div className="pr-5"> <Navbar></Navbar></div>
+              <Separator></Separator>
         {/* children */}
         <div className="w-5/6 p-5">{children}</div>
       </div>

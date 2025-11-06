@@ -5,7 +5,7 @@ const Navbar = async () => {
   const user = await checkUser();
   if (!user) return;
   return (
-    <div className="flex items-center justify-between shadow-md p-2">
+    <div className="flex items-center justify-between shadow-sm p-2">
       <h1 className="text-3xl font-semibold uppercase">
         {user.role} Dashboard
       </h1>
