@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { signUpServ, loginServ } from "./auth.service";
 import { singupValidation } from "./aut.validation";
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 // signup
 export const signUp = async (req: Request, res: Response) => {
@@ -36,10 +39,20 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const response = await loginServ({ email, password });
+    
+    // Set HttpOnly Cookie 
+    res.cookie('authToken', response.token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
+    // send response
     res.status(200).json({
       success: true,
       message: "Logged in successfully!",
-      data: response,
+      data: {user:response.user},
     });
   } catch (err:any) {
     res.status(500).json({

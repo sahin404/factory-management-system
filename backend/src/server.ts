@@ -8,11 +8,12 @@ import { balanceRouter } from './features/balance/balance.route';
 import { expenseRouter } from './features/expense/expense.route';
 import productRouter from './features/production/production.route';
 import salesRouter from './features/sales/sales.route';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 dotenv.config();
 app.use(express.json());
-
+app.use(cookieParser());
 
 app.use(cors({
   origin: 'http://localhost:3001',

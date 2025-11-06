@@ -15,13 +15,8 @@ export const verifyToken = async(
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers['authorization'] as string;
-  if (!authHeader) {
-    return res.status(401).json({ message: "Authorization header missing" });
-  }
-
-  //bearer token split
-  const token = authHeader.split(" ")[1];
+  const token = req.cookies.authToken;
+  
   if (!token) {
     return res.status(401).json({ message: "Token missing" });
   }
