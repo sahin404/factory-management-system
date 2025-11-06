@@ -1,0 +1,15 @@
+import { checkUser } from "@/lib/checkUserServerConfig";
+import NavbarRightPart from "./NavbarRightPart";
+
+const Navbar = async () => {
+  const user = await checkUser();
+  if (!user) return;
+  return (
+    <div className="flex justify-between">
+      <h1 className="text-3xl font-semibold uppercase">{user.role} Dashboard</h1>
+    <div><NavbarRightPart></NavbarRightPart></div>
+    </div>
+  );
+};
+
+export default Navbar;
