@@ -59,7 +59,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ user: res.data.data.user });
 
       // set jwt token into local storage
-      localStorage.setItem("token", res.data.data.token);
+      //localStorage.setItem("token", res.data.data.token); 
+      // don't need, because we move now setCookies functions
+
       toast.success("Logged in successfully!");
     } catch (err: any) {
       console.log(err.response?.data || err.message);

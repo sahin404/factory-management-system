@@ -15,8 +15,7 @@ import {
   Package,
 } from "lucide-react";
 import SidebarSkeleton from "./SidebarSkeleton";
-import Image from "next/image";
-import { Button } from "./ui/button";
+
 
 const Sidebar = () => {
   const { user, isLoading, checkCurrentUser } = useAuthStore();
@@ -57,7 +56,7 @@ const Sidebar = () => {
       icon: Home,
     },
     { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
-    { id: 3, name: "Employees", link: "/dashboard/employees", icon: Users },
+    { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },
     { id: 4, name: "Sales", link: "/dashboard/sales", icon: ShoppingCart },
     {
       id: 5,
