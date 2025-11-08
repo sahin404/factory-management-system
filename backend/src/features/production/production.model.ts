@@ -1,20 +1,36 @@
 import mongoose from "mongoose";
 
-const productionSchema = new mongoose.Schema({
-    products:{
-        type:Number,
-        required:true,
-        default:0
-    },
-    price:{
-        type:Number,
-        required:true,
-        default:1000
-    }
+const productSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    default: ""
+  },
+  unit: {
+    type: String,
+    default: ""
+  },
+  price: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  image: {
+    type: String,
+    default: ""
+  }
 }, {
-    timestamps:true
-})
+  timestamps: true
+});
 
-const Production = mongoose.model('Production', productionSchema);
+const Production = mongoose.model("Production", productSchema);
 
-export default Production; 
+export default Production;
