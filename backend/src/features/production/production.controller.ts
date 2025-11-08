@@ -5,9 +5,10 @@ import { getProduct} from "./production.service";
 // get product
 export const getProductController = async (req: Request, res: Response) => {
   try {
-    const searchQuery = req.query.search;
+    const searchQuery = req.query.search as string;
+    const pagination = parseInt(req.query.page as string) || 1;
 
-    const result = await getProduct(searchQuery);
+    const result = await getProduct(searchQuery, pagination);
 
     res.status(200).json({
       success: true,
