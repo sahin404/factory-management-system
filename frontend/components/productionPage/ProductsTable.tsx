@@ -51,7 +51,7 @@ const ProductTable = ({ searchTerm }: {searchTerm: string}) => {
           <TableHead>Delete Item</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody className="font-semibold">
         {products.map((product, indx) => (
           <TableRow key={product._id}>
             <TableCell>{indx + 1}</TableCell>

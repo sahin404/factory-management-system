@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 import {
   Pagination,
   PaginationContent,
@@ -8,46 +7,65 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
+} from "@/components/ui/pagination";
+import { useProductStore } from "@/stores/productStore";
 
+interface PageProps {
+  currentPage: number;
+  setCurrentPage: (value: number) => void;
+  itemsPerPage?: number;
+}
 
-const ProductionPagination = () => {
+const ProductionPagination = ({
+  currentPage,
+  setCurrentPage,
+  itemsPerPage = 3, 
+}: PageProps) => {
+  const { products } = useProductStore();
 
-  const handlePrevious = ()=>{
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-  }
+  const handlePrevious = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
-  const handlePageClick = ()=>{
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
-  }
-
-  const handleNext=()=>{
-    
-  }
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
-    <div>
+    <div className="mt-5 flex justify-center">
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" onClick={handlePrevious} />
+            <PaginationPrevious onClick={handlePrevious} />
           </PaginationItem>
-          {[1, 2, 3].map((page) => (
+
+          {pageNumbers.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
-                href="#"
-                isActive={activePage === page}
+               className={`px-3 py-1 rounded transition-colors duration-200
+    ${currentPage === page ? 'bg-green-700 text-white hover:bg-green-700 hover:text-white' : 'bg-white text-gray-700 border'}`}
                 onClick={() => handlePageClick(page)}
               >
                 {page}
               </PaginationLink>
             </PaginationItem>
           ))}
+
+          {totalPages > 5 && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
+
           <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" onClick={handleNext} />
+            <PaginationNext onClick={handleNext} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
