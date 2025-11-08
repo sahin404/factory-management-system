@@ -29,25 +29,25 @@ const TableSkeleton = () => {
         {rows.map((_, idx) => (
           <TableRow key={idx}>
             <TableCell>
-              <div className="h-4 w-4 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
             <TableCell>
-              <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
             <TableCell>
-              <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
             <TableCell>
-              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
             <TableCell>
-              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
             <TableCell>
-              <div className="h-6 w-12 bg-gray-200 rounded animate-pulse" />
+              <div className="h-6 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
             <TableCell>
-              <div className="h-6 w-12 bg-gray-200 rounded animate-pulse" />
+              <div className="h-6 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             </TableCell>
           </TableRow>
         ))}

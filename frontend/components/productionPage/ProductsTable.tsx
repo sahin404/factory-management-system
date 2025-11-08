@@ -13,6 +13,10 @@ import {
 import { useProductStore } from "@/stores/productStore";
 import { useCallback, useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
+import AddProductQuantity from "./AddProductQuantity";
+import DeleteProductItem from "./DeleteProductItem";
+import Sales from "./Sales";
+import Update from "./Update";
 
 const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, pagination:number}) => {
   const { products, isLoading, getProducts } = useProductStore();
@@ -40,7 +44,7 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
   }
 
   return (
-    <Table className="min-w-[600px] text-md">
+    <Table className="min-w-[600px]">
       <TableHeader>
         <TableRow>
           <TableHead>Serial</TableHead>
@@ -48,7 +52,9 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
           <TableHead>Price</TableHead>
           <TableHead>Unit</TableHead>
           <TableHead>Quantity</TableHead>
-          <TableHead>Add Product</TableHead>
+          <TableHead>Add Quantity</TableHead>
+          <TableHead>Sales</TableHead>
+          <TableHead>Update</TableHead>
           <TableHead>Delete Item</TableHead>
         </TableRow>
       </TableHeader>
@@ -60,8 +66,10 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
             <TableCell>BDT {product.price}</TableCell>
             <TableCell>{product.unit}</TableCell>
             <TableCell>{product.quantity} Unit</TableCell>
-            <TableCell>Add</TableCell>
-            <TableCell>remove</TableCell>
+            <TableCell><AddProductQuantity></AddProductQuantity></TableCell>
+            <TableCell> <Sales></Sales> </TableCell>
+            <TableCell> <Update></Update></TableCell>
+            <TableCell><DeleteProductItem></DeleteProductItem></TableCell>
           </TableRow>
         ))}
       </TableBody>

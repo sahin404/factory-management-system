@@ -10,12 +10,10 @@ import {
   Clock,
   Users,
   DollarSign,
-  ShoppingCart,
   FileText,
   Package,
 } from "lucide-react";
 import SidebarSkeleton from "./SidebarSkeleton";
-
 
 const Sidebar = () => {
   const { user, isLoading, checkCurrentUser } = useAuthStore();
@@ -35,15 +33,13 @@ const Sidebar = () => {
     { id: 1, name: "Overview", link: "/dashboard/overview/admin", icon: Home },
     {
       id: 7,
-      name: "Productions",
+      name: "Productions & Sales",
       link: "/dashboard/production",
       icon: Package,
     },
-    { id: 5, name: "Sales", link: "/dashboard/sales", icon: ShoppingCart },
-    { id: 4, name: "Expense", link: "/dashboard/expense", icon: DollarSign },
     { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
     { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },
-
+    { id: 4, name: "Expense", link: "/dashboard/expense", icon: DollarSign },
     { id: 6, name: "Salary", link: "/dashboard/salary", icon: FileText },
   ];
 
@@ -55,15 +51,14 @@ const Sidebar = () => {
       link: "/dashboard/overview/manager",
       icon: Home,
     },
-    { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
-    { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },
-    { id: 4, name: "Sales", link: "/dashboard/sales", icon: ShoppingCart },
     {
       id: 5,
-      name: "Productions",
+      name: "Productions & Sales",
       link: "/dashboard/production",
       icon: Package,
     },
+    { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
+    { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },
   ];
 
   // Accountant menus
@@ -89,7 +84,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="bg-green-900 text-gray-300 h-screen w-full flex flex-col p-5">
+    <div className="dark:bg-[#1b3d2e] bg-green-900 text-gray-300 h-screen w-full flex flex-col p-5">
       <h1 className="text-white text-3xl font-semibold mb-4">
         Pure Agro Industries
       </h1>
@@ -248,7 +243,10 @@ const Sidebar = () => {
       <div className="mt-auto pt-4">
         <Separator className="bg-gray-400 my-4" />
         <div className="flex items-center gap-2 px-4 py-2 bg-green-800/70 rounded-lg">
-          <span> <User></User> </span>
+          <span>
+            {" "}
+            <User></User>{" "}
+          </span>
           <span className="text-green-100 font-medium text-sm">
             {user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard
           </span>

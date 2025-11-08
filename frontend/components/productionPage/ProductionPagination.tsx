@@ -20,13 +20,13 @@ interface PageProps {
 const ProductionPagination = ({
   currentPage,
   setCurrentPage,
-  itemsPerPage = 3,
+  itemsPerPage = 5,
 }: PageProps) => {
   const { products, isLoading, total } = useProductStore();
 
-  if(isLoading || !products) return <PaginationSkeleton></PaginationSkeleton>;
+  if (isLoading || !products) return <PaginationSkeleton></PaginationSkeleton>;
 
-  if(products.length===0) return null;
+  if (products.length === 0) return null;
 
   const totalPages = Math.ceil(total / itemsPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -57,8 +57,8 @@ const ProductionPagination = ({
                 className={`px-3 py-1 rounded transition-colors duration-200
     ${
       currentPage === page
-        ? "bg-green-700 text-white hover:bg-green-700 hover:text-white"
-        : "bg-white text-gray-700 border"
+        ? "bg-green-700 text-white hover:text-white hover:bg-green-500 dark:hover:bg-green-500"
+        : "bg-white text-gray-700 hover:bg-gray-300 border"
     }`}
                 onClick={() => handlePageClick(page)}
               >

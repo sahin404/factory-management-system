@@ -24,9 +24,9 @@ const ProductionHeader = ({searchTerm, setSearchTerm, setPagination}:ProductionH
           />
 
           <div className="w-1/6">
-            <Button className="bg-green-800 text-md text-white hover:bg-green-600 py-5">
+            <Button className="bg-green-800 text-md text-white hover:bg-green-700 py-5">
               <Plus />
-              Add new Product
+              Add New Product Item
             </Button>
           </div>
 

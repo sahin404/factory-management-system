@@ -49,9 +49,9 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
         </div>
       </div>
 
-      {/* Logout */}
+      {/* Logout button*/}
       <div>
-        <Button className="hover:cursor-pointer" onClick={handleLogout} variant="destructive">
+        <Button className="hover:cursor-pointer bg-red-600 hover:cursor-pointer hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700 text-white" onClick={handleLogout} variant="destructive">
           {" "}
           <LogOut /> Logout
         </Button>
