@@ -1,7 +1,7 @@
 import ProductionBody from "@/components/productionPage/ProductionBody";
 import ProductionHeader from "@/components/productionPage/ProductionHeader";
 import ProductionPagination from "@/components/productionPage/ProductionPagination";
-import ProductTable from "@/components/productionPage/ProductTable";
+import ProductTable from "@/components/productionPage/ProductsTable";
 //server component
 const production = async () => {
   return (

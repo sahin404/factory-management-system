@@ -11,7 +11,7 @@ const ProductionHeader = () => {
           <input
             type="text"
             placeholder="Search a product..."
-            className="w-full px-4 py-2 text-md border rounded-lg outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"
+            className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"
           />
 
           <div className="w-1/6">
