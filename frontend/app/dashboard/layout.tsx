@@ -24,7 +24,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
         <div className="pr-5"> <Navbar></Navbar></div>
               <Separator></Separator>
         {/* children */}
-        <div className="p-5 bg-green-400">{children}</div>
+        <div className="p-5 pr-16">{children}</div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import ProductionPagination from "@/components/productionPage/ProductionPaginati
 //server component
 const production = async () => {
   return (
-    <div className="bg-red-500 mx-auto">
+    <div className="">
       {/* Header */}
       <ProductionHeader></ProductionHeader>
       {/* Table */}
