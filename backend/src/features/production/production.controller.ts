@@ -5,7 +5,9 @@ import { getProduct} from "./production.service";
 // get product
 export const getProductController = async (req: Request, res: Response) => {
   try {
-    const result = await getProduct();
+    const searchQuery = req.query.search;
+
+    const result = await getProduct(searchQuery);
 
     res.status(200).json({
       success: true,
