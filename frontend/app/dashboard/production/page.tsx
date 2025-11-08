@@ -10,7 +10,7 @@ const production = async () => {
       {/* Table */}
       Table
       {/* Pagination */}
-      <ProductionPagination></ProductionPagination>
+      {/* <ProductionPagination></ProductionPagination> */}
     </div>
   );
 };

@@ -14,17 +14,17 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="flex gap-8">
+    <div className="flex">
       {/* Sidebar */}
       <div className="w-1/6 sticky top-0 h-screen">
         <Sidebar></Sidebar>
       </div>
-      <div  className="flex-1 p-5">
+      <div  className="flex-1 py-5 px-10">
         {/* Navbar */}
-        <div className="pr-5"> <Navbar></Navbar></div>
+        <div className=""> <Navbar></Navbar></div>
               <Separator></Separator>
         {/* children */}
-        <div className="p-5 pr-16">{children}</div>
+        <div className="pt-10 pl-10 pr-20">{children}</div>
       </div>
     </div>
   );
