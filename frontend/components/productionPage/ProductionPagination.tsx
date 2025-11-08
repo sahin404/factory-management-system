@@ -9,6 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useProductStore } from "@/stores/productStore";
+import PaginationSkeleton from "../PaginationSkeleton";
 
 interface PageProps {
   currentPage: number;
@@ -19,9 +20,13 @@ interface PageProps {
 const ProductionPagination = ({
   currentPage,
   setCurrentPage,
-  itemsPerPage = 3, 
+  itemsPerPage = 3,
 }: PageProps) => {
-  const { products } = useProductStore();
+  const { products, isLoading } = useProductStore();
+
+  if(isLoading || !products) return <PaginationSkeleton></PaginationSkeleton>;
+
+  if(products.length===0) return null;
 
   const totalPages = Math.ceil(products.length / itemsPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -49,8 +54,12 @@ const ProductionPagination = ({
           {pageNumbers.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
-               className={`px-3 py-1 rounded transition-colors duration-200
-    ${currentPage === page ? 'bg-green-700 text-white hover:bg-green-700 hover:text-white' : 'bg-white text-gray-700 border'}`}
+                className={`px-3 py-1 rounded transition-colors duration-200
+    ${
+      currentPage === page
+        ? "bg-green-700 text-white hover:bg-green-700 hover:text-white"
+        : "bg-white text-gray-700 border"
+    }`}
                 onClick={() => handlePageClick(page)}
               >
                 {page}
