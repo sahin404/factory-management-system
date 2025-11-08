@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { useProductStore } from "@/stores/productStore";
 import { useEffect } from "react";
+import TableSkeleton from "../TableSkeleton";
 
 
 const ProductTable = () => {
@@ -21,7 +22,7 @@ const ProductTable = () => {
   },[getProducts])
 
   if (isLoading) {
-    return <p className="text-center py-4">Loading products...</p>;
+    return <TableSkeleton />
   }
 
   if (!products || products.length === 0) {

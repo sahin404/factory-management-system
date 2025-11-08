@@ -26,13 +26,12 @@ export const useProductStore = create<ProductStore>((set, get) => ({
 
   getProducts: async () => {
     set({isLoading:true});
-
     try {
       const response = await axiosInstance.get<{data:Product[]}>("/production");
       set({products:response.data.data});
     }
-    catch (err) {
-
+    catch (err:any) {
+        console.log('Error in product store to fetch products!');
     } 
     finally{
         set({isLoading:false});
