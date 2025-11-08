@@ -6,15 +6,18 @@ import { Button } from "../ui/button";
 interface ProductionHeaderProps {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
+  setPagination:(value:number)=>void;
 }
 
-const ProductionHeader = ({searchTerm, setSearchTerm}:ProductionHeaderProps) => {
+const ProductionHeader = ({searchTerm, setSearchTerm, setPagination}:ProductionHeaderProps) => {
   return (
     <div className="flex-1">
         <div className="flex gap-5">
           <input
             value={searchTerm || ""}
-            onChange={(e)=>setSearchTerm(e.target.value)}
+            onChange={(e)=>{
+              setPagination(1);
+              setSearchTerm(e.target.value)}}
             type="text"
             placeholder="Search a product..."
             className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"

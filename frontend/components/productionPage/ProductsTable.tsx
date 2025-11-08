@@ -14,21 +14,22 @@ import { useProductStore } from "@/stores/productStore";
 import { useCallback, useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
 
-const ProductTable = ({ searchTerm }: {searchTerm: string}) => {
+const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, pagination:number}) => {
   const { products, isLoading, getProducts } = useProductStore();
 
+  // console.log(searchTerm, pagination);
   const debouncedGetProducts = useCallback(
-    debounce((searchTerm:string) => {
-      getProducts(searchTerm);
+    debounce((searchTerm:string, pagination:number) => {
+      getProducts(searchTerm, pagination);
     }, 500),
     [getProducts]
   );
 
   useEffect(() => {
-    debouncedGetProducts(searchTerm);
+    debouncedGetProducts(searchTerm, pagination);
     // cleanup
     return () => debouncedGetProducts.cancel();
-  }, [searchTerm, debouncedGetProducts]);
+  }, [searchTerm,pagination, debouncedGetProducts]);
 
   if (isLoading) {
     return <TableSkeleton />;

@@ -22,13 +22,13 @@ const ProductionPagination = ({
   setCurrentPage,
   itemsPerPage = 3,
 }: PageProps) => {
-  const { products, isLoading } = useProductStore();
+  const { products, isLoading, total } = useProductStore();
 
   if(isLoading || !products) return <PaginationSkeleton></PaginationSkeleton>;
 
   if(products.length===0) return null;
 
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const totalPages = Math.ceil(total / itemsPerPage);
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   const handlePrevious = () => {
