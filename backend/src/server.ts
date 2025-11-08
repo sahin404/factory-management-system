@@ -6,8 +6,7 @@ import { authRouter } from './features/auth/auth.route';
 import employeeRouter from './features/employee/employee.route';
 import { balanceRouter } from './features/balance/balance.route';
 import { expenseRouter } from './features/expense/expense.route';
-import productRouter from './features/production/production.route';
-import salesRouter from './features/sales/sales.route';
+import productRouter from './features/productionSales/production.route';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -25,7 +24,6 @@ app.use('/api/employee', employeeRouter);
 app.use('/api/balance', balanceRouter);
 app.use('/api/expense', expenseRouter);
 app.use('/api/production', productRouter);
-app.use('/api/selles', salesRouter);
 
 
 

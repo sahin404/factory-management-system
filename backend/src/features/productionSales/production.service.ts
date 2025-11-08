@@ -4,7 +4,7 @@ import Production from "./production.model";
 export const getProduct = async (searchQuery?:string, page:number=1) => {
   const filter = searchQuery? { name: { $regex: searchQuery, $options: "i" } } : {};
 
-  const limit = 3;
+  const limit = 5;
   const products = await Production.find(filter)
     .skip((page - 1) * limit)
     .limit(limit);
