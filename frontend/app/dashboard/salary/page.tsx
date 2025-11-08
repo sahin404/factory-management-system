@@ -1,7 +1,7 @@
-const sallary = () => {
+const salary = () => {
   return (
-    <div>sallary</div>
+    <div>salary</div>
   )
 }
 
-export default sallary
+export default salary

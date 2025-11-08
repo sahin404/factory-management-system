@@ -19,12 +19,12 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
       <div className="w-1/6 sticky top-0 h-screen">
         <Sidebar></Sidebar>
       </div>
-      <div  className="w-5/6 p-5">
+      <div  className="flex-1 p-5">
         {/* Navbar */}
         <div className="pr-5"> <Navbar></Navbar></div>
               <Separator></Separator>
         {/* children */}
-        <div className="w-5/6 p-5">{children}</div>
+        <div className="p-5 bg-green-400">{children}</div>
       </div>
     </div>
   );
