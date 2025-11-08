@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Pagination,
   PaginationContent,
@@ -8,7 +10,21 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 
+
 const ProductionPagination = () => {
+
+  const handlePrevious = ()=>{
+
+  }
+
+  const handlePageClick = ()=>{
+
+  }
+
+  const handleNext=()=>{
+    
+  }
+
   return (
     <div>
       <Pagination>

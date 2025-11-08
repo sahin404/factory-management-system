@@ -1,5 +1,7 @@
 "use client";
 
+import { debounce } from "lodash";
+
 import {
   Table,
   TableHeader,
@@ -9,20 +11,27 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { useProductStore } from "@/stores/productStore";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
 
+const ProductTable = ({ searchTerm }: {searchTerm: string}) => {
+  const { products, isLoading, getProducts } = useProductStore();
 
-const ProductTable = () => {
+  const debouncedGetProducts = useCallback(
+    debounce((searchTerm:string) => {
+      getProducts(searchTerm);
+    }, 500),
+    [getProducts]
+  );
 
-  const {products, isLoading, getProducts} = useProductStore();
-
-  useEffect(()=>{
-    getProducts();
-  },[getProducts])
+  useEffect(() => {
+    debouncedGetProducts(searchTerm);
+    // cleanup
+    return () => debouncedGetProducts.cancel();
+  }, [searchTerm, debouncedGetProducts]);
 
   if (isLoading) {
-    return <TableSkeleton />
+    return <TableSkeleton />;
   }
 
   if (!products || products.length === 0) {
@@ -30,7 +39,7 @@ const ProductTable = () => {
   }
 
   return (
-    <Table className="min-w-[600px]">
+    <Table className="min-w-[600px] text-md">
       <TableHeader>
         <TableRow>
           <TableHead>Serial</TableHead>
@@ -45,7 +54,7 @@ const ProductTable = () => {
       <TableBody>
         {products.map((product, indx) => (
           <TableRow key={product._id}>
-            <TableCell>{indx+1}</TableCell>
+            <TableCell>{indx + 1}</TableCell>
             <TableCell>{product.name}</TableCell>
             <TableCell>BDT {product.price}</TableCell>
             <TableCell>{product.unit}</TableCell>
