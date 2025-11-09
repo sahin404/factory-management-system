@@ -22,8 +22,10 @@ export interface ProductStore {
   total:number,
   isLoading: boolean;
   isLoadingProductById:boolean;
+  isUpdatingQuantity:boolean;
   getProducts: (searchTerm?: string, pagination?:number) => Promise<void>;
   getProductById: (productId?:string) => Promise<void>;
+  updateProductQuantity: (productId?:string, quantity?:number) => Promise<void>;
 }
 
 export const useProductStore = create<ProductStore>((set, get) => ({
@@ -32,6 +34,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   total:0,
   product:null,
   isLoadingProductById:true,
+  isUpdatingQuantity:false,
 
   //get all product
   getProducts: async (searchTerm?: string, pagination?:number) => {
@@ -65,5 +68,25 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     finally{
       set({isLoadingProductById:false});
     }
+  },
+
+  // update only quantity
+  updateProductQuantity: async (productId?: string, quantity?: number) => {
+    set({isUpdatingQuantity:true});
+    try {
+      const response = await axiosInstance.patch<{ data: Product }>(`/production/${productId}`, { quantity });
+      set({ product: response.data.data });
+
+      // update products list too if it exists
+      set((state) => ({
+        products: state.products.map((p) => p._id === productId ? response.data.data : p)
+      }));
+    } catch (err: any) {
+      console.log("Error updating quantity:", err);
+    }
+    finally{
+      set({isUpdatingQuantity:false});
+    }
   }
+  
 }));

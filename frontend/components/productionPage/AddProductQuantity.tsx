@@ -1,29 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import Modal from "../ui/modal";
 import { useProductStore } from "@/stores/productStore";
+import { Loader2Icon } from "lucide-react";
 
 const AddProductQuantity = ({ productId }: { productId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newQuantity, setNewQuantity] = useState<string>("");
-  const [error, setError] = useState<String>('');
-  const { product, isLoadingProductById, getProductById } = useProductStore();
+  const [error, setError] = useState<String>("");
+  const [success, setSuccess] = useState<String>("");
+  const {
+    product,
+    isLoadingProductById,
+    getProductById,
+    updateProductQuantity,
+    isUpdatingQuantity,
+  } = useProductStore();
 
   const handleButtonClick = async () => {
+    setError("");
+    setSuccess("");
     setIsOpen(true);
     await getProductById(productId);
   };
 
-  const handleAddQuantity = () => {
-    const newNumber = Number(newQuantity);
-    if (newNumber < 0 || isNaN(newNumber)) {
-      setError("Please enter a valid quantity greater than 0");
-      return;
+  const handleAddQuantity = async () => {
+    try {
+      setError("");
+      setSuccess("");
+      const newNumber = Number(newQuantity);
+      if (newNumber < 0 || isNaN(newNumber)) {
+        setError("Please enter a valid quantity greater than 0");
+        return;
+      }
+      await updateProductQuantity(productId, newNumber);
+      setNewQuantity("");
+      setSuccess("Added Successfully!");
+    } catch {
+      setError("Something Went error!");
     }
-    setError('');
-    console.log(newQuantity);
   };
 
   return (
@@ -90,11 +107,27 @@ const AddProductQuantity = ({ productId }: { productId: string }) => {
                 />
                 {error && <div className="text-sm text-red-500">{error}</div>}
                 <Button
+                  disabled={isUpdatingQuantity}
                   onClick={handleAddQuantity}
                   className="w-full bg-green-700 hover:bg-green-600 text-white font-semibold py-2 rounded-lg"
                 >
-                  Save Quantity
+                  {isUpdatingQuantity ? (
+                    <div className="flex gap-2 items-center">
+                      Saving{" "}
+                      <Loader2Icon className="animate-spin"></Loader2Icon>
+                    </div>
+                  ) : (
+                    <div>Save Quantity</div>
+                  )}
                 </Button>
+                {/* Success Message */}
+                <div>
+                  {success && (
+                    <div className="text-center text-lg text-green-600">
+                      {success}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Footer Buttons */}
