@@ -18,7 +18,7 @@ export interface Data{
 
 export interface ProductStore {
   products: Product[];
-  product:Product;
+  product:Product | null;
   total:number,
   isLoading: boolean;
   isLoadingProductById:boolean;
