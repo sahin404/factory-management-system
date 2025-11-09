@@ -31,7 +31,7 @@ const AddProductQuantity = ({ productId }: { productId: string }) => {
       setError("");
       setSuccess("");
       const newNumber = Number(newQuantity);
-      if (newNumber < 0 || isNaN(newNumber)) {
+      if (newNumber < 0 || !newNumber) {
         setError("Please enter a valid quantity greater than 0");
         return;
       }
