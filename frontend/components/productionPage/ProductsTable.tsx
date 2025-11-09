@@ -33,7 +33,7 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
     debouncedGetProducts(searchTerm, pagination);
     // cleanup
     return () => debouncedGetProducts.cancel();
-  }, [searchTerm,pagination, debouncedGetProducts]);
+  }, [searchTerm, pagination, debouncedGetProducts]);
 
   if (isLoading) {
     return <TableSkeleton />;
@@ -66,7 +66,7 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
             <TableCell>BDT {product.price}</TableCell>
             <TableCell>{product.unit}</TableCell>
             <TableCell>{product.quantity} Unit</TableCell>
-            <TableCell><AddProductQuantity></AddProductQuantity></TableCell>
+            <TableCell><AddProductQuantity productId={product._id}></AddProductQuantity></TableCell>
             <TableCell> <Sales></Sales> </TableCell>
             <TableCell> <Update></Update></TableCell>
             <TableCell><DeleteProductItem></DeleteProductItem></TableCell>

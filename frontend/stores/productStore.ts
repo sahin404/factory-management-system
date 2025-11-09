@@ -18,16 +18,22 @@ export interface Data{
 
 export interface ProductStore {
   products: Product[];
+  product:Product;
   total:number,
   isLoading: boolean;
+  isLoadingProductById:boolean;
   getProducts: (searchTerm?: string, pagination?:number) => Promise<void>;
+  getProductById: (productId?:string) => Promise<void>;
 }
 
 export const useProductStore = create<ProductStore>((set, get) => ({
   products: [],
   isLoading: true,
   total:0,
+  product:null,
+  isLoadingProductById:true,
 
+  //get all product
   getProducts: async (searchTerm?: string, pagination?:number) => {
     set({ isLoading: true });
     try {
@@ -45,4 +51,19 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+  // get a single product
+  getProductById:async(productId?:string)=>{
+    set({isLoadingProductById:true})
+    try{
+      const response = await axiosInstance.get<{data:Product}>(`/production/${productId}`);
+      set({product:response.data.data});
+    }
+    catch(err){
+
+    }
+    finally{
+      set({isLoadingProductById:false});
+    }
+  }
 }));
