@@ -1,4 +1,3 @@
-import Balance from "../balance/balance.model";
 import Expense from "./expense.model"
 
 // get expense
@@ -13,13 +12,6 @@ export const addExpense = async(data:{title:string, description:string, amount:n
     data.amount = Number(data.amount);
     const newExpense = new Expense(data);
     await newExpense.save();
-
-    // update the main balance
-    const balance = await Balance.findOne();
-    if(!balance) throw new Error("Balance record not found!");
-    balance.balance -=  data.amount || 0; 
-    await balance.save();
-
     return newExpense;
 }
 
@@ -29,13 +21,6 @@ export const updateExpense = async(data:{id:string, title:string,description:str
     
     const expense  = await Expense.findById(id);
     if(!expense) throw new Error('Expense is not found!');
-
-    const balance = await Balance.findOne();
-    if(!balance) throw new Error('Balance is not found!');
-
-    // update main balance
-    balance.balance += expense.amount -amount;
-    await balance.save();
 
     //update expense field
     expense.title = title;
@@ -50,12 +35,5 @@ export const updateExpense = async(data:{id:string, title:string,description:str
 export const deleteExpense = async(id:string)=>{
     const result = await Expense.findByIdAndDelete(id);
     if(!result) throw new Error('Expense Not found!');
-
-    //update main balance
-    const balance = await Balance.findOne();
-    if(!balance) throw new Error('Balance is not found!');
-
-    balance.balance += result.amount;
-    balance.save();
     return result;
 }
