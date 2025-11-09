@@ -15,3 +15,11 @@ export const getProduct = async (searchQuery?:string, page:number=1) => {
   return {products,total};
 };
 
+
+// get a Product by id
+export const getProductById = async(productId:string)=>{
+  const product = await Production.findById(productId);
+
+  return product;
+
+}

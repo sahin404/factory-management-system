@@ -4,10 +4,10 @@ import cors from 'cors';
 import { dbConncet } from './config/db';
 import { authRouter } from './features/auth/auth.route';
 import employeeRouter from './features/employee/employee.route';
-import { balanceRouter } from './features/balance/balance.route';
 import { expenseRouter } from './features/expense/expense.route';
-import productRouter from './features/productionSales/production.route';
+import productRouter from './features/production/production.route';
 import cookieParser from 'cookie-parser';
+import salesRouter from './features/sales/sales.routes';
 
 const app = express();
 dotenv.config();
@@ -21,9 +21,9 @@ app.use(cors({
 
 app.use('/api/auth', authRouter);
 app.use('/api/employee', employeeRouter);
-app.use('/api/balance', balanceRouter);
 app.use('/api/expense', expenseRouter);
 app.use('/api/production', productRouter);
+app.use('/api/sales', salesRouter);
 
 
 
