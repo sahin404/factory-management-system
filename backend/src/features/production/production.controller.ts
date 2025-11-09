@@ -43,13 +43,12 @@ export const getProductByIdController = async (req: Request, res: Response) => {
 };
 
 
-// update product
+// update quantity of product
 export const updateProductController = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
-    const updateData = req.body;
-
-    const updatedProduct = await updateProduct(productId, updateData);
+    const newQuantity = Number(req.body.quantity);
+    const updatedProduct = await updateProduct(productId, newQuantity);
 
     res.status(200).json({
       success: true,
