@@ -55,6 +55,11 @@ const sales = ({ productId }: { productId: string }) => {
 
   };
 
+  const handleInputOnchange = (e:any) =>{
+    setQuantity(e.target.value);
+    const tempNum = Number(e.target.value);
+    if(product) setCalculatedPrice(tempNum*product?.price); 
+  }
 
   return (
     <div>
@@ -62,7 +67,7 @@ const sales = ({ productId }: { productId: string }) => {
         onClick={handleButtonClick}
         className=" dark:text-gray-300 hover: cursor-pointer bg-blue-800 hover:bg-blue-700"
       >
-        Add Saless
+        Add Sales
       </Button>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Add Sale">
@@ -109,7 +114,7 @@ const sales = ({ productId }: { productId: string }) => {
                   type="number"
                   min="1"
                   value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  onChange={handleInputOnchange}
                   placeholder="Enter quantity to sell"
                   className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
