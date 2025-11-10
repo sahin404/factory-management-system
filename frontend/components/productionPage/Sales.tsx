@@ -143,7 +143,7 @@ const sales = ({ productId }: { productId: string }) => {
                 </Button>
 
                 {success && (
-                  <p className="text-green-600 text-lg text-center">{success}</p>
+                  <p className="text-green-600 text-sm text-center">{success}</p>
                 )}
               </div>
 

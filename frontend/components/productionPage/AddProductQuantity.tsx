@@ -123,7 +123,7 @@ const AddProductQuantity = ({ productId }: { productId: string }) => {
                 {/* Success Message */}
                 <div>
                   {success && (
-                    <div className="text-center text-lg text-green-600">
+                    <div className="text-center text-sm text-green-600">
                       {success}
                     </div>
                   )}
