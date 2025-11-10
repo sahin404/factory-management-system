@@ -16,9 +16,11 @@ interface EmployeeState {
   isLoading: boolean;
   isLoadingEmployeeById: boolean;
   isUpdatingEmployee: boolean;
+  isDeleting:boolean;
   getAllEmployees: () => Promise<void>;
   getEmployeeById: (id: string) => Promise<void>;
   updateEmployee: (id: string, updatedData: Partial<Employee>) => Promise<void>;
+  deleteEmployeeById:(id:string)=>Promise<void>;
 }
 
 export const useEmployeeStore = create<EmployeeState>((set, get) => ({
@@ -27,6 +29,7 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   isLoading: true,
   isLoadingEmployeeById: false,
   isUpdatingEmployee: false,
+  isDeleting: false,
 
   // Get all employees
   getAllEmployees: async () => {
@@ -77,4 +80,19 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
       set({ isUpdatingEmployee: false });
     }
   },
+
+  //delete employee
+  deleteEmployeeById: async (id: string) => {
+  set({ isDeleting: true });
+  try {
+    await axiosInstance.delete(`/employee/${id}`);
+    set({
+      employees: get().employees.filter((emp) => emp._id !== id),
+    });
+  } catch (err) {
+    console.error("Error deleting employee:", err);
+  } finally {
+    set({ isDeleting: false });
+  }
+},
 }));
