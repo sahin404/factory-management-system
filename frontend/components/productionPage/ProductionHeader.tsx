@@ -27,8 +27,10 @@ const ProductionHeader = ({
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
   const { addProduct, isAdding } = useProductStore();
+
+
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
