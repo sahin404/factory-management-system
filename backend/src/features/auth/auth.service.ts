@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const signUpServ = async (data: IUserCreate) => {
+export const signUp = async (data: IUserCreate) => {
   try {
     //check duplicate email
     const existing = await User.findOne({ email: data.email });
@@ -20,7 +20,7 @@ export const signUpServ = async (data: IUserCreate) => {
       email: data.email,
       password: hashedPassword,
       role: data.role || 'employee',
-      image: data.image || '',
+      image:data.image || '',
       salary: data.salary || 0,
     });
 

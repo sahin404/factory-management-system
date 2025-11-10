@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { signUpServ, loginServ } from "./auth.service";
+import { signUp, loginServ } from "./auth.service";
 import { singupValidation } from "./aut.validation";
 import dotenv from 'dotenv'
 
 dotenv.config();
 
 // signup
-export const signUp = async (req: Request, res: Response) => {
+export const signUpController = async (req: Request, res: Response) => {
   try {
     const data = req.body;
     //validation
@@ -19,14 +19,14 @@ export const signUp = async (req: Request, res: Response) => {
     }
 
     // call for function
-    const userData = await signUpServ(data);
+    const userData = await signUp(data);
     res.status(201).json({
       success: true,
-      message: "successfully create this account",
+      message: "Successfully created the account.",
       data: userData,
     });
   } catch (err: any) {
-    res.status(500).send({
+    res.status(500).json({
       success: false,
       message: err.message,
     });
