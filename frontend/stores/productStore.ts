@@ -24,6 +24,7 @@ export interface ProductStore {
   isLoadingProductById: boolean;
   isUpdatingQuantity: boolean;
   isAddingSales: boolean;
+  isUpdatingProduct: boolean;
   getProducts: (searchTerm?: string, pagination?: number) => Promise<void>;
   getProductById: (productId?: string) => Promise<void>;
   updateProductQuantity: (
@@ -31,6 +32,7 @@ export interface ProductStore {
     quantity?: number
   ) => Promise<void>;
   addSales: (productId?: string, salesNum?: number) => Promise<void>;
+  updateProduct: (productId?: string, data?: Product) => Promise<void>;
 }
 
 export const useProductStore = create<ProductStore>((set, get) => ({
@@ -41,6 +43,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   isLoadingProductById: true,
   isUpdatingQuantity: false,
   isAddingSales: false,
+  isUpdatingProduct: false,
 
   //get all product
   getProducts: async (searchTerm?: string, pagination?: number) => {
@@ -96,6 +99,40 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       console.log("Error updating quantity:", err);
     } finally {
       set({ isUpdatingQuantity: false });
+    }
+  },
+
+  //update all field
+  updateProduct: async (productId?: string, data?: Product) => {
+    set({ isUpdatingProduct: true });
+    try {
+      if (!productId) {
+        throw new Error("Product ID is required for update");
+      }
+
+      const response = await axiosInstance.put<{ data: Product }>(
+        `/production/${productId}`,
+        data
+      );
+
+      const updatedProduct = response.data.data;
+
+      //update the product in store
+      set({ product: updatedProduct });
+
+      // update the product list in store
+      set((state) => ({
+        products: state.products.map((p) =>
+          p._id === productId ? updatedProduct : p
+        ),
+      }));
+    } catch (err: any) {
+      console.error(
+        "Error updating product:",
+        err.response?.data || err.message
+      );
+    } finally {
+      set({ isUpdatingProduct: false });
     }
   },
 
