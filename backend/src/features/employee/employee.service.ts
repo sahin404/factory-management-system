@@ -13,17 +13,18 @@ export async function getSingleEmployee(id: string) {
   return await User.findById(id);
 }
 
+// Update employee
+export async function updateEmployee(id: string, payload: any) {
+  return await User.findByIdAndUpdate(
+    id,
+    { $set: payload },
+    { new: true, runValidators: true }
+  );
+}
+
 // Delete employee
 export async function deleteEmployee(id: string) {
   return await User.findByIdAndDelete(id);
 }
 
-// Update employee name (employee only)
-export async function updateEmployeeByEmployee(id: string, data: UpdateEmployeeByEmployee) {
-  return await User.findByIdAndUpdate(id, { name: data.name }, { new: true });
-}
 
-// Update employee (admin/manager can update all fields)
-export async function updateEmployeeByAdmin(id: string, data: UpdateEmployeeByAdmin) {
-  return await User.findByIdAndUpdate(id, data, { new: true });
-}

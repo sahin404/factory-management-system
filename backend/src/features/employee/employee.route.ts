@@ -3,8 +3,7 @@ import {
   getAllEmployeeController,
   getSingleEmployeeController,
   deleteEmployeeController,
-  updateEmployeeByEmployeeController,
-  updateEmployeeByAdminController,
+  updateEmployeeController,
 } from './employee.controller';
 
 const router = express.Router();
@@ -12,7 +11,6 @@ const router = express.Router();
 router.get('/', getAllEmployeeController);
 router.get('/:id', getSingleEmployeeController);
 router.delete('/:id', deleteEmployeeController);
-router.patch('/update-by-employee/:id', updateEmployeeByEmployeeController);
-router.patch('/update-by-admin/:id', updateEmployeeByAdminController);
+router.put('/:id', updateEmployeeController);
 
 export default router;
