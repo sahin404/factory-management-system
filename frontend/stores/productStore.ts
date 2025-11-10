@@ -3,7 +3,7 @@ import axiosInstance from "@/lib/api";
 import { create } from "zustand";
 
 export interface Product {
-  _id: string;
+  _id?: string;
   name: string;
   description: string;
   unit: string;
@@ -27,6 +27,7 @@ export interface ProductStore {
   isAddingSales: boolean;
   isUpdatingProduct: boolean;
   isDeleting:boolean;
+  isAdding:boolean,
   getProducts: (searchTerm?: string, pagination?: number) => Promise<void>;
   getProductById: (productId?: string) => Promise<void>;
   updateProductQuantity: (
@@ -36,6 +37,7 @@ export interface ProductStore {
   addSales: (productId?: string, salesNum?: number) => Promise<void>;
   updateProduct: (productId?: string, data?: Product) => Promise<void>;
   deleteProductById:(productId?:string)=>Promise<void>;
+  addProduct:(newProduct?:Product)=>Promise<void>;
 }
 
 export const useProductStore = create<ProductStore>((set, get) => ({
@@ -48,6 +50,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   isAddingSales: false,
   isUpdatingProduct: false,
   isDeleting:false,
+  isAdding:false,
 
   //get all product
   getProducts: async (searchTerm?: string, pagination?: number) => {
@@ -184,5 +187,25 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     finally{
       set({isDeleting:false});
     }
-  }
+    
+  },
+
+  addProduct: async (newProduct?: Product) => {
+    if (!newProduct) return;
+    set({ isAdding: true });
+
+    try {
+      const response = await axiosInstance.post<{ data: Product }>(
+        "/production",
+        newProduct
+      );
+      set((state) => ({
+        products: [response.data.data, ...state.products],
+      }));
+    } catch (err: any) {
+      console.log("Error adding product:", err);
+    } finally {
+      set({ isAdding: false });
+    }
+  },
 }));
