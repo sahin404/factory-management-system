@@ -12,6 +12,8 @@ import { Button } from "../ui/button";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
+import UpdateEmployee from "./UpdateEmployee";
+import DeleteEmployee from "./DeleteEmployee";
 
 const ProductTable = () => {
   const { employees, getAllEmployees, isLoading } = useEmployeeStore();
@@ -55,14 +57,10 @@ const ProductTable = () => {
               <TableCell>{employee.email}</TableCell>
               <TableCell>{employee.salary}</TableCell>
               <TableCell>
-                <Button className="bg-yellow-600 text-white rounded hover:bg-yellow-500">
-                  Update
-                </Button>
+                <UpdateEmployee empId={employee._id}></UpdateEmployee>
               </TableCell>
               <TableCell>
-                <Button className="bg-red-700 text-white rounded hover:bg-red-600">
-                  Delete
-                </Button>
+                <DeleteEmployee empId={employee._id}></DeleteEmployee>
               </TableCell>
             </TableRow>
           ))
