@@ -24,7 +24,7 @@ export const getProductById = async (productId: string) => {
 };
 
 // update quanty of a product
-export const updateProduct = async (productId: string, newQuantity: number) => {
+export const updateProductQuantity = async (productId: string, newQuantity: number) => {
   const product = await Production.findById(productId);
 
   if (!product) {
@@ -33,6 +33,20 @@ export const updateProduct = async (productId: string, newQuantity: number) => {
   product.quantity += newQuantity;
 
   const updatedProduct = await product.save();
+
+  return updatedProduct;
+};
+
+
+// update all field of a product
+export const updateProduct = async (productId: string, updatedData: any) => {
+  const updatedProduct = await Production.findByIdAndUpdate(
+    productId,
+    updatedData,
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedProduct) throw new Error("Product not found");
 
   return updatedProduct;
 };
