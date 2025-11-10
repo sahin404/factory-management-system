@@ -1,11 +1,10 @@
 import User from '../auth/auth.model';
 import { UpdateEmployeeByAdmin, UpdateEmployeeByEmployee } from './employee.types';
 
-
 // Get all employees
 export async function getAllEmployees() {
     return await User.find({ 
-        role: 'employee' 
+        role: {$ne:'admin'} 
     });
 }
 

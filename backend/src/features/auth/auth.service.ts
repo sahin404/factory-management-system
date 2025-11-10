@@ -36,7 +36,7 @@ export const signUp = async (data: IUserCreate) => {
   }
 };
 
-export const loginServ = async({email,password}:{email:string, password:string})=>{
+export const login = async({email,password}:{email:string, password:string})=>{
   try{
     //check if email doesnot exists
     const existingUser = await User.findOne({

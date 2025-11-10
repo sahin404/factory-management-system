@@ -13,10 +13,11 @@ export async function getAllEmployeeController(req: Request, res: Response) {
     const employees = await getAllEmployees();
     res.status(200).json({
         success:true,
+        message: "Fetched employees successfully.",
         data: employees
     });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch employees' });
+    res.status(500).json({ success:false, message: 'Failed to fetch employees' });
   }
 }
 
