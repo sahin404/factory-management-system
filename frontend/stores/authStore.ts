@@ -3,12 +3,12 @@ import toast from "react-hot-toast";
 import { create } from "zustand";
 
 interface User {
-  _id: string;
+  _id?: string;
   name: string;
   email: string;
   role: string;
-  image:string;
-  salary:Number;
+  image?:string;
+  salary:number;
 }
 
 interface LoginResponse {
@@ -16,6 +16,12 @@ interface LoginResponse {
     token: string;
     user: User;
   };
+}
+
+interface SignupResponse {
+  success: boolean;
+  message: string;
+  data?: User;
 }
 
 interface CheckAuth {
@@ -27,8 +33,11 @@ interface AuthState {
   isLoading: boolean;
   isLoggingIn: boolean;
   errorMessage:string;
+  isSigningUp:boolean,
   checkCurrentUser: () => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
+  signup: (data: User) => Promise<SignupResponse | null>;
+  //  signup: (data: User) => Promise<SignupResponse | null>;
   //   logout: () => Promise<void>;
 }
 
@@ -37,6 +46,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoading: true,
   isLoggingIn: false,
   errorMessage:'',
+  isSigningUp:false,
 
   // check current user
   checkCurrentUser: async () => {
@@ -70,4 +80,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ isLoggingIn: false });
     }
   },
+
+  // signup User
+  signup:async(data:User)=>{
+    set({isSigningUp:true});
+    try{
+      const response = await axiosInstance.post<SignupResponse>(`/auth/signup`, data);
+      if(response.data?.success){
+        return response.data;
+      }
+      else{
+        return null;
+      }
+    }
+    catch(err:any){
+      return err?.response.data;
+    }
+    finally{
+      set({isSigningUp:true});
+    }
+  }
 }));

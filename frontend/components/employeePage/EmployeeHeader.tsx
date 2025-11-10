@@ -4,6 +4,7 @@ import { Plus, Eye, EyeOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Modal from "../ui/modal";
+import { useAuthStore } from "@/stores/authStore";
 
 const EmployeeHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,25 +20,41 @@ const EmployeeHeader = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // call the store
+  const { isSigningUp, signup } = useAuthStore();
+
   const openModal = () => {
     setIsOpen(true);
+    setError("");
+    setSuccess("");
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      role: "",
+      salary: "",
+    });
   };
 
   //hanlde onchange
   const handleOnChange = (e: any) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   // Handle Add employee button
-  const handleAddEmployeeButton = (e: any) => {
+  const handleAddEmployeeButton = async (e: any) => {
     //initial validation check:
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
     const name = formData.name.trim();
     const email = formData.email.trim();
     const password = formData.password.trim();
     const role = formData.role.trim();
-    const salary = formData.salary;
+    const salary = Number(formData.salary);
 
     // Email regex pattern
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -58,17 +75,34 @@ const EmployeeHeader = () => {
     }
 
     if (!role) {
-      setError("Please select a valid role.");
+      setError("Please select a role.");
       return;
     }
 
-    if (!salary || Number(salary) <= 0) {
-      setError("Salary must be a positive number.");
+    if (salary <= 0) {
+      setError("Please enter a valid salary.");
       return;
     }
+
+    const signupData = {
+      ...formData,
+      salary: Number(formData.salary),
+    };
 
     // Now all data is ready to save database:
-
+    const response = await signup(signupData);
+    if (response?.success) {
+      setSuccess(response?.message);
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        role: "",
+        salary: "",
+      });
+    } else {
+      setError(response?.message || "");
+    }
   };
 
   return (
@@ -164,6 +198,14 @@ const EmployeeHeader = () => {
                 placeholder="Salary (BDT)"
                 className="w-full border rounded p-2"
               />
+
+              {/* show error */}
+              <div>
+                {error && <div className="text-red-500 text-md">{error}</div>}
+                {success && (
+                  <div className="text-green-500 text-md">{success}</div>
+                )}
+              </div>
 
               {/* Buttons */}
               <div className="flex justify-end gap-2 pt-2">
