@@ -37,7 +37,7 @@ const sales = ({ productId }: { productId: string }) => {
     // check is greater than total product
     if (product) {
       if (product?.quantity < salesNum) {
-        setError("Sales number must be less than total products!");
+        setError("Not enough stock!");
         return;
       }
     }
