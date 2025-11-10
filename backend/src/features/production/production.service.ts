@@ -37,7 +37,6 @@ export const updateProductQuantity = async (productId: string, newQuantity: numb
   return updatedProduct;
 };
 
-
 // update all field of a product
 export const updateProduct = async (productId: string, updatedData: any) => {
   const updatedProduct = await Production.findByIdAndUpdate(
@@ -50,3 +49,10 @@ export const updateProduct = async (productId: string, updatedData: any) => {
 
   return updatedProduct;
 };
+
+
+//delete product by id
+export const deleteProductById = async(productId?:string) =>{
+  const response = await Production.findByIdAndDelete(productId);
+  return response;
+}

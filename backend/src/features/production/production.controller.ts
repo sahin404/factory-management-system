@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { getProduct, getProductById, updateProduct, updateProductQuantity } from "./production.service";
+import {
+  deleteProductById,
+  getProduct,
+  getProductById,
+  updateProduct,
+  updateProductQuantity,
+} from "./production.service";
 
 // get product
 export const getProductController = async (req: Request, res: Response) => {
@@ -36,15 +42,17 @@ export const getProductByIdController = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(400).json({
       success: false,
-      message: 'Error in fetching single product.'
+      message: "Error in fetching single product.",
     });
     console.log(err);
   }
 };
 
-
 // update quantity of product
-export const updateProductQuantityController = async (req: Request, res: Response) => {
+export const updateProductQuantityController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const productId = req.params.id;
     const newQuantity = Number(req.body.quantity);
@@ -65,9 +73,11 @@ export const updateProductQuantityController = async (req: Request, res: Respons
   }
 };
 
-
 // update  all fiend of product
-export const updateAllFieldsController = async (req: Request, res: Response) => {
+export const updateAllFieldsController = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const productId = req.params.id;
     const updatedData = req.body;
@@ -85,6 +95,28 @@ export const updateAllFieldsController = async (req: Request, res: Response) => 
       success: false,
       message: "Failed to update product",
       error: err.message,
+    });
+  }
+};
+
+// delete a product by id
+export const deleteProductByIdController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const productId = req.params.id;
+    const response = await deleteProductById(productId);
+    res.status(200).json({
+      success: true,
+      message: "successfully delete this item.",
+      data: response,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      success: true,
+      message: "An error occured to delete this item."
     });
   }
 };
