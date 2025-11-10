@@ -8,9 +8,67 @@ import Modal from "../ui/modal";
 const EmployeeHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    salary: "",
+  });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const openModal = () => {
     setIsOpen(true);
+  };
+
+  //hanlde onchange
+  const handleOnChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  // Handle Add employee button
+  const handleAddEmployeeButton = (e: any) => {
+    //initial validation check:
+    e.preventDefault();
+
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const password = formData.password.trim();
+    const role = formData.role.trim();
+    const salary = formData.salary;
+
+    // Email regex pattern
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name || name.length < 3) {
+      setError("Employee name must be at least 3 characters long.");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    if (!role) {
+      setError("Please select a valid role.");
+      return;
+    }
+
+    if (!salary || Number(salary) <= 0) {
+      setError("Salary must be a positive number.");
+      return;
+    }
+
+    // Now all data is ready to save database:
+
   };
 
   return (
@@ -43,6 +101,8 @@ const EmployeeHeader = () => {
               <span className="font-semibold">Employee Name</span>
               <input
                 name="name"
+                value={formData.name}
+                onChange={handleOnChange}
                 placeholder="Employee Name"
                 className="w-full border rounded p-2"
               />
@@ -52,6 +112,8 @@ const EmployeeHeader = () => {
               <input
                 name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleOnChange}
                 placeholder="Email"
                 className="w-full border rounded p-2"
               />
@@ -60,6 +122,8 @@ const EmployeeHeader = () => {
               <span className="font-semibold">Password</span>
               <div className="relative">
                 <input
+                  value={formData.password}
+                  onChange={handleOnChange}
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
@@ -77,9 +141,10 @@ const EmployeeHeader = () => {
               {/* Select Role */}
               <span className="font-semibold">Select Role</span>
               <select
+                value={formData.role}
+                onChange={handleOnChange}
                 name="role"
                 className="w-full border rounded p-2 bg-white"
-                defaultValue=""
               >
                 <option value="" disabled>
                   Choose Role
@@ -92,6 +157,8 @@ const EmployeeHeader = () => {
               {/* Salary */}
               <span className="font-semibold">Salary</span>
               <input
+                value={formData.salary}
+                onChange={handleOnChange}
                 name="salary"
                 type="number"
                 placeholder="Salary (BDT)"
@@ -100,7 +167,10 @@ const EmployeeHeader = () => {
 
               {/* Buttons */}
               <div className="flex justify-end gap-2 pt-2">
-                <Button className="bg-green-700 hover:bg-green-600 text-white">
+                <Button
+                  onClick={handleAddEmployeeButton}
+                  className="bg-green-700 hover:bg-green-600 text-white"
+                >
                   Add Employee
                 </Button>
                 <Button onClick={() => setIsOpen(false)} variant="secondary">
