@@ -69,7 +69,7 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
             <TableCell><AddProductQuantity productId={product._id}></AddProductQuantity></TableCell>
             <TableCell> <Sales productId={product._id}></Sales> </TableCell>
             <TableCell> <Update productId={product._id}></Update></TableCell>
-            <TableCell><DeleteProductItem></DeleteProductItem></TableCell>
+            <TableCell><DeleteProductItem productId={product._id}></DeleteProductItem></TableCell>
           </TableRow>
         ))}
       </TableBody>

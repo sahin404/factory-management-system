@@ -43,8 +43,8 @@ const Update = ({ productId }: { productId: string }) => {
       setSuccess("");
 
       const dataToUpdate = {
-        ...product, // existing values
-        ...formData, // override with changed values
+        ...product,
+        ...formData,
       };
 
       // Validation

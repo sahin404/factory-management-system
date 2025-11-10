@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/toast";
 import axiosInstance from "@/lib/api";
 import { create } from "zustand";
 
@@ -25,6 +26,7 @@ export interface ProductStore {
   isUpdatingQuantity: boolean;
   isAddingSales: boolean;
   isUpdatingProduct: boolean;
+  isDeleting:boolean;
   getProducts: (searchTerm?: string, pagination?: number) => Promise<void>;
   getProductById: (productId?: string) => Promise<void>;
   updateProductQuantity: (
@@ -33,6 +35,7 @@ export interface ProductStore {
   ) => Promise<void>;
   addSales: (productId?: string, salesNum?: number) => Promise<void>;
   updateProduct: (productId?: string, data?: Product) => Promise<void>;
+  deleteProductById:(productId?:string)=>Promise<void>;
 }
 
 export const useProductStore = create<ProductStore>((set, get) => ({
@@ -44,6 +47,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   isUpdatingQuantity: false,
   isAddingSales: false,
   isUpdatingProduct: false,
+  isDeleting:false,
 
   //get all product
   getProducts: async (searchTerm?: string, pagination?: number) => {
@@ -160,4 +164,25 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       set({ isAddingSales: false });
     }
   },
+
+  // delete a product item
+  deleteProductById: async(productId?:string)=>{
+    set({isDeleting:true});
+    try{
+      await axiosInstance.delete(`/production/${productId}`);
+      set((state) => ({
+      products: state.products.filter((p) => p._id !== productId),
+    }));
+    } 
+    catch{
+      console.log("An error occured to delete prodcut item");
+      toast.error("Error occurred!", {
+        position: "top-right",
+        description: "Something went wrong. Please try again.",
+      });
+    }
+    finally{
+      set({isDeleting:false});
+    }
+  }
 }));
