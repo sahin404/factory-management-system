@@ -1,4 +1,5 @@
 import Production from "./production.model";
+import { UpdateData } from "./production.types";
 
 // get product
 export const getProduct = async (searchQuery?: string, page: number = 1) => {
@@ -55,4 +56,11 @@ export const updateProduct = async (productId: string, updatedData: any) => {
 export const deleteProductById = async(productId?:string) =>{
   const response = await Production.findByIdAndDelete(productId);
   return response;
+}
+
+//adding a product
+export const addProduct =async(newProduct:UpdateData)=>{
+  const addNewProduct = new Production(newProduct);
+  addNewProduct.save();
+  return addNewProduct;
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+  addProduct,
   deleteProductById,
   getProduct,
   getProductById,
@@ -116,7 +117,25 @@ export const deleteProductByIdController = async (
     console.log(err);
     res.status(400).json({
       success: true,
-      message: "An error occured to delete this item."
+      message: "An error occured to delete this item.",
+    });
+  }
+};
+
+// add product
+export const addProductController = async (req: Request, res: Response) => {
+  try {
+    const newData = req.body;
+    const response = await addProduct(newData);
+    res.status(201).json({
+      success: true,
+      message: "Successfully Added this item",
+      data: response,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: "An error occured to added this item.",
     });
   }
 };
