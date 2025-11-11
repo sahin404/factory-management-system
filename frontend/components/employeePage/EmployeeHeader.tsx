@@ -6,7 +6,13 @@ import { useState } from "react";
 import Modal from "../ui/modal";
 import { useAuthStore } from "@/stores/authStore";
 
-const EmployeeHeader = () => {
+interface HeaderInterface {
+  searchTerm:string;
+  setSearchTerm: (value: string)=>void;
+
+}
+
+const EmployeeHeader = ({searchTerm, setSearchTerm}:HeaderInterface) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -110,6 +116,8 @@ const EmployeeHeader = () => {
       <div className="flex gap-5">
         {/* search input */}
         <input
+          value={searchTerm}
+          onChange={(e)=>setSearchTerm(e.target.value)}
           type="text"
           placeholder="Search employee..."
           className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"

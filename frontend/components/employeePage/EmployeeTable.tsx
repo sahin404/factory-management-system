@@ -8,22 +8,20 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { Button } from "../ui/button";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
 import UpdateEmployee from "./UpdateEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 
-const ProductTable = () => {
+const ProductTable = ({searchTerm}:{searchTerm:string}) => {
   const { employees, getAllEmployees, isLoading } = useEmployeeStore();
-
   useEffect(() => {
     const getEmployees = async () => {
-      await getAllEmployees();
+      await getAllEmployees(searchTerm);
     };
     getEmployees();
-  }, []);
+  }, [searchTerm]);
 
   if (isLoading) return <TableSkeleton></TableSkeleton>;
 

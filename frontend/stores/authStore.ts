@@ -1,14 +1,15 @@
 import axiosInstance from "@/lib/api";
 import toast from "react-hot-toast";
 import { create } from "zustand";
+import { Employee, useEmployeeStore } from "./employeeStore";
 
 interface User {
   _id?: string;
   name: string;
   email: string;
   role: string;
-  image?:string;
-  salary:number;
+  image?: string;
+  salary: number;
 }
 
 interface LoginResponse {
@@ -32,8 +33,8 @@ interface AuthState {
   user: User | null;
   isLoading: boolean;
   isLoggingIn: boolean;
-  errorMessage:string;
-  isSigningUp:boolean,
+  errorMessage: string;
+  isSigningUp: boolean;
   checkCurrentUser: () => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
   signup: (data: User) => Promise<SignupResponse | null>;
@@ -45,8 +46,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   isLoading: true,
   isLoggingIn: false,
-  errorMessage:'',
-  isSigningUp:false,
+  errorMessage: "",
+  isSigningUp: false,
 
   // check current user
   checkCurrentUser: async () => {
@@ -69,35 +70,41 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ user: res.data.data.user });
 
       // set jwt token into local storage
-      //localStorage.setItem("token", res.data.data.token); 
+      //localStorage.setItem("token", res.data.data.token);
       // don't need, because we move now setCookies functions
 
       toast.success("Logged in successfully!");
     } catch (err: any) {
       console.log(err.response?.data || err.message);
-      set({errorMessage:"Invalid Credentials. Try Again!"})
+      set({ errorMessage: "Invalid Credentials. Try Again!" });
     } finally {
       set({ isLoggingIn: false });
     }
   },
 
   // signup User
-  signup:async(data:User)=>{
-    set({isSigningUp:true});
-    try{
-      const response = await axiosInstance.post<SignupResponse>(`/auth/signup`, data);
-      if(response.data?.success){
+  signup: async (data: User) => {
+    set({ isSigningUp: true });
+    try {
+      const response = await axiosInstance.post<SignupResponse>(
+        `/auth/signup`,
+        data
+      );
+      if (response.data?.success) {
+        const newUser = response.data.data! as Employee;
+
+        // EmployeeStore update
+        const addEmployee = useEmployeeStore.getState().addEmployee;
+        addEmployee(newUser);
+
         return response.data;
-      }
-      else{
+      } else {
         return null;
       }
-    }
-    catch(err:any){
+    } catch (err: any) {
       return err?.response.data;
+    } finally {
+      set({ isSigningUp: false });
     }
-    finally{
-      set({isSigningUp:true});
-    }
-  }
+  },
 }));

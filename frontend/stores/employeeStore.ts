@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/api";
 import { create } from "zustand";
 
-interface Employee {
+export interface Employee {
   _id: string;
   name: string;
   email: string;
@@ -16,11 +16,13 @@ interface EmployeeState {
   isLoading: boolean;
   isLoadingEmployeeById: boolean;
   isUpdatingEmployee: boolean;
-  isDeleting:boolean;
-  getAllEmployees: () => Promise<void>;
+  isDeleting: boolean;
+  getAllEmployees: (searchTerm:string) => Promise<void>;
   getEmployeeById: (id: string) => Promise<void>;
   updateEmployee: (id: string, updatedData: Partial<Employee>) => Promise<void>;
-  deleteEmployeeById:(id:string)=>Promise<void>;
+  deleteEmployeeById: (id: string) => Promise<void>;
+  addEmployee: (newEmployee: Employee) => void;
+  
 }
 
 export const useEmployeeStore = create<EmployeeState>((set, get) => ({
@@ -32,13 +34,20 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   isDeleting: false,
 
   // Get all employees
-  getAllEmployees: async () => {
+  getAllEmployees: async (searchTerm?:string) => {
     set({ isLoading: true });
     try {
-      const response = await axiosInstance.get<{ data: Employee[] }>("/employee");
+      const query = searchTerm? `?search=${searchTerm}`:'';
+
+      const response = await axiosInstance.get<{ data: Employee[] }>(
+        `/employee${query}`
+      );
       set({ employees: response.data.data });
     } catch (err: any) {
-      console.error("Error fetching employees:", err.response?.data || err.message);
+      console.log(
+        "Error fetching employees:",
+        err.response?.data || err.message
+      );
     } finally {
       set({ isLoading: false });
     }
@@ -48,10 +57,15 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   getEmployeeById: async (id: string) => {
     set({ isLoadingEmployeeById: true });
     try {
-      const response = await axiosInstance.get<{ data: Employee }>(`/employee/${id}`);
+      const response = await axiosInstance.get<{ data: Employee }>(
+        `/employee/${id}`
+      );
       set({ employee: response.data.data });
     } catch (err: any) {
-      console.error("Error fetching employee:", err.response?.data || err.message);
+      console.log(
+        "Error fetching employee:",
+        err.response?.data || err.message
+      );
     } finally {
       set({ isLoadingEmployeeById: false });
     }
@@ -75,7 +89,10 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
             : get().employee,
       });
     } catch (err: any) {
-      console.error("Error updating employee:", err.response?.data || err.message);
+      console.log(
+        "Error updating employee:",
+        err.response?.data || err.message
+      );
     } finally {
       set({ isUpdatingEmployee: false });
     }
@@ -83,16 +100,21 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
 
   //delete employee
   deleteEmployeeById: async (id: string) => {
-  set({ isDeleting: true });
-  try {
-    await axiosInstance.delete(`/employee/${id}`);
-    set({
-      employees: get().employees.filter((emp) => emp._id !== id),
-    });
-  } catch (err) {
-    console.error("Error deleting employee:", err);
-  } finally {
-    set({ isDeleting: false });
-  }
-},
+    set({ isDeleting: true });
+    try {
+      await axiosInstance.delete(`/employee/${id}`);
+      set({
+        employees: get().employees.filter((emp) => emp._id !== id),
+      });
+    } catch (err) {
+      console.log("Error deleting employee:", err);
+    } finally {
+      set({ isDeleting: false });
+    }
+  },
+
+  // EmployeeStore
+  addEmployee: (newEmployee: Employee) => {
+    set({ employees: [...get().employees, newEmployee] });
+  },
 }));
