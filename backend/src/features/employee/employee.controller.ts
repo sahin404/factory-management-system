@@ -10,12 +10,12 @@ import {
 export async function getAllEmployeeController(req: Request, res: Response) {
   try {
     const searchTerm = req.query.search as string;
-
-    const employees = await getAllEmployees(searchTerm);
+    const currentPage = Number(req.query.page) || 1;
+    const response = await getAllEmployees(searchTerm, currentPage);
     res.status(200).json({
         success:true,
         message: "Fetched employees successfully.",
-        data: employees
+        data: response
     });
   } catch (error) {
     res.status(500).json({ success:false, message: 'Failed to fetch employees' });

@@ -1,14 +1,21 @@
 import User from "../auth/auth.model";
 
 // Get all employees
-export async function getAllEmployees(searchTerm: string) {
+export async function getAllEmployees(searchTerm: string, currentPage:number) {
   const filter:any = { role: { $ne: "admin" }};
 
   if(searchTerm){
     filter.name = {$regex:searchTerm, $options:"i"};
   }
 
-  return await User.find(filter).sort({ createdAt: -1 });
+  const limit = 3;
+  const employees = await  User.find(filter)
+    .sort({ createdAt: -1 })
+    .skip((currentPage-1)*limit)
+    .limit(limit);
+  const totalEmployees = await User.countDocuments(filter);
+
+  return({employees,totalEmployees});
 }
 
 // Get single employee by ID
