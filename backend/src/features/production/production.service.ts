@@ -9,6 +9,7 @@ export const getProduct = async (searchQuery?: string, page: number = 1) => {
 
   const limit = 5;
   const products = await Production.find(filter)
+  .sort({createdAt:-1}) // new product first
     .skip((page - 1) * limit)
     .limit(limit);
 

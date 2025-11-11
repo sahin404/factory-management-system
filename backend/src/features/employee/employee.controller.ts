@@ -9,7 +9,9 @@ import {
 // Get all employees
 export async function getAllEmployeeController(req: Request, res: Response) {
   try {
-    const employees = await getAllEmployees();
+    const searchTerm = req.query.search as string;
+
+    const employees = await getAllEmployees(searchTerm);
     res.status(200).json({
         success:true,
         message: "Fetched employees successfully.",
