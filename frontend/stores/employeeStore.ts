@@ -17,6 +17,7 @@ interface EmployeeState {
   isLoadingEmployeeById: boolean;
   isUpdatingEmployee: boolean;
   isDeleting: boolean;
+  totalEmployees:number,
   getAllEmployees: (searchTerm:string) => Promise<void>;
   getEmployeeById: (id: string) => Promise<void>;
   updateEmployee: (id: string, updatedData: Partial<Employee>) => Promise<void>;
@@ -25,10 +26,20 @@ interface EmployeeState {
   
 }
 
+interface GetAllEmployeeState{
+  success:boolean,
+  message:string,
+  data:{
+    employees:Employee[],
+    totalEmployees:number
+  }
+}
+
 export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   employees: [],
   employee: null,
   isLoading: true,
+  totalEmployees:0,
   isLoadingEmployeeById: false,
   isUpdatingEmployee: false,
   isDeleting: false,
@@ -39,10 +50,11 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
     try {
       const query = searchTerm? `?search=${searchTerm}`:'';
 
-      const response = await axiosInstance.get<{ data: Employee[] }>(
+      const response = await axiosInstance.get<GetAllEmployeeState>(
         `/employee${query}`
       );
-      set({ employees: response.data.data });
+      set({ employees: response.data.data.employees });
+      set({totalEmployees:response.data.data.totalEmployees});
     } catch (err: any) {
       console.log(
         "Error fetching employees:",

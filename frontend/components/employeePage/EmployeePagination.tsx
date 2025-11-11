@@ -9,11 +9,19 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useEmployeeStore } from "@/stores/employeeStore";
+import PaginationSkeleton from "../PaginationSkeleton";
 
 const EmployeePagination = () => {
-  // Static pagination design (no functionality yet)
-  const pageNumbers = [1, 2, 3, 4, 5];
-  const currentPage = 1;
+
+  const {totalEmployees, isLoading} = useEmployeeStore();
+
+  if(isLoading) return <PaginationSkeleton></PaginationSkeleton>
+  
+  const limit = 10;
+  const totalPages = Math.ceil(totalEmployees/limit);
+  // create array
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="mt-5 flex justify-center">
@@ -23,11 +31,11 @@ const EmployeePagination = () => {
             <PaginationPrevious />
           </PaginationItem>
 
-          {pageNumbers.map((page) => (
+          {pages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
                 className={`px-3 py-1 rounded transition-colors duration-200 ${
-                  currentPage === page
+                  1 === page
                     ? "bg-green-700 text-white hover:text-white hover:bg-green-500 dark:hover:bg-green-500"
                     : "bg-white text-gray-700 hover:bg-gray-300 border"
                 }`}
@@ -37,9 +45,9 @@ const EmployeePagination = () => {
             </PaginationItem>
           ))}
 
-          <PaginationItem>
+          {/* <PaginationItem>
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem> */}
 
           <PaginationItem>
             <PaginationNext />
