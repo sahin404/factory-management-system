@@ -9,20 +9,38 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
 import UpdateEmployee from "./UpdateEmployee";
 import DeleteEmployee from "./DeleteEmployee";
+import { debounce } from "lodash";
 
-const ProductTable = ({searchTerm}:{searchTerm:string}) => {
+const ProductTable = ({
+  searchTerm,
+  currentPage,
+}: {
+  searchTerm: string;
+  currentPage: number;
+}) => {
   const { employees, getAllEmployees, isLoading } = useEmployeeStore();
-  useEffect(() => {
-    const getEmployees = async () => {
-      await getAllEmployees(searchTerm);
-    };
-    getEmployees();
-  }, [searchTerm]);
 
+  // debounce
+  const debouncedGetEmployees = useCallback(
+    debounce((term: string, page: number) => {
+      getAllEmployees(term, page);
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    debouncedGetEmployees(searchTerm, currentPage);
+
+    // cleanup to cancel debounce on unmount
+    return () => {
+      debouncedGetEmployees.cancel();
+    };
+  }, [searchTerm, currentPage, debouncedGetEmployees]);
+  
   if (isLoading) return <TableSkeleton></TableSkeleton>;
 
   return (

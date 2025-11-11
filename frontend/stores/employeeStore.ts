@@ -18,7 +18,7 @@ interface EmployeeState {
   isUpdatingEmployee: boolean;
   isDeleting: boolean;
   totalEmployees:number,
-  getAllEmployees: (searchTerm:string) => Promise<void>;
+  getAllEmployees: (searchTerm:string,currentPage:number) => Promise<void>;
   getEmployeeById: (id: string) => Promise<void>;
   updateEmployee: (id: string, updatedData: Partial<Employee>) => Promise<void>;
   deleteEmployeeById: (id: string) => Promise<void>;
@@ -45,11 +45,15 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   isDeleting: false,
 
   // Get all employees
-  getAllEmployees: async (searchTerm?:string) => {
+  getAllEmployees: async (searchTerm?:string, currentPage?:number) => {
     set({ isLoading: true });
     try {
-      const query = searchTerm? `?search=${searchTerm}`:'';
+      
+      // if user search then page number should 1
+      const pageToUse = searchTerm ? 1 : currentPage || 1;
 
+      const query = searchTerm? `?page=${pageToUse}&search=${searchTerm}`:`?page=${currentPage}`;
+      
       const response = await axiosInstance.get<GetAllEmployeeState>(
         `/employee${query}`
       );

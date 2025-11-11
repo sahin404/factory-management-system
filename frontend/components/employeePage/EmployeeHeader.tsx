@@ -9,10 +9,11 @@ import { useAuthStore } from "@/stores/authStore";
 interface HeaderInterface {
   searchTerm:string;
   setSearchTerm: (value: string)=>void;
+  setCurrentPage: (value: number)=>void;
 
 }
 
-const EmployeeHeader = ({searchTerm, setSearchTerm}:HeaderInterface) => {
+const EmployeeHeader = ({searchTerm, setSearchTerm, setCurrentPage}:HeaderInterface) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -117,7 +118,7 @@ const EmployeeHeader = ({searchTerm, setSearchTerm}:HeaderInterface) => {
         {/* search input */}
         <input
           value={searchTerm}
-          onChange={(e)=>setSearchTerm(e.target.value)}
+          onChange={(e)=>{setSearchTerm(e.target.value); setCurrentPage(1)}}
           type="text"
           placeholder="Search employee..."
           className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"

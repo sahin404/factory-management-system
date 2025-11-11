@@ -12,30 +12,50 @@ import {
 import { useEmployeeStore } from "@/stores/employeeStore";
 import PaginationSkeleton from "../PaginationSkeleton";
 
-const EmployeePagination = () => {
+interface pageNationProps {
+  currentPage: number;
+  setCurrentPage: (value: number) => void;
+}
 
-  const {totalEmployees, isLoading} = useEmployeeStore();
+const EmployeePagination = ({
+  currentPage,
+  setCurrentPage,
+}: pageNationProps) => {
+  const { totalEmployees, isLoading } = useEmployeeStore();
 
-  if(isLoading) return <PaginationSkeleton></PaginationSkeleton>
-  
-  const limit = 10;
-  const totalPages = Math.ceil(totalEmployees/limit);
+  if (isLoading) return <PaginationSkeleton></PaginationSkeleton>;
+
+  const limit = 3;
+  const totalPages = Math.ceil(totalEmployees / limit);
   // create array
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const handlePrevious = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="mt-5 flex justify-center">
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious />
+            <PaginationPrevious onClick={handlePrevious} />
           </PaginationItem>
 
           {pages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
+                onClick={() => handlePageClick(page)}
                 className={`px-3 py-1 rounded transition-colors duration-200 ${
-                  1 === page
+                  currentPage === page
                     ? "bg-green-700 text-white hover:text-white hover:bg-green-500 dark:hover:bg-green-500"
                     : "bg-white text-gray-700 hover:bg-gray-300 border"
                 }`}
@@ -50,7 +70,7 @@ const EmployeePagination = () => {
           </PaginationItem> */}
 
           <PaginationItem>
-            <PaginationNext />
+            <PaginationNext onClick={handleNext} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
