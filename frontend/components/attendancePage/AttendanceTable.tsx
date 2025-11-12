@@ -13,15 +13,13 @@ import { useEmployeeStore } from "@/stores/employeeStore";
 import { useEffect } from "react";
 import TableSkeleton from "../TableSkeleton";
 
-const AttendanceTable = () => {
+const AttendanceTable = ({searchTerm}:{searchTerm:string}) => {
   
   const {isLoading, employees, getAllEmployees} = useEmployeeStore();
 
   useEffect(()=>{
-    getAllEmployees("", 1);
-  },[getAllEmployees])
-
-
+    getAllEmployees(searchTerm, 1);
+  },[getAllEmployees, searchTerm])
 
   const today = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
