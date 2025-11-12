@@ -8,6 +8,7 @@ import { expenseRouter } from './features/expense/expense.route';
 import productRouter from './features/production/production.route';
 import cookieParser from 'cookie-parser';
 import salesRouter from './features/sales/sales.routes';
+import attendanceRouter from './features/attendance/attendance.route';
 
 const app = express();
 dotenv.config();
@@ -24,6 +25,7 @@ app.use('/api/employee', employeeRouter);
 app.use('/api/expense', expenseRouter);
 app.use('/api/production', productRouter);
 app.use('/api/sales', salesRouter);
+app.use('/api/attendance', attendanceRouter);
 
 
 
