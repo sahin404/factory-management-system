@@ -8,7 +8,7 @@ export async function getAllEmployees(searchTerm: string, currentPage:number) {
     filter.name = {$regex:searchTerm, $options:"i"};
   }
 
-  const limit = 3;
+  const limit = 10;
   const employees = await  User.find(filter)
     .sort({ createdAt: -1 })
     .skip((currentPage-1)*limit)
