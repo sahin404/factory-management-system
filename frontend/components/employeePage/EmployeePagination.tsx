@@ -25,7 +25,7 @@ const EmployeePagination = ({
 
   if (isLoading) return <PaginationSkeleton></PaginationSkeleton>;
 
-  const limit = 3;
+  const limit = 10;
   const totalPages = Math.ceil(totalEmployees / limit);
   // create array
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);

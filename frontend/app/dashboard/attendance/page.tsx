@@ -1,8 +1,15 @@
+import AttendanceBody from "@/components/attendancePage/AttendanceBody"
 
 const attendance = async() => {
 
   return (
-    <div>attendance</div>
+    <div>
+      {/* Header */}
+      <h1 className="text-2xl font-semibold">Attendance</h1>
+      
+      {/* Body */}
+      <AttendanceBody></AttendanceBody>
+    </div>
   )
 }
 
