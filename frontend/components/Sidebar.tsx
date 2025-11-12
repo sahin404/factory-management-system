@@ -13,7 +13,7 @@ import {
   FileText,
   Package,
 } from "lucide-react";
-import SidebarSkeleton from "./SidebarSkeleton";
+import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 
 const Sidebar = () => {
   const { user, isLoading, checkCurrentUser } = useAuthStore();

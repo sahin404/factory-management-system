@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useProductStore } from "@/stores/productStore";
-import PaginationSkeleton from "../PaginationSkeleton";
+import PaginationSkeleton from "../skeletons/PaginationSkeleton";
 
 interface PageProps {
   currentPage: number;

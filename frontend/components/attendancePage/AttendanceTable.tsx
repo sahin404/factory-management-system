@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useCallback, useEffect, useState } from "react";
-import TableSkeleton from "../TableSkeleton";
+import TableSkeleton from "../skeletons/TableSkeleton";
 import { debounce } from "lodash";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { useAttendanceStore } from "@/stores/attendanceStore";
@@ -69,7 +69,7 @@ const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentP
     await updateAttendance(empId, status, today);
   };
 
-  if (isLoading || attendanceLoading) return <TableSkeleton></TableSkeleton>;
+  if (isLoading || attendanceLoading) return <TableSkeleton />;
 
   return (
     <Table className="min-w-[600px]">

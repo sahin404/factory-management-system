@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useProductStore } from "@/stores/productStore";
 import { useCallback, useEffect } from "react";
-import TableSkeleton from "../TableSkeleton";
+import TableSkeleton from "../skeletons/TableSkeleton";
 import AddProductQuantity from "./AddProductQuantity";
 import DeleteProductItem from "./DeleteProductItem";
 import Sales from "./Sales";

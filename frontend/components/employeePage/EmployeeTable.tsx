@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { useEmployeeStore } from "@/stores/employeeStore";
 import { useCallback, useEffect } from "react";
-import TableSkeleton from "../TableSkeleton";
+import TableSkeleton from "../skeletons/TableSkeleton";
 import UpdateEmployee from "./UpdateEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { debounce } from "lodash";

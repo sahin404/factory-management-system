@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import NavbarRightPart from "./NavbarRightPart";
-import NavbarSkeleton from "./NavbarSkeleton";
+import NavbarSkeleton from "./skeletons/NavbarSkeleton";
 import { useAuthStore } from "@/stores/authStore";
 
 const Navbar = () => {
