@@ -22,7 +22,7 @@ const ProductTable = ({
   searchTerm: string;
   currentPage: number;
 }) => {
-  const { employees, getAllEmployees, isLoading } = useEmployeeStore();
+  const { employees, getAllEmployees, isLoading, resetEmployeesData } = useEmployeeStore();
 
   // debounce
   const debouncedGetEmployees = useCallback(
@@ -33,13 +33,14 @@ const ProductTable = ({
   );
 
   useEffect(() => {
+    resetEmployeesData();
     debouncedGetEmployees(searchTerm, currentPage);
 
     // cleanup to cancel debounce on unmount
     return () => {
       debouncedGetEmployees.cancel();
     };
-  }, [searchTerm, currentPage, debouncedGetEmployees]);
+  }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
   
   if (isLoading) return <TableSkeleton></TableSkeleton>;
 

@@ -28,6 +28,7 @@ export interface ProductStore {
   isUpdatingProduct: boolean;
   isDeleting:boolean;
   isAdding:boolean,
+  resetProductsData: () => void;
   getProducts: (searchTerm?: string, pagination?: number) => Promise<void>;
   getProductById: (productId?: string) => Promise<void>;
   updateProductQuantity: (
@@ -51,6 +52,11 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   isUpdatingProduct: false,
   isDeleting:false,
   isAdding:false,
+
+  // reset function
+  resetProductsData: () => {
+    set({ products: [], total: 0, isLoading: true }); 
+  },
 
   //get all product
   getProducts: async (searchTerm?: string, pagination?: number) => {

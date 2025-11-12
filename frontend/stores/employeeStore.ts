@@ -17,48 +17,52 @@ interface EmployeeState {
   isLoadingEmployeeById: boolean;
   isUpdatingEmployee: boolean;
   isDeleting: boolean;
-  totalEmployees:number,
-  getAllEmployees: (searchTerm:string,currentPage:number) => Promise<void>;
+  totalEmployees: number;
+  resetEmployeesData: () => void;
+  getAllEmployees: (searchTerm: string, currentPage: number) => Promise<void>;
   getEmployeeById: (id: string) => Promise<void>;
   updateEmployee: (id: string, updatedData: Partial<Employee>) => Promise<void>;
   deleteEmployeeById: (id: string) => Promise<void>;
   addEmployee: (newEmployee: Employee) => void;
-  
 }
 
-interface GetAllEmployeeState{
-  success:boolean,
-  message:string,
-  data:{
-    employees:Employee[],
-    totalEmployees:number
-  }
+interface GetAllEmployeeState {
+  success: boolean;
+  message: string;
+  data: {
+    employees: Employee[];
+    totalEmployees: number;
+  };
 }
 
 export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   employees: [],
   employee: null,
   isLoading: true,
-  totalEmployees:0,
+  totalEmployees: 0,
   isLoadingEmployeeById: false,
   isUpdatingEmployee: false,
   isDeleting: false,
-
+  
+  resetEmployeesData: () => {
+    set({ employees: [], totalEmployees: 0, isLoading: true });
+  },
   // Get all employees
-  getAllEmployees: async (searchTerm?:string, currentPage?:number) => {
+  getAllEmployees: async (searchTerm?: string, currentPage?: number) => {
     set({ isLoading: true });
     try {
-      
       // if user search then page number should 1
       const pageToUse = searchTerm ? 1 : currentPage || 1;
 
-      const query = searchTerm? `?page=${pageToUse}&search=${searchTerm}`:`?page=${currentPage}`;
-      
+      const query = searchTerm
+        ? `?page=${pageToUse}&search=${searchTerm}`
+        : `?page=${currentPage}`;
+
       const response = await axiosInstance.get<GetAllEmployeeState>(
         `/employee${query}`
       );
       set({ employees: response.data.data.employees });
-      set({totalEmployees:response.data.data.totalEmployees});
+      set({ totalEmployees: response.data.data.totalEmployees });
     } catch (err: any) {
       console.log(
         "Error fetching employees:",

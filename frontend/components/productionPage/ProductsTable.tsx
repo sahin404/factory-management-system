@@ -19,7 +19,7 @@ import Sales from "./Sales";
 import Update from "./Update";
 
 const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, pagination:number}) => {
-  const { products, isLoading, getProducts } = useProductStore();
+  const { products, isLoading, getProducts, resetProductsData } = useProductStore();
 
   // console.log(searchTerm, pagination);
   const debouncedGetProducts = useCallback(
@@ -30,10 +30,11 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
   );
 
   useEffect(() => {
+    resetProductsData();
     debouncedGetProducts(searchTerm, pagination);
     // cleanup
     return () => debouncedGetProducts.cancel();
-  }, [searchTerm, pagination, debouncedGetProducts]);
+  }, [searchTerm, pagination, debouncedGetProducts, resetProductsData]);
 
   if (isLoading) {
     return <TableSkeleton />;

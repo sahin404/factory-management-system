@@ -17,6 +17,7 @@ interface attendanceResponse{
 interface AttendanceState {
   attendances: Attendance[];
   isLoading: boolean;
+  resetAttendanceData: () => void;
   updateAttendance: (
     employeeId: string,
     status: "present" | "absent" | "leave",
@@ -28,6 +29,11 @@ interface AttendanceState {
 export const useAttendanceStore = create<AttendanceState>((set, get) => ({
   attendances: [],
   isLoading: false,
+  
+  // reset function
+  resetAttendanceData: () => {
+    set({ attendances: [], isLoading: true });
+  },
 
   // get all attendance for specific date
   getAllAttendance: async (date) => {
