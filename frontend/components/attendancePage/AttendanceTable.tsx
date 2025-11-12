@@ -9,22 +9,27 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Switch } from "@/components/ui/switch";
+import { useEmployeeStore } from "@/stores/employeeStore";
+import { useEffect } from "react";
+import TableSkeleton from "../TableSkeleton";
 
 const AttendanceTable = () => {
-  // Dummy employee data
-  const employees = [
-    { name: "John Doe", designation: "Manager", email: "john@example.com" },
-    { name: "Jane Smith", designation: "Accountant", email: "jane@example.com" },
-    { name: "Alex Johnson", designation: "Employee", email: "alex@example.com" },
-    { name: "Maria Garcia", designation: "Employee", email: "maria@example.com" },
-    { name: "David Brown", designation: "Employee", email: "david@example.com" },
-  ];
+  
+  const {isLoading, employees, getAllEmployees} = useEmployeeStore();
+
+  useEffect(()=>{
+    getAllEmployees("", 1);
+  },[getAllEmployees])
+
+
 
   const today = new Date().toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
+
+  if(isLoading) return <TableSkeleton></TableSkeleton>
 
   return (
     <Table className="min-w-[600px]">
@@ -48,7 +53,7 @@ const AttendanceTable = () => {
           <TableRow key={indx}>
             <TableCell>{indx + 1}</TableCell>
             <TableCell>{emp.name}</TableCell>
-            <TableCell>{emp.designation}</TableCell>
+            <TableCell>{emp.role}</TableCell>
             <TableCell>{emp.email}</TableCell>
             <TableCell>
               <Switch />
