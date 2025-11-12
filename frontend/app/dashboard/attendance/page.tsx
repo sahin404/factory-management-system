@@ -5,7 +5,7 @@ const attendance = async() => {
   return (
     <div>
       {/* Header */}
-      <h1 className="text-2xl font-semibold">Attendance</h1>
+      <h1 className="text-2xl font-semibold mb-5">Attendance</h1>
       
       {/* Body */}
       <AttendanceBody></AttendanceBody>
