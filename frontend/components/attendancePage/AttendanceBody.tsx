@@ -19,12 +19,12 @@ const AttendanceBody = () => {
       {/* Table */}
       <div className="border-2 border-border rounded p-10 mt-5 space-y-10">
         {/* Header */}
-        <AttendanceHeader searchTerm={searchTerm || ""} setSearchTerm={setSearchTerm}></AttendanceHeader>
+        <AttendanceHeader searchTerm={searchTerm || ""} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage}></AttendanceHeader>
         <div className="border border-border rounded">
-          <AttendanceTable searchTerm={searchTerm}></AttendanceTable>
+          <AttendanceTable searchTerm={searchTerm} currentPage={currentPage}></AttendanceTable>
         </div>
         <div>
-          <AttendancePagination />
+          <AttendancePagination currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </div>
       </div>
     </div>

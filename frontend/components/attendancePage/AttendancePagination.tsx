@@ -8,7 +8,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
+import { useEmployeeStore } from "@/stores/employeeStore";
+import PaginationSkeleton from "../PaginationSkeleton";
 
 interface PaginationProps {
   currentPage: number;
@@ -19,7 +20,8 @@ const AttendancePagination = ({
   currentPage,
   setCurrentPage,
 }: PaginationProps) => {
-  const totalEmployees = 50; // dummy total employees
+  const { totalEmployees, isLoading } = useEmployeeStore();
+
   const limit = 10; // per page
   const totalPages = Math.ceil(totalEmployees / limit);
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -35,6 +37,10 @@ const AttendancePagination = ({
   const handlePageClick = (page: number) => {
     setCurrentPage(page);
   };
+
+  if(isLoading) return <PaginationSkeleton></PaginationSkeleton>
+  if(totalEmployees===0) return null;
+  
 
   return (
     <div className="mt-5 flex justify-center">
