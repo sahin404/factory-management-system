@@ -1,6 +1,7 @@
 import SalaryHeader from "./SalaryHeader";
 import SalaryPagination from "./SalaryPagination";
 import SalarySummeryCard from "./SalarySummeryCard";
+import SalaryTable from "./SalaryTable";
 
 const SalaryBody = () => {
   return (
@@ -15,7 +16,7 @@ const SalaryBody = () => {
         {/* Header */}
         <SalaryHeader></SalaryHeader>
         <div className="border border-border rounded">
-          <SalaryPagination></SalaryPagination>
+          <SalaryTable />
         </div>
         <div>
           <SalaryPagination></SalaryPagination>
