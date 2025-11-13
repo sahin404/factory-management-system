@@ -5,16 +5,8 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Modal from "../ui/modal";
 import { useAuthStore } from "@/stores/authStore";
-import InputField from "../InputField";
 
-interface HeaderInterface {
-  searchTerm:string;
-  setSearchTerm: (value: string)=>void;
-  setCurrentPage: (value: number)=>void;
-
-}
-
-const EmployeeHeader = ({searchTerm, setSearchTerm, setCurrentPage}:HeaderInterface) => {
+const AddEmployeeButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -116,11 +108,6 @@ const EmployeeHeader = ({searchTerm, setSearchTerm, setCurrentPage}:HeaderInterf
   return (
     <div className="flex-1">
       <div className="flex gap-5">
-        {/* search input */}
-        <div className="w-5/6">
-          <InputField searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage}></InputField>
-        </div>
-
         {/* button & modal */}
         <div className="w-1/6">
           <Button
@@ -233,4 +220,4 @@ const EmployeeHeader = ({searchTerm, setSearchTerm, setCurrentPage}:HeaderInterf
   );
 };
 
-export default EmployeeHeader;
+export default AddEmployeeButton;

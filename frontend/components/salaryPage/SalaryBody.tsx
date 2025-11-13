@@ -1,9 +1,10 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import SalaryTable from "./SalaryTable";
 import PaginationPage from "../Pagination";
 import InputField from "../InputField";
+import SalaryMonthBadge from "./SalaryMonthBadge";
 
 const SalaryBody = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -11,16 +12,31 @@ const SalaryBody = () => {
 
   return (
     <div>
-
       {/* Table */}
       <div className="border-2 border-border rounded p-10 mt-5 space-y-10">
         {/* Header */}
-        <InputField searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage}></InputField>
+        <div className="flex gap-5">
+          <InputField
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            setCurrentPage={setCurrentPage}
+          ></InputField>
+          <SalaryMonthBadge></SalaryMonthBadge>
+        </div>
+
+        {/* Table */}
         <div className="border border-border rounded">
           <SalaryTable searchTerm={searchTerm} currentPage={currentPage} />
         </div>
+
+        {/* Pagination */}
         <div>
-          <PaginationPage currentPage={currentPage} setCurrentPage={setCurrentPage}></PaginationPage>
+          {!searchTerm && (
+            <PaginationPage
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            ></PaginationPage>
+          )}
         </div>
       </div>
     </div>

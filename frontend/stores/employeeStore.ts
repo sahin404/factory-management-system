@@ -43,7 +43,7 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   isLoadingEmployeeById: false,
   isUpdatingEmployee: false,
   isDeleting: false,
-  
+  // reset function
   resetEmployeesData: () => {
     set({ employees: [], totalEmployees: 0, isLoading: true });
   },
