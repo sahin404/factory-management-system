@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Modal from "../ui/modal";
 import { useAuthStore } from "@/stores/authStore";
+import InputField from "../InputField";
 
 interface HeaderInterface {
   searchTerm:string;
@@ -116,13 +117,9 @@ const EmployeeHeader = ({searchTerm, setSearchTerm, setCurrentPage}:HeaderInterf
     <div className="flex-1">
       <div className="flex gap-5">
         {/* search input */}
-        <input
-          value={searchTerm}
-          onChange={(e)=>{setSearchTerm(e.target.value); setCurrentPage(1)}}
-          type="text"
-          placeholder="Search employee..."
-          className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"
-        />
+        <div className="w-5/6">
+          <InputField searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage}></InputField>
+        </div>
 
         {/* button & modal */}
         <div className="w-1/6">

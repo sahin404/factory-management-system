@@ -10,18 +10,21 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import PaginationSkeleton from "../skeletons/PaginationSkeleton";
+import PaginationSkeleton from "./skeletons/PaginationSkeleton";
+import { useProductStore } from "@/stores/productStore";
 
 interface pageNationProps {
   currentPage: number;
   setCurrentPage: (value: number) => void;
 }
 
-const EmployeePagination = ({
+const PaginationPage = ({
   currentPage,
   setCurrentPage,
 }: pageNationProps) => {
   const { totalEmployees, isLoading } = useEmployeeStore();
+  const {isLoading:productionLoading} = useProductStore();
+
 
   if (isLoading) return <PaginationSkeleton></PaginationSkeleton>;
 
@@ -78,4 +81,4 @@ const EmployeePagination = ({
   );
 };
 
-export default EmployeePagination;
+export default PaginationPage;

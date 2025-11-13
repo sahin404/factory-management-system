@@ -9,15 +9,35 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { useEmployeeStore } from "@/stores/employeeStore";
+import { useCallback, useEffect } from "react";
+import { debounce } from "lodash";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
-const SalaryTable = () => {
-  // Dummy employee data
-  const employees = [
-    { id: 1, name: "Shahin Alam", role: "Production Manager", email: "shahin@example.com", status: "paid" },
-    { id: 2, name: "Rafiul Hasan", role: "Machine Operator", email: "rafiul@example.com", status: "unpaid" },
-    { id: 3, name: "Tanim Rahman", role: "Supervisor", email: "tanim@example.com", status: "paid" },
-    { id: 4, name: "Mehedi Hasan", role: "Accountant", email: "mehedi@example.com", status: "unpaid" },
-  ];
+const SalaryTable = ({searchTerm,currentPage,}: {searchTerm: string,currentPage: number;}) => {
+
+    //store
+    const { isLoading, employees, getAllEmployees, resetEmployeesData } = useEmployeeStore();
+
+    // fetching employee with debouncing
+    const debouncedGetEmployees = useCallback(
+    debounce((term: string, page: number) => {
+        getAllEmployees(term, page);
+    }, 500),
+    [getAllEmployees]
+    );
+    useEffect(() => {
+    resetEmployeesData();
+    debouncedGetEmployees(searchTerm, currentPage);
+
+    // cleanup to cancel debounce on unmount
+    return () => {
+        debouncedGetEmployees.cancel();
+    };
+    }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
+
+    if(isLoading) return <TableSkeleton></TableSkeleton>
+
 
   return (
     <Table className="min-w-[600px]">
@@ -33,7 +53,7 @@ const SalaryTable = () => {
 
       <TableBody className="font-semibold">
         {employees.map((emp, index) => (
-          <TableRow key={emp.id}>
+          <TableRow key={emp._id}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{emp.name}</TableCell>
             <TableCell>{emp.role}</TableCell>

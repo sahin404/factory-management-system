@@ -5,17 +5,18 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Modal from "../ui/modal";
 import { useProductStore } from "@/stores/productStore";
+import InputField from "../InputField";
 
 interface ProductionHeaderProps {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
-  setPagination: (value: number) => void;
+  setCurrentPage: (value: number) => void;
 }
 
 const ProductionHeader = ({
   searchTerm,
   setSearchTerm,
-  setPagination,
+  setCurrentPage,
 }: ProductionHeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -106,16 +107,9 @@ const ProductionHeader = ({
   return (
     <div className="flex-1">
       <div className="flex gap-5">
-        <input
-          value={searchTerm || ""}
-          onChange={(e) => {
-            setPagination(1);
-            setSearchTerm(e.target.value);
-          }}
-          type="text"
-          placeholder="Search a product..."
-          className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"
-        />
+        <div className="w-5/6">
+          <InputField searchTerm={searchTerm} setSearchTerm={setSearchTerm} setCurrentPage={setCurrentPage}></InputField>
+        </div>
 
         <div className="w-1/6">
           <Button

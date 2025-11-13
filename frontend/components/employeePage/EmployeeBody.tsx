@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import EmployeeHeader from "./EmployeeHeader";
-import EmployeePagination from "./EmployeePagination";
 import EmployeeTable from "./EmployeeTable";
+import PaginationPage from "../Pagination";
 
 const EmployeeBody = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -23,10 +23,12 @@ const EmployeeBody = () => {
           ></EmployeeTable>
         </div>
         <div>
-          <EmployeePagination
+          {!searchTerm &&
+          <PaginationPage
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-          ></EmployeePagination>
+          ></PaginationPage>
+          }
         </div>
       </div>
     </div>

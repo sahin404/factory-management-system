@@ -15,7 +15,7 @@ import { debounce } from "lodash";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { useAttendanceStore } from "@/stores/attendanceStore";
 
-const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentPage: number;}) => {
+const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentPage: number}) => {
   const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
   
   //store

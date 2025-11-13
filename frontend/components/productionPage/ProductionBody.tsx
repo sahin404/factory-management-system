@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import ProductionHeader from "./ProductionHeader"
-import ProductionPagination from "./ProductionPagination"
 import ProductTable from "./ProductsTable"
+import ProductionPagination from "./ProductionPagination"
 
 const ProductionBody = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -11,12 +11,15 @@ const ProductionBody = () => {
 
   return (
     <div className="border-2 border-border rounded p-10 mt-5 space-y-10">
-        <ProductionHeader searchTerm={searchTerm} setSearchTerm = {setSearchTerm} setPagination={setCurrentPage}></ProductionHeader>
+        <ProductionHeader searchTerm={searchTerm} setSearchTerm = {setSearchTerm} setCurrentPage={setCurrentPage}></ProductionHeader>
         <div className="border border-border rounded">
             <ProductTable searchTerm={searchTerm || ""} pagination={currentPage}></ProductTable>
         </div>
         <div>
-          <ProductionPagination currentPage={currentPage} setCurrentPage={setCurrentPage}></ProductionPagination>
+          {
+            !searchTerm &&  <ProductionPagination currentPage={currentPage} setCurrentPage={setCurrentPage}></ProductionPagination>
+          }
+
         </div>
     </div>
   )

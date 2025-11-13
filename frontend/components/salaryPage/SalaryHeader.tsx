@@ -11,7 +11,8 @@ const SalaryHeader = ({
   setSearchTerm,
   setCurrentPage,
 }: SalaryHeaderProps) => {
-  // Previous month name বের করা
+    
+  // Previous month
   const prevMonth = new Date();
   prevMonth.setMonth(prevMonth.getMonth() - 1);
   const monthName = prevMonth.toLocaleString("default", { month: "long" });
