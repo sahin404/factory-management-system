@@ -1,7 +1,15 @@
+import SalaryBody from "@/components/salaryPage/SalaryBody";
+
 const salary = () => {
   return (
-    <div>salary</div>
-  )
-}
+    <div>
+      {/* Header */}
+      <h1 className="text-2xl font-semibold">Salary</h1>
 
-export default salary
+      {/* Body */}
+      <SalaryBody></SalaryBody>
+    </div>
+  );
+};
+
+export default salary;
