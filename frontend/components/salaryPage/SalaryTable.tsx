@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import TableSkeleton from "../skeletons/TableSkeleton";
 import { useSalaryStore } from "@/stores/salaryStore";
@@ -22,6 +22,11 @@ const SalaryTable = ({
   searchTerm: string;
   currentPage: number;
 }) => {
+
+  //states
+  const [salary, setSalary] = useState<{[key:string]:string}>({});
+
+
   //store
   const { isLoading, employees, getAllEmployees, resetEmployeesData } =
     useEmployeeStore();
@@ -29,6 +34,7 @@ const SalaryTable = ({
     isLoading: salaryInformationLoading,
     salaryInformations,
     addSalaryInformation,
+    getSalaryInformations
   } = useSalaryStore();
 
   // fetching employee with debouncing
@@ -48,22 +54,44 @@ const SalaryTable = ({
     };
   }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
 
-  // loading status
-  if (isLoading) return <TableSkeleton></TableSkeleton>;
-
-  // get current month
-  const getCurrentMonth = () => {
+  
+  // get previous month
+  const getPreviousMonth = () => {
     const now = new Date();
+    now.setMonth(now.getMonth() - 1);
+
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
+
     return `${year}-${month}`;
   };
 
-  //
+  // call to get database salary inforrmation
+  useEffect(()=>{
+    const month = getPreviousMonth();
+    getSalaryInformations(month);
+  },[getSalaryInformations])
+
+  // check every employees and assign them their corresponding salary status
+  useEffect(()=>{
+    const mapping: { [key: string]: string } = {};
+
+    employees.forEach(emp=>{
+      const checkFind = salaryInformations.find((si)=>si.empId == emp._id);
+      mapping[emp._id] = checkFind ? checkFind.salaryStatus : "unpaid";
+    })
+
+    setSalary(mapping);
+  },[employees, salaryInformations])
+
+  // call store to save salary information
   const handleToggoleChange = (value: string, id: string) => {
-    const month = getCurrentMonth();
+    const month = getPreviousMonth();
     addSalaryInformation(id, value, month);
   };
+
+  // loading status
+  if (isLoading || salaryInformationLoading) return <TableSkeleton></TableSkeleton>;
 
   return (
     <Table className="min-w-[600px]">
@@ -89,7 +117,7 @@ const SalaryTable = ({
                 variant="outline"
                 type="single"
                 onValueChange={(value) => handleToggoleChange(value, emp._id)}
-                value={emp.status || "unpaid"}
+                value={salary[emp._id] || "unpaid"}
               >
                 <ToggleGroupItem
                   value="paid"
