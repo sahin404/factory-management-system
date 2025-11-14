@@ -20,7 +20,7 @@ const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentP
   
   //store
   const { isLoading, employees, getAllEmployees, resetEmployeesData } = useEmployeeStore();
-  const {attendances,updateAttendance, getAllAttendance, isLoading: attendanceLoading, resetAttendanceData} = useAttendanceStore();
+  const {attendances,updateAttendance, getAllAttendance, isLoading: attendanceLoading} = useAttendanceStore();
 
   // fetching employee with debouncing
   const debouncedGetEmployees = useCallback(
@@ -31,14 +31,13 @@ const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentP
   );
   useEffect(() => {
     resetEmployeesData();
-    resetAttendanceData();
     debouncedGetEmployees(searchTerm, currentPage);
 
     // cleanup to cancel debounce on unmount
     return () => {
       debouncedGetEmployees.cancel();
     };
-  }, [searchTerm, currentPage, debouncedGetEmployees, resetAttendanceData, resetEmployeesData]);
+  }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
 
 
   // today date calculate and make string
@@ -71,7 +70,9 @@ const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentP
     await updateAttendance(empId, status, today);
   };
 
-  if (isLoading || attendanceLoading) return <TableSkeleton />;
+  if ((isLoading || attendanceLoading)) {
+  return <TableSkeleton />;
+}
 
   return (
     <Table className="min-w-[600px]">

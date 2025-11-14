@@ -64,6 +64,7 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
       set({ employees: response.data.data.employees });
       set({ totalEmployees: response.data.data.totalEmployees });
     } catch (err: any) {
+      
       console.log(
         "Error fetching employees:",
         err.response?.data || err.message
