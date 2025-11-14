@@ -18,3 +18,5 @@ empId: {
 }, { timestamps: true });
 
 const Salary = mongoose.model('Salary', salarySchema);
+
+export default Salary;
