@@ -13,31 +13,57 @@ import { useEmployeeStore } from "@/stores/employeeStore";
 import { useCallback, useEffect } from "react";
 import { debounce } from "lodash";
 import TableSkeleton from "../skeletons/TableSkeleton";
+import { useSalaryStore } from "@/stores/salaryStore";
 
-const SalaryTable = ({searchTerm,currentPage,}: {searchTerm: string,currentPage: number;}) => {
+const SalaryTable = ({
+  searchTerm,
+  currentPage,
+}: {
+  searchTerm: string;
+  currentPage: number;
+}) => {
+  //store
+  const { isLoading, employees, getAllEmployees, resetEmployeesData } =
+    useEmployeeStore();
+  const {
+    isLoading: salaryInformationLoading,
+    salaryInformations,
+    addSalaryInformation,
+  } = useSalaryStore();
 
-    //store
-    const { isLoading, employees, getAllEmployees, resetEmployeesData } = useEmployeeStore();
-
-    // fetching employee with debouncing
-    const debouncedGetEmployees = useCallback(
+  // fetching employee with debouncing
+  const debouncedGetEmployees = useCallback(
     debounce((term: string, page: number) => {
-        getAllEmployees(term, page);
+      getAllEmployees(term, page);
     }, 500),
     [getAllEmployees]
-    );
-    useEffect(() => {
+  );
+  useEffect(() => {
     resetEmployeesData();
     debouncedGetEmployees(searchTerm, currentPage);
 
     // cleanup to cancel debounce on unmount
     return () => {
-        debouncedGetEmployees.cancel();
+      debouncedGetEmployees.cancel();
     };
-    }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
+  }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
 
-    if(isLoading) return <TableSkeleton></TableSkeleton>
+  // loading status
+  if (isLoading) return <TableSkeleton></TableSkeleton>;
 
+  // get current month
+  const getCurrentMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
+  };
+
+  //
+  const handleToggoleChange = (value: string, id: string) => {
+    const month = getCurrentMonth();
+    addSalaryInformation(id, value, month);
+  };
 
   return (
     <Table className="min-w-[600px]">
@@ -62,7 +88,8 @@ const SalaryTable = ({searchTerm,currentPage,}: {searchTerm: string,currentPage:
               <ToggleGroup
                 variant="outline"
                 type="single"
-                value={emp.status}
+                onValueChange={(value) => handleToggoleChange(value, emp._id)}
+                value={emp.status || "unpaid"}
               >
                 <ToggleGroupItem
                   value="paid"
