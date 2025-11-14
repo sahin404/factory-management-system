@@ -21,23 +21,43 @@ interface addSalaryInformationState{
     data:SalaryInformation[]
 }
 
-export const useSalaryStore = create<SalaryStoreState>((set)=>({
+export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
     salaryInformations: [],
     isLoading:true,
 
+    // get the salary status in database
+
+    // save the salary status in database
     addSalaryInformation: async(empId, salaryStatus, month) =>{
+        const prevState = get().salaryInformations;
+
         try{
+
+            // optimistic save
+            set((state)=>({
+                salaryInformations:[
+                    ...state.salaryInformations.filter((salary)=>salary.empId !== empId),
+                    {empId, salaryStatus, month}
+                ]
+
+            }))
+
+            // save to database
             const response = await axiosInstance.post<addSalaryInformationState>('/salary', {empId, salaryStatus, month});
             if(response.data.success){
                 console.log("Successfully save the salary status in db");
             }
             else{
-                console.log("An error occured to save add salary information");
+                // rollback
+                set({ salaryInformations: prevState });
+                console.log("An error occured to save salary information");
             }
 
         }
         catch(err){
-            console.log("An error occured to save add salary information");
+            // rollback
+            set({ salaryInformations: prevState });
+            console.log("An error occured to save salary information");
         }
     }
 }))
