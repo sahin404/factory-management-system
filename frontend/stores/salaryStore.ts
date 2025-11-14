@@ -18,14 +18,14 @@ interface SalaryStoreState{
 
 interface addSalaryInformationState{
     success:boolean,
-    message:string,
+    message?:string,
     data:SalaryInformation[]
 }
 
 export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
     salaryInformations: [],
     isLoading:true,
-
+    
     // get the salary status in database
     getSalaryInformations:async(month)=>{
         set({isLoading:true});
@@ -34,6 +34,7 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
             set({salaryInformations: response.data.data});
         }
         catch(err){
+            console.log(err.response);
             console.log('An error occured to fetching salary information.');
         }
         finally{
@@ -71,7 +72,7 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
         catch(err){
             // rollback
             set({ salaryInformations: prevState });
-            console.log("An error occured to save salary information");
+            console.log("An error occured to save salary information.");
         }
     }
 }))
