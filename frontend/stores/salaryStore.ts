@@ -13,6 +13,7 @@ interface SalaryStoreState{
     isLoading:boolean;
 
     addSalaryInformation: (empId:string, salaryStatus:string, month:string) =>Promise<void>;
+    getSalaryInformations: (month:string)=>Promise<void>;
 }
 
 interface addSalaryInformationState{
@@ -26,6 +27,19 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
     isLoading:true,
 
     // get the salary status in database
+    getSalaryInformations:async(month)=>{
+        set({isLoading:true});
+        try{
+            const response = await axiosInstance.get<addSalaryInformationState>(`/salary/${month}`);
+            set({salaryInformations: response.data.data});
+        }
+        catch(err){
+            console.log('An error occured to fetching salary information.');
+        }
+        finally{
+            set({isLoading:false});
+        }
+    },
 
     // save the salary status in database
     addSalaryInformation: async(empId, salaryStatus, month) =>{
