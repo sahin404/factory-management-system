@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 
 const TableSkeleton = () => {
-  const rows = Array(5).fill(0); // 5 placeholder rows
+  const rows = Array(7).fill(0); // 5 placeholder rows
 
   return (
     <Table className="min-w-[600px]">

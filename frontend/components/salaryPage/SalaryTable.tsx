@@ -22,10 +22,8 @@ const SalaryTable = ({
   searchTerm: string;
   currentPage: number;
 }) => {
-
   //states
-  const [salary, setSalary] = useState<{[key:string]:string}>({});
-
+  const [salary, setSalary] = useState<{ [key: string]: string }>({});
 
   //store
   const { isLoading, employees, getAllEmployees, resetEmployeesData } =
@@ -34,7 +32,7 @@ const SalaryTable = ({
     isLoading: salaryInformationLoading,
     salaryInformations,
     addSalaryInformation,
-    getSalaryInformations
+    getSalaryInformations,
   } = useSalaryStore();
 
   // fetching employee with debouncing
@@ -54,7 +52,6 @@ const SalaryTable = ({
     };
   }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
 
-  
   // get previous month
   const getPreviousMonth = () => {
     const now = new Date();
@@ -67,22 +64,22 @@ const SalaryTable = ({
   };
 
   // call to get database salary inforrmation
-  useEffect(()=>{
+  useEffect(() => {
     const month = getPreviousMonth();
     getSalaryInformations(month);
-  },[getSalaryInformations])
+  }, [getSalaryInformations]);
 
   // check every employees and assign them their corresponding salary status
-  useEffect(()=>{
+  useEffect(() => {
     const mapping: { [key: string]: string } = {};
 
-    employees.forEach(emp=>{
-      const checkFind = salaryInformations.find((si)=>si.empId == emp._id);
+    employees.forEach((emp) => {
+      const checkFind = salaryInformations.find((si) => si.empId == emp._id);
       mapping[emp._id] = checkFind ? checkFind.salaryStatus : "unpaid";
-    })
+    });
 
     setSalary(mapping);
-  },[employees, salaryInformations])
+  }, [employees, salaryInformations]);
 
   // call store to save salary information
   const handleToggoleChange = (value: string, id: string) => {
@@ -91,7 +88,8 @@ const SalaryTable = ({
   };
 
   // loading status
-  if (isLoading || salaryInformationLoading) return <TableSkeleton></TableSkeleton>;
+  if (isLoading || salaryInformationLoading)
+    return <TableSkeleton></TableSkeleton>;
 
   return (
     <Table className="min-w-[600px]">
@@ -106,6 +104,14 @@ const SalaryTable = ({
       </TableHeader>
 
       <TableBody className="font-semibold">
+        {employees.length === 0 && (
+          <TableRow>
+            <TableCell colSpan={5} className="text-center py-6 text-gray-500">
+              No employees found
+            </TableCell>
+          </TableRow>
+        )}
+
         {employees.map((emp, index) => (
           <TableRow key={emp._id}>
             <TableCell>{index + 1}</TableCell>
@@ -126,6 +132,7 @@ const SalaryTable = ({
                 >
                   Paid
                 </ToggleGroupItem>
+
                 <ToggleGroupItem
                   value="unpaid"
                   aria-label="Unpaid"

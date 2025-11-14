@@ -34,7 +34,6 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
             set({salaryInformations: response.data.data});
         }
         catch(err){
-            console.log(err.response);
             console.log('An error occured to fetching salary information.');
         }
         finally{

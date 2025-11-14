@@ -73,8 +73,8 @@ const Sidebar = () => {
     { id: 3, name: "Salary", link: "/dashboard/salary", icon: FileText },
   ];
 
-  // Employee menus
-  const EmployeeMenus = [
+  // Worker menus
+  const WorkerMenus = [
     {
       id: 1,
       name: "Overview",
@@ -203,9 +203,9 @@ const Sidebar = () => {
         )}
 
         {/* if user is employee */}
-        {user.role === "employee" && (
+        {user.role === "worker" && (
           <div className="space-y-3">
-            {EmployeeMenus.map((menu) => {
+            {WorkerMenus.map((menu) => {
               const Icon = menu.icon; // icon component
               const isActive = menu.name === activeMenu;
 

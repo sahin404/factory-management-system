@@ -178,7 +178,7 @@ const AddEmployeeButton = () => {
                 </option>
                 <option value="manager">Manager</option>
                 <option value="accountant">Accountant</option>
-                <option value="employee">Employee</option>
+                <option value="worker">Worker</option>
               </select>
 
               {/* Salary */}
