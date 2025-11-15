@@ -9,7 +9,6 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useExpenseStore } from "@/stores/expenseStore";
 import TableSkeleton from "../skeletons/TableSkeleton";
