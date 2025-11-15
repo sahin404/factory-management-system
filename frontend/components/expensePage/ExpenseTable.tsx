@@ -10,40 +10,19 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-
-// Dummy expense data
-const dummyExpenses = [
-  {
-    _id: "1",
-    name: "Office Rent",
-    description: "Monthly office space rent",
-    date: "12 Jan 2025",
-    amount: 15000,
-  },
-  {
-    _id: "2",
-    name: "Internet Bill",
-    description: "Broadband bill",
-    date: "10 Jan 2025",
-    amount: 1200,
-  },
-  {
-    _id: "3",
-    name: "Snacks Purchase",
-    description: "Tea & biscuits",
-    date: "09 Jan 2025",
-    amount: 450,
-  },
-  {
-    _id: "4",
-    name: "Employee Bonus",
-    description: "Performance bonus",
-    date: "01 Jan 2025",
-    amount: 5000,
-  },
-];
+import { useEffect } from "react";
+import { useExpenseStore } from "@/stores/expenseStore";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
 const ExpenseTable = () => {
+
+  const {getExpenses, isLoading, expenses} = useExpenseStore();
+  useEffect(()=>{
+    getExpenses();
+  },[])
+
+  if(isLoading) return <TableSkeleton></TableSkeleton>
+
   return (
     <Table className="min-w-[600px]">
       <TableHeader>
@@ -57,14 +36,14 @@ const ExpenseTable = () => {
       </TableHeader>
 
       <TableBody className="font-semibold">
-        {dummyExpenses.length === 0 ? (
+        {expenses.length === 0 ? (
           <TableRow>
             <TableCell colSpan={5} className="text-center text-gray-500 py-4">
               No expenses found
             </TableCell>
           </TableRow>
         ) : (
-          dummyExpenses.map((exp, index) => (
+          expenses.map((exp, index) => (
             <TableRow key={exp._id}>
               <TableCell>{index + 1}</TableCell>
 
