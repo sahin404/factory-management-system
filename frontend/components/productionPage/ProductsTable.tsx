@@ -53,7 +53,7 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
           <TableHead>Price</TableHead>
           <TableHead>Unit</TableHead>
           <TableHead>Quantity</TableHead>
-          <TableHead>Add Quantity</TableHead>
+          <TableHead>Productions</TableHead>
           <TableHead>Sales</TableHead>
           <TableHead>Update</TableHead>
           <TableHead>Delete Item</TableHead>
