@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addExpense, deleteExpense} from "./expense.service";
+import { addExpense, deleteExpense, getExpenses} from "./expense.service";
 
 // add expense
 export const addExpenseController = async (req: Request, res: Response) => {
@@ -20,6 +20,24 @@ export const addExpenseController = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getExpensesController = async(req:Request, res:Response)=>{
+  try {
+    const expenses = await getExpenses();
+
+    return res.status(200).json({
+      success: true,
+      message: "Expenses fetched successfully",
+      data: expenses,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch expenses",
+      error: err.message,
+    });
+  }
+}
 
 //delete expense
 export const deleteExpenseController = async (req: Request, res: Response) => {

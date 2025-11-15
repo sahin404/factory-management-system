@@ -15,6 +15,12 @@ export const addExpense = async(data:ExpenseType)=>{
     return newExpense;
 }
 
+// get expenses
+export const getExpenses = async() =>{
+    const response = await Expense.find().sort({createdAt:-1});
+    return response;
+}
+
 //delete expense
 export const deleteExpense = async(id:string)=>{
     const result = await Expense.findByIdAndDelete(id);
