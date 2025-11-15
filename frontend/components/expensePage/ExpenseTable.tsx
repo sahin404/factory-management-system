@@ -14,7 +14,40 @@ import { useExpenseStore } from "@/stores/expenseStore";
 import TableSkeleton from "../skeletons/TableSkeleton";
 import DeleteExpenseButton from "./DeleteExpenseButton";
 
-const ExpenseTable = () => {
+
+
+const applyFilter = (expenses: any[], filter: string) => {
+  const now = new Date();
+
+  return expenses.filter((exp) => {
+    const expDate = new Date(exp.date);
+
+    if (filter === "recent") {
+      return expDate.toDateString() === now.toDateString();
+    }
+
+    if (filter === "week") {
+      const diff = now.getTime() - expDate.getTime();
+      return diff <= 7 * 24 * 60 * 60 * 1000;
+    }
+
+    if (filter === "month") {
+      return (
+        expDate.getMonth() === now.getMonth() &&
+        expDate.getFullYear() === now.getFullYear()
+      );
+    }
+
+    if (filter === "year") {
+      return expDate.getFullYear() === now.getFullYear();
+    }
+
+    return true;
+  });
+};
+
+
+const ExpenseTable = ({filter}:{filter:string}) => {
 
   const {getExpenses, isLoading, expenses} = useExpenseStore();
   useEffect(()=>{
@@ -22,6 +55,8 @@ const ExpenseTable = () => {
   },[])
 
   if(isLoading) return <TableSkeleton></TableSkeleton>
+
+  const filteredExpenses = applyFilter(expenses, filter);
 
   return (
     <Table className="min-w-[600px]">
@@ -36,14 +71,14 @@ const ExpenseTable = () => {
       </TableHeader>
 
       <TableBody className="font-semibold">
-        {expenses.length === 0 ? (
+        {filteredExpenses.length === 0 ? (
           <TableRow>
             <TableCell colSpan={5} className="text-center text-gray-500 py-4">
               No expenses found
             </TableCell>
           </TableRow>
         ) : (
-          expenses.map((exp, index) => (
+          filteredExpenses.map((exp, index) => (
             <TableRow key={exp._id}>
               <TableCell>{index + 1}</TableCell>
 

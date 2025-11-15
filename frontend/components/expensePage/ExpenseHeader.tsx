@@ -10,8 +10,12 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 
-const ExpenseHeader = () => {
-  const [filter, setFilter] = useState("recent");
+interface HeaderProps{
+  filter:string;
+  setFilter:(val:string)=>void;
+}
+
+const ExpenseHeader = ({ filter, setFilter }:HeaderProps) => {
 
   return (
     <div className="flex justify-between items-center mb-4">
@@ -24,9 +28,9 @@ const ExpenseHeader = () => {
 
           <SelectContent>
             <SelectItem value="recent">Today</SelectItem>
-            <SelectItem value="1m">This Week</SelectItem>
-            <SelectItem value="6m">This Month</SelectItem>
-            <SelectItem value="12m">This Year</SelectItem>
+            <SelectItem value="week">This Week</SelectItem>
+            <SelectItem value="month">This Month</SelectItem>
+            <SelectItem value="year">This Year</SelectItem>
           </SelectContent>
         </Select>
       </div>

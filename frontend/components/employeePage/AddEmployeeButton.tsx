@@ -21,7 +21,7 @@ const AddEmployeeButton = () => {
   const [success, setSuccess] = useState("");
 
   // call the store
-  const { isSigningUp, signup } = useAuthStore();
+  const { signup } = useAuthStore();
 
   const openModal = () => {
     setIsOpen(true);
