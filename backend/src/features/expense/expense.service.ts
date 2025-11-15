@@ -17,7 +17,7 @@ export const addExpense = async(data:ExpenseType)=>{
 
 // get expenses
 export const getExpenses = async() =>{
-    const response = await Expense.find().sort({createdAt:-1});
+    const response = await Expense.find().sort({date:-1});
     return response;
 }
 
