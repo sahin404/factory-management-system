@@ -98,7 +98,7 @@ const SalaryTable = ({
           <TableHead>Serial</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Designation</TableHead>
-          <TableHead>Email</TableHead>
+          <TableHead>Salary</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
@@ -117,7 +117,7 @@ const SalaryTable = ({
             <TableCell>{index + 1}</TableCell>
             <TableCell>{emp.name}</TableCell>
             <TableCell>{emp.role}</TableCell>
-            <TableCell>{emp.email}</TableCell>
+            <TableCell>{emp.salary}</TableCell>
             <TableCell>
               <ToggleGroup
                 variant="outline"
