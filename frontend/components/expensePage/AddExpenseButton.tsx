@@ -5,27 +5,34 @@ import { useState } from "react";
 import Modal from "../ui/modal";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { useExpenseStore } from "@/stores/expenseStore";
 
 const AddExpenseButton = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
   const [formData, setFormaData] = useState({
     name: "",
     description: "",
     date: "",
-    amount: "",
   });
+
+  //store
+  const {AddExpense} = useExpenseStore();
 
   // handle modal open/close
   const handleModalOpen = () => {
     setIsOpen(true);
     setError("");
+    setSuccess("");
   };
 
   //handle the from submission
-  const handleSubmit = ()=>{
+  const handleSubmit = async()=>{
     //clear previous error
     setError("");
+    setSuccess("");
     //validation
     if(formData.name.length<3){
         setError('Expense Name must be greater than 3 characters!');
@@ -39,10 +46,31 @@ const AddExpenseButton = () => {
         setError('Please input a valid date!');
         return;
     }
-    if(!formData.amount || Number(formData.amount)<0){
+    if(!amount || Number(amount)<0){
         setError('Please input a valid amount!');
         return;
     }
+
+    const amountNum = Number(amount);
+    const finalData = {
+      ...formData,
+      amount:amountNum
+    }
+    const response = await AddExpense(finalData);
+    if(response?.success){
+      setSuccess("Saved Successfully.");
+      setFormaData({
+        name:"",
+        description:"",
+        date:""
+      })
+      setAmount("");
+      
+    }
+    else{
+      setError("Something went wrong. Please try again!");
+    }
+
   }
 
 
@@ -107,9 +135,9 @@ const AddExpenseButton = () => {
           <div className="flex flex-col space-y-1">
             <label className="text-sm font-medium">Amount (TK)</label>
             <Input
-              value={formData.amount}
+              value={amount}
               onChange={(e) =>
-                setFormaData({ ...formData, amount: e.target.value })
+                setAmount(e.target.value )
               }
               type="number"
               placeholder="e.g., 5000"
@@ -119,6 +147,7 @@ const AddExpenseButton = () => {
           {/* Error */}
           <div>
             {error && <div className="text-red-500 text-sm">{error}</div>}
+            {success && <div className="text-green-500 text-sm">{success}</div>}
           </div>
 
           {/* Modal Footer */}
