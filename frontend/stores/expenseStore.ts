@@ -19,20 +19,23 @@ interface ExpenseStoreState {
   expenses: ExpenseData[];
   isLoading: boolean;
   isAddingExpense: boolean;
+  isDeleting: boolean;
   AddExpense: (value: ExpenseData) => Promise<ExpenseResponse>;
   getExpenses: () => Promise<void>;
+  deleteExpense: (value: string) => Promise<void>;
 }
 
 export const useExpenseStore = create<ExpenseStoreState>((set) => ({
   expenses: [],
   isLoading: true,
   isAddingExpense: false,
+  isDeleting: false,
 
   //add expense
   AddExpense: async (expenseData) => {
     set({ isAddingExpense: true });
     try {
-      const response = await axiosInstance.post<{data:ExpenseData}>(
+      const response = await axiosInstance.post<{ data: ExpenseData }>(
         "/expense",
         expenseData
       );
@@ -58,6 +61,27 @@ export const useExpenseStore = create<ExpenseStoreState>((set) => ({
       console.log(err.response.message);
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  // delete Expenses
+  deleteExpense: async (expId) => {
+    set({ isDeleting: true });
+    try {
+      const response = await axiosInstance.delete<{ success: boolean }>(
+        `/expense/${expId}`
+      );
+      if (response.data.success) {
+        set((state) => ({
+          expenses: state.expenses.filter((exp) => exp._id !== expId),
+        }));
+      } else {
+        console.log("Error occure to delete expense");
+      }
+    } catch (err: any) {
+      console.log(err.response.message);
+    } finally {
+      set({ isDeleting: false });
     }
   },
 }));

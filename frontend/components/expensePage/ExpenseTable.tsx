@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useExpenseStore } from "@/stores/expenseStore";
 import TableSkeleton from "../skeletons/TableSkeleton";
+import DeleteExpenseButton from "./DeleteExpenseButton";
 
 const ExpenseTable = () => {
 
@@ -56,9 +57,7 @@ const ExpenseTable = () => {
               <TableCell>{exp.amount} TK</TableCell>
 
               <TableCell>
-                <Button variant="destructive" size="sm">
-                  Delete
-                </Button>
+                <DeleteExpenseButton expId={exp._id || ""}></DeleteExpenseButton>
               </TableCell>
             </TableRow>
           ))
