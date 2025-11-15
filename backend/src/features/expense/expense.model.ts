@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const expenseSchema = new mongoose.Schema({
-    title:{
+    name:{
         type:String,
         required:true,
         trim:true
@@ -10,6 +10,10 @@ const expenseSchema = new mongoose.Schema({
         type:String,
         required:true,
         trim:true
+    },
+    date:{
+        type:String,
+        reuired:true,
     },
     amount:{
         type:Number,
