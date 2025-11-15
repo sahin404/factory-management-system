@@ -45,7 +45,7 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   isDeleting: false,
   // reset function
   resetEmployeesData: () => {
-    set({ employees: [], totalEmployees: 0, isLoading: true });
+    set({ employees: [], totalEmployees: 0});
   },
   // Get all employees
   getAllEmployees: async (searchTerm?: string, currentPage?: number) => {
