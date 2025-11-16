@@ -17,8 +17,12 @@ interface EmployeeState {
   isLoadingEmployeeById: boolean;
   isUpdatingEmployee: boolean;
   isDeleting: boolean;
+
   totalEmployees: number;
-  resetEmployeesData: () => void;
+
+  // Catch Flag
+  fetched: boolean;
+
   getAllEmployees: (searchTerm: string, currentPage: number) => Promise<void>;
   getEmployeeById: (id: string) => Promise<void>;
   updateEmployee: (id: string, updatedData: Partial<Employee>) => Promise<void>;
@@ -38,20 +42,25 @@ interface GetAllEmployeeState {
 export const useEmployeeStore = create<EmployeeState>((set, get) => ({
   employees: [],
   employee: null,
-  isLoading: true,
+  isLoading: false,
   totalEmployees: 0,
   isLoadingEmployeeById: false,
   isUpdatingEmployee: false,
   isDeleting: false,
-  // reset function
-  resetEmployeesData: () => {
-    set({ employees: [], totalEmployees: 0});
-  },
-  // Get all employees
+  fetched: false,
+
   getAllEmployees: async (searchTerm?: string, currentPage?: number) => {
-    set({ isLoading: true });
+    const { fetched, employees } = get();
+
+    if (!searchTerm && fetched) {
+      // already have data, so so loading
+    } else {
+      // Only show skeleton on first load OR search
+      set({ isLoading: true });
+    }
+
     try {
-      // if user search then page number should 1
+      // If searching, page should reset to 1
       const pageToUse = searchTerm ? 1 : currentPage || 1;
 
       const query = searchTerm
@@ -61,20 +70,21 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
       const response = await axiosInstance.get<GetAllEmployeeState>(
         `/employee${query}`
       );
-      set({ employees: response.data.data.employees });
-      set({ totalEmployees: response.data.data.totalEmployees });
+
+      set({
+        employees: response.data.data.employees,
+        totalEmployees: response.data.data.totalEmployees,
+
+        /** cache only when it's not a search */
+        fetched: searchTerm ? false : true,
+      });
     } catch (err: any) {
-      
-      console.log(
-        "Error fetching employees:",
-        err.response?.data || err.message
-      );
+      console.log("Error fetching employees:", err.response?.data || err.message);
     } finally {
       set({ isLoading: false });
     }
   },
 
-  // Get single employee by ID
   getEmployeeById: async (id: string) => {
     set({ isLoadingEmployeeById: true });
     try {
@@ -83,21 +93,17 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
       );
       set({ employee: response.data.data });
     } catch (err: any) {
-      console.log(
-        "Error fetching employee:",
-        err.response?.data || err.message
-      );
+      console.log("Error fetching employee:", err.response?.data || err.message);
     } finally {
       set({ isLoadingEmployeeById: false });
     }
   },
-  // Update employee
+
   updateEmployee: async (id: string, updatedData: Partial<Employee>) => {
     set({ isUpdatingEmployee: true });
     try {
       await axiosInstance.put(`/employee/${id}`, updatedData);
 
-      // Local state update
       const updatedEmployees = get().employees.map((emp) =>
         emp._id === id ? { ...emp, ...updatedData } : emp
       );
@@ -108,24 +114,27 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
           get().employee?._id === id
             ? { ...get().employee!, ...updatedData }
             : get().employee,
+
+        /** cache reset so next visit reloads fresh data */
+        fetched: false,
       });
     } catch (err: any) {
-      console.log(
-        "Error updating employee:",
-        err.response?.data || err.message
-      );
+      console.log("Error updating employee:", err.response?.data || err.message);
     } finally {
       set({ isUpdatingEmployee: false });
     }
   },
 
-  //delete employee
   deleteEmployeeById: async (id: string) => {
     set({ isDeleting: true });
     try {
       await axiosInstance.delete(`/employee/${id}`);
+
       set({
         employees: get().employees.filter((emp) => emp._id !== id),
+
+        /** cache reset */
+        fetched: false,
       });
     } catch (err) {
       console.log("Error deleting employee:", err);
@@ -134,8 +143,12 @@ export const useEmployeeStore = create<EmployeeState>((set, get) => ({
     }
   },
 
-  // EmployeeStore
   addEmployee: (newEmployee: Employee) => {
-    set({ employees: [...get().employees, newEmployee] });
+    set({
+      employees: [...get().employees, newEmployee],
+
+      /** cache reset */
+      fetched: false,
+    });
   },
 }));

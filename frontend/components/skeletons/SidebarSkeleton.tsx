@@ -5,6 +5,7 @@ const SidebarSkeleton = () => {
     <div className="bg-green-900 text-gray-300 h-screen w-full flex flex-col p-5 animate-pulse">
       {/* Title */}
       <div className="h-8 w-40 bg-green-800 rounded mb-5"></div>
+      <div className="h-8 w-40 bg-green-800 rounded mb-5"></div>
 
       {/* Separator */}
       <div className="h-px w-full bg-green-800 mb-5"></div>
@@ -15,9 +16,9 @@ const SidebarSkeleton = () => {
           <li key={idx} className="flex items-center justify-between w-full px-4 py-2 rounded-lg">
             <div className="flex items-center gap-3">
               {/* Icon placeholder */}
-              <div className="h-5 w-5 bg-green-800 rounded"></div>
+              <div className="h-10 w-5 bg-green-800 rounded"></div>
               {/* Text placeholder */}
-              <div className="h-4 w-24 bg-green-800 rounded"></div>
+              <div className="h-10 w-24 bg-green-800 rounded"></div>
             </div>
           </li>
         ))}

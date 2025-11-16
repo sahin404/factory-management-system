@@ -9,40 +9,40 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { useEmployeeStore } from "@/stores/employeeStore";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TableSkeleton from "../skeletons/TableSkeleton";
 import UpdateEmployee from "./UpdateEmployee";
 import DeleteEmployee from "./DeleteEmployee";
 import { debounce } from "lodash";
 
-const ProductTable = ({
+const EmployeeTable = ({
   searchTerm,
   currentPage,
 }: {
   searchTerm: string;
   currentPage: number;
 }) => {
-  const { employees, getAllEmployees, isLoading, resetEmployeesData } = useEmployeeStore();
+  const { employees, getAllEmployees, isLoading } = useEmployeeStore();
 
-  // debounce
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  // debounce fetch
   const debouncedGetEmployees = useCallback(
-    debounce((term: string, page: number) => {
-      getAllEmployees(term, page);
+    debounce(async (term: string, page: number) => {
+      await getAllEmployees(term, page);
+      setFirstLoad(false); // first fetch done
     }, 500),
-    []
+    [getAllEmployees]
   );
 
   useEffect(() => {
-    resetEmployeesData();
     debouncedGetEmployees(searchTerm, currentPage);
+    return () => debouncedGetEmployees.cancel();
+  }, [searchTerm, currentPage, debouncedGetEmployees]);
 
-    // cleanup to cancel debounce on unmount
-    return () => {
-      debouncedGetEmployees.cancel();
-    };
-  }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
-  
-  if (isLoading) return <TableSkeleton></TableSkeleton>;
+  const shouldShowSkeleton = employees.length === 0 && (isLoading || firstLoad);
+
+  if (shouldShowSkeleton) return <TableSkeleton />;
 
   return (
     <Table className="min-w-[600px]">
@@ -66,18 +66,18 @@ const ProductTable = ({
             </TableCell>
           </TableRow>
         ) : (
-          employees.map((employee, indx) => (
+          employees.map((employee, index) => (
             <TableRow key={employee._id}>
-              <TableCell>{indx + 1}</TableCell>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{employee.name}</TableCell>
               <TableCell>{employee.role}</TableCell>
               <TableCell>{employee.email}</TableCell>
               <TableCell>{employee.salary}</TableCell>
               <TableCell>
-                <UpdateEmployee empId={employee._id}></UpdateEmployee>
+                <UpdateEmployee empId={employee._id} />
               </TableCell>
               <TableCell>
-                <DeleteEmployee empId={employee._id}></DeleteEmployee>
+                <DeleteEmployee empId={employee._id} />
               </TableCell>
             </TableRow>
           ))
@@ -87,4 +87,4 @@ const ProductTable = ({
   );
 };
 
-export default ProductTable;
+export default EmployeeTable;

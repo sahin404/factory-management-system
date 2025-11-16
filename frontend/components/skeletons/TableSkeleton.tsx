@@ -4,26 +4,27 @@ import {
   Table,
   TableHeader,
   TableBody,
-  TableHead,
   TableRow,
   TableCell,
 } from "@/components/ui/table";
 
 const TableSkeleton = () => {
-  const rows = Array(7).fill(0); // 5 placeholder rows
+  const rows = Array(7).fill(0);
 
   return (
     <Table className="min-w-[600px]">
       <TableHeader>
-        <TableRow>
-          <TableHead>Serial</TableHead>
-          <TableHead>Product Name</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead>Unit</TableHead>
-          <TableHead>Quantity</TableHead>
-          <TableHead>Add Product</TableHead>
-          <TableHead>Delete Item</TableHead>
-        </TableRow>
+        <>
+          {[...Array(rows)].map((_, index) => (
+            <TableRow key={index}>
+              {[...Array(7)].map((_, i) => (
+                <TableCell key={i} className="py-3">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </>
       </TableHeader>
       <TableBody>
         {rows.map((_, idx) => (
