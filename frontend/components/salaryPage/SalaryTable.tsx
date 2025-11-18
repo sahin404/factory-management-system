@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -26,7 +27,7 @@ const SalaryTable = ({
   const [salary, setSalary] = useState<{ [key: string]: string }>({});
 
   //store
-  const { isLoading, employees, getAllEmployees, resetEmployeesData } =
+  const { isLoading, employees, getAllEmployees} =
     useEmployeeStore();
   const {
     isLoading: salaryInformationLoading,
@@ -43,14 +44,13 @@ const SalaryTable = ({
     [getAllEmployees]
   );
   useEffect(() => {
-    resetEmployeesData();
     debouncedGetEmployees(searchTerm, currentPage);
 
     // cleanup to cancel debounce on unmount
     return () => {
       debouncedGetEmployees.cancel();
     };
-  }, [searchTerm, currentPage, debouncedGetEmployees, resetEmployeesData]);
+  }, [searchTerm, currentPage, debouncedGetEmployees]);
 
   // get previous month
   const getPreviousMonth = () => {
