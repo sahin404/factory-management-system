@@ -28,6 +28,7 @@ const EmployeeTable = ({
 
   // debounce fetch
   const debouncedGetEmployees = useCallback(
+   
     debounce(async (term: string, page: number) => {
       await getAllEmployees(term, page);
       setFirstLoad(false); // first fetch done
@@ -36,9 +37,13 @@ const EmployeeTable = ({
   );
 
   useEffect(() => {
+     console.log('get employees userffr');
     debouncedGetEmployees(searchTerm, currentPage);
     return () => debouncedGetEmployees.cancel();
   }, [searchTerm, currentPage, debouncedGetEmployees]);
+
+  console.log('employee', isLoading);
+  console.log(firstLoad);
 
   const shouldShowSkeleton = employees.length === 0 && (isLoading || firstLoad);
 

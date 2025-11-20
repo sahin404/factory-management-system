@@ -11,6 +11,7 @@ interface SalaryInformation{
 interface SalaryStoreState{
     salaryInformations: SalaryInformation[];
     isLoading:boolean;
+    fetched:boolean;
 
     addSalaryInformation: (empId:string, salaryStatus:string, month:string) =>Promise<void>;
     getSalaryInformations: (month:string)=>Promise<void>;
@@ -24,14 +25,19 @@ interface addSalaryInformationState{
 
 export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
     salaryInformations: [],
-    isLoading:true,
-    
+    isLoading:false,
+    fetched:false,
     // get the salary status in database
     getSalaryInformations:async(month)=>{
-        set({isLoading:true});
+        const {fetched, salaryInformations} = get();
+        if(fetched){
+            // Data is already cached, skip loading indicator
+        } else {
+            set({isLoading:true});
+        }
         try{
             const response = await axiosInstance.get<addSalaryInformationState>(`/salary/${month}`);
-            set({salaryInformations: response.data.data});
+            set({salaryInformations: response.data.data, fetched:true});
         }
         catch(err){
             console.log('An error occured to fetching salary information.');
@@ -59,7 +65,8 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
             // save to database
             const response = await axiosInstance.post<addSalaryInformationState>('/salary', {empId, salaryStatus, month});
             if(response.data.success){
-                console.log("Successfully save the salary status in db");
+                // console.log("Successfully save the salary status in db");
+                set({ fetched: false });
             }
             else{
                 // rollback

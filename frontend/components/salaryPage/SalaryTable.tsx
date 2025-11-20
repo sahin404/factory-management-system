@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -25,32 +24,59 @@ const SalaryTable = ({
 }) => {
   //states
   const [salary, setSalary] = useState<{ [key: string]: string }>({});
+  const [firstLoad, setFirstLoad] = useState(true);
 
   //store
-  const { isLoading, employees, getAllEmployees} =
-    useEmployeeStore();
   const {
-    isLoading: salaryInformationLoading,
+    isLoading: empLoading,
+    employees,
+    getAllEmployees,
+    fetched: empFetched,
+  } = useEmployeeStore();
+
+  const {
+    isLoading: salaryLoading,
     salaryInformations,
     addSalaryInformation,
     getSalaryInformations,
+    fetched: salaryFetched,
   } = useSalaryStore();
 
   // fetching employee with debouncing
   const debouncedGetEmployees = useCallback(
-    debounce((term: string, page: number) => {
-      getAllEmployees(term, page);
+    debounce(async(term: string, page: number) => {
+      await getAllEmployees(term, page);
     }, 500),
     [getAllEmployees]
   );
+
+
+// 🔥 পরিবর্তন ৩: একটি সিঙ্ক করার useEffect যোগ করুন
+  useEffect(() => {
+    // এই useEffect টি শুধু মাত্র প্রথমবার লোড হওয়ার পরে `firstLoad` কে false করে দেবে।
+    // যখন empFetched এবং salaryFetched উভয়ই true হবে (অথবা যখন লোডিং শেষ হবে), তখন প্রথম লোড শেষ।
+    if (empFetched && salaryFetched && firstLoad) {
+      setFirstLoad(false);
+    }
+    // যদি employees.length > 0 হয় এবং লোডিং শেষ হয়, তবুও false সেট করা যায়।
+    if (!empLoading && !salaryLoading && (empFetched || salaryFetched) && firstLoad) {
+      setFirstLoad(false);
+    }
+
+  }, [empFetched, salaryFetched, empLoading, salaryLoading, firstLoad]);
+
+
   useEffect(() => {
     debouncedGetEmployees(searchTerm, currentPage);
-
+    console.log("Employee useeffect");
     // cleanup to cancel debounce on unmount
     return () => {
       debouncedGetEmployees.cancel();
     };
   }, [searchTerm, currentPage, debouncedGetEmployees]);
+
+
+  
 
   // get previous month
   const getPreviousMonth = () => {
@@ -63,22 +89,28 @@ const SalaryTable = ({
     return `${year}-${month}`;
   };
 
+
   // call to get database salary inforrmation
-  useEffect(() => {
-    const month = getPreviousMonth();
-    getSalaryInformations(month);
-  }, [getSalaryInformations]);
+  useEffect(() => {
+    const month = getPreviousMonth();
+    // 🔥 পরিবর্তন ৪: month পরিবর্তিত হলে fetched ফ্ল্যাগটি reset করুন
+    // NOTE: This assumes getSalaryInformations doesn't handle month change cache logic itself.
+    // If you need to force a re-fetch when month changes, you must manually set `fetched: false` in the store.
+    getSalaryInformations(month);
+  }, [getSalaryInformations]);
 
   // check every employees and assign them their corresponding salary status
   useEffect(() => {
-    const mapping: { [key: string]: string } = {};
+    if (employees.length > 0 && salaryInformations.length > 0) {
+      const mapping: { [key: string]: string } = {};
 
-    employees.forEach((emp) => {
-      const checkFind = salaryInformations.find((si) => si.empId == emp._id);
-      mapping[emp._id] = checkFind ? checkFind.salaryStatus : "unpaid";
-    });
+      employees.forEach((emp) => {
+        const checkFind = salaryInformations.find((si) => si.empId == emp._id);
+        mapping[emp._id] = checkFind ? checkFind.salaryStatus : "unpaid";
+      });
 
-    setSalary(mapping);
+      setSalary(mapping);
+    }
   }, [employees, salaryInformations]);
 
   // call store to save salary information
@@ -86,10 +118,23 @@ const SalaryTable = ({
     const month = getPreviousMonth();
     addSalaryInformation(id, value, month);
   };
+  console.log('employee legth: ', employees.length);
+  console.log('salary', salary);
+  console.log("employee loading:", empLoading);
+  console.log("salary loading:", salaryLoading);
 
   // loading status
-  if (isLoading || salaryInformationLoading)
-    return <TableSkeleton></TableSkeleton>;
+  
+   // Improved loading logic
+  const isInitialOrRefetchLoading = empLoading || salaryLoading || firstLoad;
+  const hasData = employees.length > 0;
+  
+  // স্কেলেটন দেখাও যদি: কোনো ডেটা না থাকে AND (হয় এটি প্রথম লোড OR কোনো ডেটা একটিভলি লোড হচ্ছে)
+  const shouldShowSkeleton = !hasData && isInitialOrRefetchLoading;
+
+  if (shouldShowSkeleton) {
+    return <TableSkeleton />;
+  }
 
   return (
     <Table className="min-w-[600px]">
@@ -104,7 +149,7 @@ const SalaryTable = ({
       </TableHeader>
 
       <TableBody className="font-semibold">
-        {employees.length === 0 && (
+        {employees.length === 0 && empFetched && salaryFetched && !empLoading && !salaryLoading &&(
           <TableRow>
             <TableCell colSpan={5} className="text-center py-6 text-gray-500">
               No employees found
@@ -125,6 +170,15 @@ const SalaryTable = ({
                 onValueChange={(value) => handleToggoleChange(value, emp._id)}
                 value={salary[emp._id] || "unpaid"}
               >
+                
+                <ToggleGroupItem
+                  value="unpaid"
+                  aria-label="Unpaid"
+                  className="data-[state=on]:bg-red-500 data-[state=on]:text-white"
+                >
+                  Unpaid
+                </ToggleGroupItem>
+                
                 <ToggleGroupItem
                   value="paid"
                   aria-label="Paid"
@@ -133,13 +187,6 @@ const SalaryTable = ({
                   Paid
                 </ToggleGroupItem>
 
-                <ToggleGroupItem
-                  value="unpaid"
-                  aria-label="Unpaid"
-                  className="data-[state=on]:bg-red-500 data-[state=on]:text-white"
-                >
-                  Unpaid
-                </ToggleGroupItem>
               </ToggleGroup>
             </TableCell>
           </TableRow>
