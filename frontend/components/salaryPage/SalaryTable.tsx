@@ -51,7 +51,6 @@ const SalaryTable = ({
   );
 
 
-// 🔥 পরিবর্তন ৩: একটি সিঙ্ক করার useEffect যোগ করুন
   useEffect(() => {
     // এই useEffect টি শুধু মাত্র প্রথমবার লোড হওয়ার পরে `firstLoad` কে false করে দেবে।
     // যখন empFetched এবং salaryFetched উভয়ই true হবে (অথবা যখন লোডিং শেষ হবে), তখন প্রথম লোড শেষ।
@@ -93,7 +92,6 @@ const SalaryTable = ({
   // call to get database salary inforrmation
   useEffect(() => {
     const month = getPreviousMonth();
-    // 🔥 পরিবর্তন ৪: month পরিবর্তিত হলে fetched ফ্ল্যাগটি reset করুন
     // NOTE: This assumes getSalaryInformations doesn't handle month change cache logic itself.
     // If you need to force a re-fetch when month changes, you must manually set `fetched: false` in the store.
     getSalaryInformations(month);
