@@ -46,16 +46,17 @@ export const useAttendanceStore = create<AttendanceStoreState>((set, get) => ({
 
     if (!search && fetched) {
       // already fetched
-      return;
     } else {
       set({ isLoading: true });
     }
 
     try {
+      const pageToUse = search ? 1 : currentPage;
+
       const response = await axiosInstance.get<AttendanceResponse>(
         "/attendance",
         {
-          params: { date, search, page: currentPage },
+          params: { date, search, page: pageToUse },
         }
       );
 

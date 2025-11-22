@@ -1,8 +1,8 @@
 "use client"
 import { useState } from "react";
 import AttendanceTable from "./AttendanceTable";
-import PaginationPage from "../Pagination";
 import InputField from "../InputField";
+import AttendancePagination from "./AttendancePagination";
 
 const AttendanceBody = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,10 +24,10 @@ const AttendanceBody = () => {
         {/* Pagination */}
         <div>
           {!searchTerm &&
-          <PaginationPage
+          <AttendancePagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-          ></PaginationPage>
+          ></AttendancePagination>
           }
         </div>
       </div>
