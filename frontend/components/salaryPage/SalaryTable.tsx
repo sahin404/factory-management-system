@@ -13,28 +13,45 @@ import { useSalaryStore } from "@/stores/salaryStore";
 import { useEffect, useState } from "react";
 import TableSkeleton from "../skeletons/TableSkeleton";
 
-
 const SalaryTable = () => {
-
   const [firstLoad, setFirstLoad] = useState(true);
 
-  const {salaryInformations, isLoading, getSalaryInformations} = useSalaryStore();
+  const { salaryInformations, isLoading, getSalaryInformations, addSalaryInformation } =
+    useSalaryStore();
 
-  useEffect(()=>{
-    const getInfo = async()=>{
-      await getSalaryInformations('october');
+  // Previous Month
+  const getPreviousMonth = () => {
+    const now = new Date();
+    now.setMonth(now.getMonth() - 1);
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    return `${year}-${month}`;
+  };
+  const month = getPreviousMonth();
+
+  // Load salary data
+  useEffect(() => {
+    const getInfo = async () => {
+      await getSalaryInformations(month);
       setFirstLoad(false);
-    }
+    };
     getInfo();
-  },[])
+  }, []);
+
+  // Handle toggle
+  const handleToggle = (empId: string, value: string) => {
+    if (!value) return;
+    addSalaryInformation(empId, value, month);
+  };
+
+  // Skeleton loader
+  const shouldSkeletonOpen = salaryInformations.length === 0 && (firstLoad || isLoading);
+  if (shouldSkeletonOpen) return <TableSkeleton />;
 
 
-  const shouldSkeletonOpen = salaryInformations.length===0 && (firstLoad || isLoading);
-
-  if(shouldSkeletonOpen) return <TableSkeleton></TableSkeleton>
-
-
-   return (
+  return (
     <Table className="min-w-[600px] border border-gray-200">
       <TableHeader>
         <TableRow className="bg-gray-100">
@@ -53,16 +70,24 @@ const SalaryTable = () => {
             <TableCell>{emp.name}</TableCell>
             <TableCell>{emp.email}</TableCell>
             <TableCell>{emp.salary}</TableCell>
+
             <TableCell>
               <ToggleGroup
                 type="single"
                 value={emp.salaryStatus}
-                className="border rounded"
+                onValueChange={(value) => handleToggle(emp._id!, value)}
               >
-                <ToggleGroupItem value="unpaid" className="px-3 py-1 data-[state=on]:bg-red-500 data-[state=on]:text-white">
+                <ToggleGroupItem
+                  value="unpaid"
+                  className="px-3 data-[state=on]:bg-red-500 data-[state=on]:text-white"
+                >
                   Unpaid
                 </ToggleGroupItem>
-                <ToggleGroupItem value="paid" className="px-3 py-1 data-[state=on]:bg-green-500 data-[state=on]:text-white">
+
+                <ToggleGroupItem
+                  value="paid"
+                  className="px-3 data-[state=on]:bg-green-500 data-[state=on]:text-white"
+                >
                   Paid
                 </ToggleGroupItem>
               </ToggleGroup>
@@ -74,4 +99,4 @@ const SalaryTable = () => {
   );
 };
 
-export default SalaryTable
+export default SalaryTable;
