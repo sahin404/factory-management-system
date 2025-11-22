@@ -9,11 +9,16 @@ const ExpenseBody = () => {
   const { isLoading, expenses, getExpenses } = useExpenseStore();
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   // Fetch expenses on mount
   useEffect(() => {
-    getExpenses();
-  }, [getExpenses]);
+    const fetchExpenses = async() =>{
+      await getExpenses();
+    } 
+    fetchExpenses();
+    setFirstLoad(false);
+  }, []);
 
   // Filtered expenses
   const filteredExpenses = expenses.filter((exp) => {
@@ -39,7 +44,7 @@ const ExpenseBody = () => {
     <div className="border-2 border-border rounded p-10 mt-5 space-y-10">
       <ExpenseHeader filter={filter} setFilter={setFilter} setCurrentPage={setCurrentPage} />
       <div className="border border-border rounded">
-        <ExpenseTable isLoading={isLoading} expenses={paginatedExpenses} />
+        <ExpenseTable isLoading={isLoading} expenses={paginatedExpenses} firstLoad={firstLoad}/>
       </div>
       <ExpensePagination
         currentPage={currentPage}

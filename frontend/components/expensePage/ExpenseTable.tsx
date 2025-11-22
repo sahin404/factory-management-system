@@ -22,10 +22,14 @@ interface ExpenseData {
 interface ExpenseTableProps {
   expenses: ExpenseData[];
   isLoading: boolean;
+  firstLoad:boolean;
 }
 
-const ExpenseTable = ({ expenses, isLoading }: ExpenseTableProps) => {
-  if (isLoading) return <TableSkeleton></TableSkeleton>
+const ExpenseTable = ({ expenses, isLoading, firstLoad }: ExpenseTableProps) => {
+
+  const shouldSkeletonOpen = expenses.length===0 && (firstLoad || isLoading);
+
+  if(shouldSkeletonOpen) return <TableSkeleton></TableSkeleton>
 
   return (
     <Table className="min-w-[600px]">

@@ -37,7 +37,6 @@ const EmployeeTable = ({
   );
 
   useEffect(() => {
-     console.log('get employees userffr');
     debouncedGetEmployees(searchTerm, currentPage);
     return () => debouncedGetEmployees.cancel();
   }, [searchTerm, currentPage, debouncedGetEmployees]);
