@@ -5,10 +5,10 @@ import { getAttendance, updateAttendance } from "./attendance.service";
 // Get attendances for a specific date
 export const getAttendanceController = async (req: Request, res: Response) => {
   try {
-    const { date } = req.query;
+    const { date, search="", page="1" } = req.query;
     if (!date) return res.status(400).json({ success: false, message: "Date is required" });
-
-    const response = await getAttendance(date as string);
+    const currentPage = parseInt(page as string) || 1;
+    const response = await getAttendance(date as string,search as string, currentPage);
     res.status(200).json({ success: true, data: response.data, total: response.total });
   } catch (err: any) {
     console.error(err);
@@ -18,17 +18,17 @@ export const getAttendanceController = async (req: Request, res: Response) => {
 
 // Update attendance
 export const updateAttendanceController = async (req: Request, res: Response) => {
-  const { employeeId, status, date } = req.body;
+  const { empId, status, date } = req.body;
 
   try {
-    if (!employeeId || !status || !date) {
+    if (!empId || !status || !date) {
       return res.status(400).json({ success: false, message: "Missing required fields" });
     }
 
     if (!["present", "absent", "leave"].includes(status)) {
       return res.status(400).json({ success: false, message: "Invalid status value" });
     }
-    const updated = await updateAttendance(employeeId, status as "present" | "absent" | "leave", date);
+    const updated = await updateAttendance(empId, status as "present" | "absent" | "leave", date);
     
     return res.status(200).json({
       success: true,

@@ -25,7 +25,7 @@ export const getAttendance = async (
       $lookup: {
         from: "attendances", // attendance collection name
         localField: "_id",
-        foreignField: "employeeId",
+        foreignField: "empId",
         as: "attendanceData",
       },
     },
@@ -43,13 +43,13 @@ export const getAttendance = async (
     {
       $project: {
         name: 1,
-        employeeId: 1,
+        empId: "$_id",
         email: 1,
         role:1,
         status: {
           $ifNull: [
             { $arrayElemAt: ["$attendanceOnDate.status", 0] },
-            "not marked", // default if no attendance
+            "absent", // default if no attendance
           ],
         },
       },
@@ -67,6 +67,6 @@ export const getAttendance = async (
 
 // Update attendance
 export const updateAttendance = async(empId:string, status:'present'| 'absent'|'leave', date:string)=>{
-    const response = await Attendance.findOneAndUpdate({employeeId:empId, date}, {status}, {new:true, upsert:true});
+    const response = await Attendance.findOneAndUpdate({empId, date}, {status}, {new:true, upsert:true});
     return response;
 }
