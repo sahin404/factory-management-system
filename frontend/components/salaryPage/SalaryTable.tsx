@@ -10,14 +10,24 @@ import {
 } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useSalaryStore } from "@/stores/salaryStore";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TableSkeleton from "../skeletons/TableSkeleton";
+import { debounce } from "lodash";
 
-const SalaryTable = () => {
+interface searchProps {
+  searchTerm: string;
+  currentPage: number;
+}
+
+const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
   const [firstLoad, setFirstLoad] = useState(true);
 
-  const { salaryInformations, isLoading, getSalaryInformations, addSalaryInformation } =
-    useSalaryStore();
+  const {
+    salaryInformations,
+    isLoading,
+    getSalaryInformations,
+    addSalaryInformation,
+  } = useSalaryStore();
 
   // Previous Month
   const getPreviousMonth = () => {
@@ -31,14 +41,19 @@ const SalaryTable = () => {
   };
   const month = getPreviousMonth();
 
-  // Load salary data
+  // debounce fetch
+  const debouncedGetSalary = useCallback(
+    debounce(async (month: string, term: string, page: number) => {
+      await getSalaryInformations(month, term, page);
+      setFirstLoad(false); // first fetch done
+    }, 500),
+    [getSalaryInformations]
+  );
+
   useEffect(() => {
-    const getInfo = async () => {
-      await getSalaryInformations(month);
-      setFirstLoad(false);
-    };
-    getInfo();
-  }, []);
+    debouncedGetSalary(month, searchTerm, currentPage);
+    return () => debouncedGetSalary.cancel();
+  }, [searchTerm, currentPage, debouncedGetSalary]);
 
   // Handle toggle
   const handleToggle = (empId: string, value: string) => {
@@ -47,9 +62,17 @@ const SalaryTable = () => {
   };
 
   // Skeleton loader
-  const shouldSkeletonOpen = salaryInformations.length === 0 && (firstLoad || isLoading);
+  const shouldSkeletonOpen =
+    salaryInformations.length === 0 && (firstLoad || isLoading);
   if (shouldSkeletonOpen) return <TableSkeleton />;
 
+  if (!isLoading && salaryInformations.length === 0) {
+    return (
+      <div className="text-center py-10 text-gray-500 font-semibold">
+        No employees found.
+      </div>
+    );
+  }
 
   return (
     <Table className="min-w-[600px] border border-gray-200">

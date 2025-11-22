@@ -14,44 +14,62 @@ interface SalaryInformationsState {
   success: boolean;
   message?: string;
   data: SalaryInformationState[];
+  total:number;
 }
 
 interface SalaryStoreState {
   salaryInformations: SalaryInformationState[];
   isLoading: boolean;
   fetched: boolean;
+  totalEmployeeForSalary:number;
 
   addSalaryInformation: (
     empId: string,
     salaryStatus: string,
     month: string
   ) => Promise<void>;
-  getSalaryInformations: (month: string) => Promise<void>;
+  getSalaryInformations: (month: string, searchTerm:string, currentPage:number) => Promise<void>;
 }
 
 export const useSalaryStore = create<SalaryStoreState>((set, get) => ({
   salaryInformations: [],
   isLoading: false,
   fetched: false,
+  totalEmployeeForSalary:0,
+
   // get the salary status in database
-  getSalaryInformations: async (month) => {
-    const { fetched } = get();
-    if (fetched) {
-      // Data is already cached
-    } else {
-      set({ isLoading: true });
-    }
-    try {
-      const response = await axiosInstance.get<SalaryInformationsState>(
-        `/salary/${month}`
-      );
-      set({ salaryInformations: response.data.data, fetched: true });
-    } catch (err) {
-      console.log("An error occured to fetching salary information.");
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  getSalaryInformations: async (month, searchTerm = "", currentPage = 1) => {
+  const { fetched } = get();
+
+  if (!searchTerm && fetched) {
+    // no skeleton
+  } else {
+    set({ isLoading: true });
+  }
+
+  try {
+    const pageToUse = searchTerm ? 1 : currentPage;
+
+    const response = await axiosInstance.get<SalaryInformationsState>("/salary", {
+      params: {
+        month,
+        search: searchTerm,
+        page: pageToUse,
+      },
+    });
+
+    set({
+      salaryInformations: response.data.data,
+      totalEmployeeForSalary: response.data.total,
+      fetched: searchTerm ? false : true,
+    });
+
+  } catch (err) {
+    console.log("Error fetching salary information:", err);
+  } finally {
+    set({ isLoading: false });
+  }
+},
 
   // save the salary status in database
   addSalaryInformation: async (empId, salaryStatus, month) => {

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import SalaryTable from "./SalaryTable";
-import PaginationPage from "../Pagination";
 import InputField from "../InputField";
 import SalaryMonthBadge from "./SalaryMonthBadge";
+import SalaryPagination from "./SalaryPagination";
 
 const SalaryBody = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -26,16 +26,16 @@ const SalaryBody = () => {
 
         {/* Table */}
         <div className="border border-border rounded">
-          <SalaryTable/>
+          <SalaryTable searchTerm={searchTerm} currentPage={currentPage} />
         </div>
 
         {/* Pagination */}
         <div>
           {!searchTerm && (
-            <PaginationPage
+            <SalaryPagination
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-            ></PaginationPage>
+            ></SalaryPagination>
           )}
         </div>
       </div>

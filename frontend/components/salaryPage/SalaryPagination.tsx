@@ -8,25 +8,25 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useEmployeeStore } from "@/stores/employeeStore";
-import PaginationSkeleton from "./skeletons/PaginationSkeleton";
+import { useSalaryStore } from "@/stores/salaryStore";
+import PaginationSkeleton from "../skeletons/PaginationSkeleton";
 
 interface pageNationProps {
   currentPage: number;
   setCurrentPage: (value: number) => void;
 }
 
-const PaginationPage = ({ currentPage, setCurrentPage }: pageNationProps) => {
-  const { totalEmployees, isLoading, fetched} = useEmployeeStore();
+const SalaryPagination = ({ currentPage, setCurrentPage }: pageNationProps) => {
+  const { totalEmployeeForSalary, fetched, isLoading } = useSalaryStore();
 
+  const totalEmployees = totalEmployeeForSalary;
   const limit = 10;
   const totalPages = Math.ceil(totalEmployees / limit);
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   // Skeleton show condition
   const shouldShowSkeleton = totalEmployees === 0 && (isLoading || !fetched);
-
-  if (shouldShowSkeleton) return <PaginationSkeleton />;
+  if(shouldShowSkeleton) return <PaginationSkeleton></PaginationSkeleton>
 
   const handlePrevious = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -72,4 +72,4 @@ const PaginationPage = ({ currentPage, setCurrentPage }: pageNationProps) => {
   );
 };
 
-export default PaginationPage;
+export default SalaryPagination;
