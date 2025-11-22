@@ -26,7 +26,7 @@ const SalaryBody = () => {
 
         {/* Table */}
         <div className="border border-border rounded">
-          <SalaryTable searchTerm={searchTerm} currentPage={currentPage} />
+          <SalaryTable/>
         </div>
 
         {/* Pagination */}

@@ -42,8 +42,6 @@ const EmployeeTable = ({
     return () => debouncedGetEmployees.cancel();
   }, [searchTerm, currentPage, debouncedGetEmployees]);
 
-  console.log('employee', isLoading);
-  console.log(firstLoad);
 
   const shouldShowSkeleton = employees.length === 0 && (isLoading || firstLoad);
 

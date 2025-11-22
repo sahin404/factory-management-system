@@ -1,15 +1,23 @@
 import axiosInstance from '@/lib/api';
 import {create} from 'zustand';
 
-interface SalaryInformation{
-    _id?:string,
+interface SalaryInformationState{
+     _id?:string,
+    name:string,
+    email:string, 
+    salary:number,
     month:string,
-    empId:string,
     salaryStatus:string
 }
 
+interface SalaryInformationsState{
+    success:boolean,
+    message?:string,
+    data:SalaryInformationState[]
+}
+
 interface SalaryStoreState{
-    salaryInformations: SalaryInformation[];
+    salaryInformations: SalaryInformationState[];
     isLoading:boolean;
     fetched:boolean;
 
@@ -17,11 +25,6 @@ interface SalaryStoreState{
     getSalaryInformations: (month:string)=>Promise<void>;
 }
 
-interface addSalaryInformationState{
-    success:boolean,
-    message?:string,
-    data:SalaryInformation[]
-}
 
 export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
     salaryInformations: [],
@@ -29,15 +32,16 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
     fetched:false,
     // get the salary status in database
     getSalaryInformations:async(month)=>{
-        const {fetched, salaryInformations} = get();
+        const {fetched} = get();
         if(fetched){
-            // Data is already cached, skip loading indicator
+            // Data is already cached
         } else {
             set({isLoading:true});
         }
         try{
-            const response = await axiosInstance.get<addSalaryInformationState>(`/salary/${month}`);
+            const response = await axiosInstance.get<SalaryInformationsState>(`/salary/${month}`);
             set({salaryInformations: response.data.data, fetched:true});
+   
         }
         catch(err){
             console.log('An error occured to fetching salary information.');
@@ -52,18 +56,8 @@ export const useSalaryStore = create<SalaryStoreState>((set, get)=>({
         const prevState = get().salaryInformations;
 
         try{
-
-            // optimistic save
-            set((state)=>({
-                salaryInformations:[
-                    ...state.salaryInformations.filter((salary)=>salary.empId !== empId),
-                    {empId, salaryStatus, month}
-                ]
-
-            }))
-
             // save to database
-            const response = await axiosInstance.post<addSalaryInformationState>('/salary', {empId, salaryStatus, month});
+            const response = await axiosInstance.post<SalaryInformationsState>('/salary', {empId, salaryStatus, month});
             if(response.data.success){
                 // console.log("Successfully save the salary status in db");
                 set({ fetched: false });
