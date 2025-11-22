@@ -42,9 +42,17 @@ const EmployeeTable = ({
   }, [searchTerm, currentPage, debouncedGetEmployees]);
 
 
+  // skeleton logic
   const shouldShowSkeleton = employees.length === 0 && (isLoading || firstLoad);
-
   if (shouldShowSkeleton) return <TableSkeleton />;
+
+  if (!isLoading && employees.length === 0) {
+    return (
+      <div className="text-center py-10 text-gray-500 font-semibold">
+        No employees found.
+      </div>
+    );
+  }
 
   return (
     <Table className="min-w-[600px]">
@@ -61,13 +69,7 @@ const EmployeeTable = ({
       </TableHeader>
 
       <TableBody className="font-semibold">
-        {employees.length === 0 ? (
-          <TableRow>
-            <TableCell colSpan={7} className="text-center text-gray-500 py-4">
-              No employees found
-            </TableCell>
-          </TableRow>
-        ) : (
+        {
           employees.map((employee, index) => (
             <TableRow key={employee._id}>
               <TableCell>{index + 1}</TableCell>
@@ -83,7 +85,7 @@ const EmployeeTable = ({
               </TableCell>
             </TableRow>
           ))
-        )}
+        }
       </TableBody>
     </Table>
   );
