@@ -1,3 +1,5 @@
+// components/tables/AttendanceTable.tsx
+
 "use client";
 
 import {
@@ -8,139 +10,134 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { useEmployeeStore } from "@/stores/employeeStore";
-import { useCallback, useEffect, useState } from "react";
-import TableSkeleton from "../skeletons/TableSkeleton";
-import { debounce } from "lodash";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useAttendanceStore } from "@/stores/attendanceStore";
+import { useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
+import TableSkeleton from "../skeletons/TableSkeleton";
 
-const AttendanceTable = ({searchTerm,currentPage,}: {searchTerm: string,currentPage: number}) => {
-  const [attendance, setAttendance] = useState<{ [key: string]: string }>({});
-  
-  //store
-  const { isLoading, employees, getAllEmployees} = useEmployeeStore();
-  const {attendances,updateAttendance, getAllAttendance, isLoading: attendanceLoading} = useAttendanceStore();
-
-  // fetching employee with debouncing
-  const debouncedGetEmployees = useCallback(
-    debounce((term: string, page: number) => {
-      getAllEmployees(term, page);
-    }, 500),
-    [getAllEmployees]
-  );
-  useEffect(() => {
-    debouncedGetEmployees(searchTerm, currentPage);
-
-    // cleanup to cancel debounce on unmount
-    return () => {
-      debouncedGetEmployees.cancel();
-    };
-  }, [searchTerm, currentPage, debouncedGetEmployees]);
-
-
-  // today date calculate and make string
-  const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", });
-
-  // Fetch attendance data when employees or date change
-  useEffect(() => {
-    if (employees.length > 0) {
-      getAllAttendance(today);
-    }
-  }, [employees, today]);
-
-  // Sync backend attendance to local state
-  useEffect(() => {
-    const newAttendance: { [key: string]: "present" | "absent" | "leave" } = {};
-    employees.forEach((emp) => {
-      const att = attendances.find((a) => a.employeeId === emp._id);
-      newAttendance[emp._id] = att ? att.status : "absent";
-    });
-    setAttendance(newAttendance);
-  }, [attendances, employees]);
-
-  // handle attendance change and save to database
-  const handleAttendanceChange = async (
-    empId: string,
-    status: "present" | "absent" | "leave"
-  ) => {
-    setAttendance((prev) => ({ ...prev, [empId]: status }));
-    // console.log(`Employee ${empId} marked as ${status}`);
-    await updateAttendance(empId, status, today);
-  };
-
-  if ((isLoading || attendanceLoading)) {
-  return <TableSkeleton />;
+interface AttendanceTableProps {
+  searchTerm: string;
+  currentPage: number;
 }
 
+const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  // Get today
+  const today = new Date().toISOString().split("T")[0];
+
+  const { attendances, isLoading, getAllAttendance, updateAttendance } =
+    useAttendanceStore();
+
+  // Debounced fetch for attendance data
+  const debouncedGetAttendance = useCallback(
+    debounce(async (date: string, term: string, page: number) => {
+      await getAllAttendance(date, term, page);
+      setFirstLoad(false);
+    }, 500),
+    [getAllAttendance]
+  );
+
+  useEffect(() => {
+    debouncedGetAttendance(today, searchTerm, currentPage);
+    return () => debouncedGetAttendance.cancel();
+  }, [searchTerm, currentPage, debouncedGetAttendance, today]);
+
+  // Handle toggle change
+  const handleAttendanceChange = (
+    employeeId: string,
+    status: "present" | "absent" | "leave"
+  ) => {
+    if (status) {
+      updateAttendance(employeeId, status, today);
+    }
+  };
+
+  console.log(attendances);
+
+  // Skeleton loader logic
+  const shouldSkeletonOpen =
+    attendances.length === 0 && (firstLoad || isLoading);
+  if (shouldSkeletonOpen) return <TableSkeleton />;
+
+  // No data found message
+  if (!isLoading && attendances.length === 0) {
+    return (
+      <div className="text-center py-10 text-gray-500 font-semibold">
+        No employees found.
+      </div>
+    );
+  }
+
   return (
-    <Table className="min-w-[600px]">
-      <TableHeader>
+    <Table className="min-w-[600px] border border-gray-200">
+      <TableHeader className="bg-gray-100">
         <TableRow>
-          <TableHead>Serial</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Designation</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>
+          <TableHead className="dark:text-black">Serial</TableHead>
+          <TableHead className="dark:text-black">Name</TableHead>
+          <TableHead className="dark:text-black">Designation</TableHead>
+          <TableHead className="dark:text-black">Email</TableHead>
+          <TableHead className="dark:text-black">
             Status <div className="text-xs text-gray-400">{today}</div>
           </TableHead>
         </TableRow>
       </TableHeader>
 
       <TableBody className="font-semibold">
-        {employees.length === 0 ? (
-          <TableRow>
-            <TableCell colSpan={6} className="text-center text-gray-500 py-4">
-              No employees found
+        {attendances.map((emp, index) => (
+          <TableRow key={emp.employeeId}>
+            <TableCell>{(currentPage - 1) * 10 + index + 1}</TableCell>
+            <TableCell>{emp.name}</TableCell>
+            <TableCell>{emp.role}</TableCell>
+            <TableCell>{emp.email}</TableCell>
+
+            <TableCell>
+              <ToggleGroup
+                type="single"
+                className="border-2"
+                value={
+                  emp.status === "absent"
+                    ? "A"
+                    : emp.status === "present"
+                    ? "P"
+                    : emp.status === "leave"
+                    ? "L"
+                    : "A"
+                }
+                onValueChange={(value) => {
+                  if (value === "A")
+                    handleAttendanceChange(emp.employeeId, "absent");
+                  if (value === "P")
+                    handleAttendanceChange(emp.employeeId, "present");
+                  if (value === "L")
+                    handleAttendanceChange(emp.employeeId, "leave");
+                }}
+              >
+                <ToggleGroupItem
+                  value="A"
+                  className="data-[state=on]:bg-red-500 data-[state=on]:text-white"
+                >
+                  A
+                </ToggleGroupItem>
+
+                <ToggleGroupItem
+                  value="P"
+                  className="data-[state=on]:bg-green-500 data-[state=on]:text-white"
+                >
+                  P
+                </ToggleGroupItem>
+
+                <ToggleGroupItem
+                  value="L"
+                  className="data-[state=on]:bg-blue-500 data-[state=on]:text-white"
+                >
+                  L
+                </ToggleGroupItem>
+              </ToggleGroup>
             </TableCell>
           </TableRow>
-        ) : (
-          employees.map((emp, indx) => (
-            <TableRow key={indx}>
-              <TableCell>{indx + 1}</TableCell>
-              <TableCell>{emp.name}</TableCell>
-              <TableCell>{emp.role}</TableCell>
-              <TableCell>{emp.email}</TableCell>
-              {/* Toggole Group*/}
-              <TableCell>
-                <ToggleGroup
-                  variant={"outline"}
-                  type="single"
-                  value={attendance[emp._id] || "absent"}
-                  onValueChange={(val) => {
-                    if (val)
-                      handleAttendanceChange(
-                        emp._id,
-                        val as "present" | "absent" | "leave"
-                      );
-                  }}
-                >
-                  <ToggleGroupItem
-                    value="absent"
-                    aria-label="Toggle bold"
-                    className="data-[state=on]:bg-red-500 data-[state=on]:text-white"
-                  >
-                    A
-                  </ToggleGroupItem>
-                  <ToggleGroupItem
-                    value="present"
-                    aria-label="Toggle italic"
-                    className="data-[state=on]:bg-green-500 data-[state=on]:text-white"
-                  >
-                    P
-                  </ToggleGroupItem>
-                  <ToggleGroupItem
-                    value="leave"
-                    aria-label="Toggle strikethrough"
-                    className="data-[state=on]:bg-blue-500 data-[state=on]:text-white"
-                  >
-                    L
-                  </ToggleGroupItem>
-                </ToggleGroup>
-              </TableCell>
-            </TableRow>
-          ))
-        )}
+        ))}
       </TableBody>
     </Table>
   );

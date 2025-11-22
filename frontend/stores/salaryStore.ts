@@ -3,11 +3,12 @@ import { create } from "zustand";
 
 interface SalaryInformationState {
   _id?: string;
+  empId:string;
   name: string;
   email: string;
   salary: number;
   month: string;
-  salaryStatus: string;
+  status: string;
 }
 
 interface SalaryInformationsState {
@@ -25,7 +26,7 @@ interface SalaryStoreState {
 
   addSalaryInformation: (
     empId: string,
-    salaryStatus: string,
+    status: string,
     month: string
   ) => Promise<void>;
   getSalaryInformations: (month: string, searchTerm:string, currentPage:number) => Promise<void>;
@@ -72,20 +73,20 @@ export const useSalaryStore = create<SalaryStoreState>((set, get) => ({
 },
 
   // save the salary status in database
-  addSalaryInformation: async (empId, salaryStatus, month) => {
+  addSalaryInformation: async (empId, status, month) => {
     const prevState = get().salaryInformations;
 
     // Optimistic update
     set((state) => ({
       salaryInformations: state.salaryInformations.map((emp) =>
-        emp._id === empId ? { ...emp, salaryStatus } : emp
+        emp.empId === empId ? { ...emp, status } : emp
       ),
     }));
 
     try {
       const response = await axiosInstance.post<SalaryInformationsState>("/salary", {
         empId,
-        salaryStatus,
+        status,
         month,
       });
 

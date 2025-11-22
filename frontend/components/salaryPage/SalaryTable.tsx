@@ -88,7 +88,7 @@ const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
 
       <TableBody className="font-semibold">
         {salaryInformations.map((emp, index) => (
-          <TableRow key={emp._id}>
+          <TableRow key={emp.empId}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{emp.name}</TableCell>
             <TableCell>{emp.email}</TableCell>
@@ -97,8 +97,8 @@ const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
             <TableCell>
               <ToggleGroup
                 type="single"
-                value={emp.salaryStatus}
-                onValueChange={(value) => handleToggle(emp._id!, value)}
+                value={emp.status || 'unpaid'}
+                onValueChange={(value) => handleToggle(emp.empId, value)}
               >
                 <ToggleGroupItem
                   value="unpaid"

@@ -1,43 +1,74 @@
 import { create } from "zustand";
 import axiosInstance from "@/lib/api";
 
-interface Attendance {
-  _id?: string;
-  employeeId: string;
-  date: string;
-  status: "present" | "absent" | "leave";
-}
-
-interface attendanceResponse{
-    success:boolean,
-    message:boolean,
-    data:Attendance[]
-}
-
 interface AttendanceState {
-  attendances: Attendance[];
+  _id?: string;
+  name: string;
+  email: string;
+  employeeId: string;
+  status: string;
+  role: string;
+}
+
+interface AttendanceResponse {
+  success: boolean;
+  message?: string;
+  data: AttendanceState[];
+  total: number;
+}
+
+interface AttendanceStoreState {
+  attendances: AttendanceState[];
   isLoading: boolean;
+  fetched: boolean;
+  total: number;
   updateAttendance: (
     employeeId: string,
     status: "present" | "absent" | "leave",
     date: string
   ) => Promise<void>;
-  getAllAttendance: (date: string) => Promise<void>;
+  getAllAttendance: (
+    date: string,
+    search: string,
+    currentPage: number
+  ) => Promise<void>;
 }
 
-export const useAttendanceStore = create<AttendanceState>((set, get) => ({
+export const useAttendanceStore = create<AttendanceStoreState>((set, get) => ({
   attendances: [],
   isLoading: false,
-  
+  fetched: false,
+  total: 0,
 
   // get all attendance for specific date
-  getAllAttendance: async (date) => {
-    set({ isLoading: true });
+  getAllAttendance: async (date, search = "", currentPage = 1) => {
+    const { fetched } = get();
+
+    if (!search && fetched) {
+      // already fetched
+      return;
+    } else {
+      set({ isLoading: true });
+    }
+
     try {
-      const res = await axiosInstance.get<attendanceResponse>(`/attendance?date=${date}`);
-      set({ attendances: res.data.data || [] });
-    } catch (err: any) {
-      console.log(err.response?.data || err.message);
+      const response = await axiosInstance.get<AttendanceResponse>(
+        "/attendance",
+        {
+          params: { date, search, page: currentPage },
+        }
+      );
+
+      set({
+        attendances: response.data.data.map((a) => ({
+          ...a,
+          status: a.status || "absent",
+        })),
+        total: response.data.total,
+        fetched: search ? false : true,
+      });
+    } catch (err) {
+      console.error("Error fetching attendances:", err);
     } finally {
       set({ isLoading: false });
     }
@@ -45,27 +76,31 @@ export const useAttendanceStore = create<AttendanceState>((set, get) => ({
 
   // single employee attendance
   updateAttendance: async (employeeId, status, date) => {
+    const prevState = get().attendances;
+
+    // optimistic update
+    set((state) => ({
+      attendances: state.attendances.map((a) =>
+        a.employeeId === employeeId ? { ...a, status } : a
+      ),
+    }));
+
     try {
-      // optimistic update
-      set((state) => ({
-        attendances: [
-          ...state.attendances.filter((a) => a.employeeId !== employeeId),
-          { employeeId, date, status },
-        ],
-      }));
+      const res = await axiosInstance.post<AttendanceResponse>(
+        "/attendance/update",
+        {
+          employeeId,
+          status,
+          date,
+        }
+      );
 
-      const res = await axiosInstance.post<attendanceResponse>(`/attendance/update`, {
-        employeeId,
-        status,
-        date,
-      });
-
-      if (res.data?.success) {
-      } else {
+      if (!res.data.success) {
+        // set({ attendances: prevState }); // rollback
       }
     } catch (err: any) {
+      // set({ attendances: prevState }); // rollback
       console.error(err.response?.data || err.message);
     }
   },
-  
 }));
