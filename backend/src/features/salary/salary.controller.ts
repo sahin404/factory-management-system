@@ -24,19 +24,23 @@ export const addSalaryController = async (req: Request, res: Response) => {
 
 
 // get Salary informations
-export const getSalaryByMonthController = async (req: Request, res: Response) => {
+export const getSalaryController = async (req: Request, res: Response) => {
   try {
-    const { month } = req.params;
-    
+    const { month, search, page } = req.query;
+
     if (!month) {
-      return res.status(400).json({ success: false, message: "Month parameter is required" });
+      return res.status(400).json({ success: false, message: "Month is required" });
     }
 
-    const data = await getSalaryInformations(month);
+    const data = await getSalaryInformations(
+      month as string,
+      (search as string) || "",
+      parseInt((page as string) || "1")
+    );
 
-    return res.status(200).json({ success: true, data });
-  } catch (err: any) {
-    console.error("Error in getSalaryByMonthController:", err);
+    return res.status(200).json({ success: true, data: data.data, total: data.total });
+  } catch (err) {
+    console.error("Error in getSalaryController:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };

@@ -1,5 +1,11 @@
 import User from "../auth/auth.model";
 import Salary from "./salary.model";
+import { PipelineStage } from "mongoose";
+
+interface SalaryInfoResult {
+  data: any[];
+  total: number;
+}
 
 // add salary information into daabase
 export const addSalaryInformation = async (
@@ -17,13 +23,24 @@ export const addSalaryInformation = async (
 };
 
 // get salary information from database
-export const getSalaryInformations = async (month: string) => {
-  const data = await User.aggregate([
+export const getSalaryInformations = async (
+  month: string,
+  search: string = "",
+  page: number = 1,
+  limit: number = 10 // default per page
+): Promise<SalaryInfoResult> => {
+  const matchStage: Record<string, any> = { role: { $ne: "admin" } };
+  if (search) {
+    matchStage.name = { $regex: search, $options: "i" }; 
+  }
+
+  const pipeline: PipelineStage[] = [
+    { $match: matchStage },
     {
       $lookup: {
-        from: "salaries", // Salary collection name
-        localField: "_id", // User._id
-        foreignField: "empId", // Salary.empId
+        from: "salaries",
+        localField: "_id",
+        foreignField: "empId",
         as: "salaryData",
       },
     },
@@ -43,7 +60,7 @@ export const getSalaryInformations = async (month: string) => {
         name: 1,
         employeeId: 1,
         email: 1,
-        salary: 1, // User.salary
+        salary: 1,
         month: month,
         salaryStatus: {
           $ifNull: [
@@ -53,7 +70,13 @@ export const getSalaryInformations = async (month: string) => {
         },
       },
     },
-  ]);
+    { $sort: { name: 1 } },
+    { $skip: (page - 1) * limit },
+    { $limit: limit },
+  ];
 
-  return data;
+  const data = await User.aggregate(pipeline);
+  const total = await User.countDocuments(matchStage);
+
+  return { data, total };
 };

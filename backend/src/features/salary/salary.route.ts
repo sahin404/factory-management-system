@@ -1,10 +1,10 @@
 import express from "express";
-import { addSalaryController, getSalaryByMonthController } from "./salary.controller";
+import { addSalaryController, getSalaryController } from "./salary.controller";
 
 const salaryRouter = express.Router();
 
 salaryRouter.post("/", addSalaryController);
-salaryRouter.get("/:month", getSalaryByMonthController);
+salaryRouter.get("/", getSalaryController);
 
 
 export default salaryRouter;
