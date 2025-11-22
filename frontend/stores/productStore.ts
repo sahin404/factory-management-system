@@ -28,7 +28,7 @@ export interface ProductStore {
   isUpdatingProduct: boolean;
   isDeleting:boolean;
   isAdding:boolean,
-  resetProductsData: () => void;
+  fetched:boolean,
   getProducts: (searchTerm?: string, pagination?: number) => Promise<void>;
   getProductById: (productId?: string) => Promise<void>;
   updateProductQuantity: (
@@ -43,7 +43,7 @@ export interface ProductStore {
 
 export const useProductStore = create<ProductStore>((set, get) => ({
   products: [],
-  isLoading: true,
+  isLoading: false,
   total: 0,
   product: null,
   isLoadingProductById: true,
@@ -52,15 +52,19 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   isUpdatingProduct: false,
   isDeleting:false,
   isAdding:false,
-
-  // reset function
-  resetProductsData: () => {
-    set({ products: [], total: 0, isLoading: true }); 
-  },
+  fetched:false,
 
   //get all product
   getProducts: async (searchTerm?: string, pagination?: number) => {
-    set({ isLoading: true });
+    const {fetched} = get();
+
+    if(!searchTerm && fetched){
+      //already cached
+    }
+    else{
+      set({ isLoading: true });
+    }
+    
     try {
       const query = searchTerm
         ? `?search=${searchTerm}&page=${pagination}`
@@ -71,6 +75,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       );
       set({ products: response.data.data.products });
       set({ total: response.data.data.total });
+      set({fetched:true});
     } catch (err: any) {
       console.log("Error in product store to fetch products!");
     } finally {
@@ -100,7 +105,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
         `/production/${productId}`,
         { quantity }
       );
-      set({ product: response.data.data });
+      set({ product: response.data.data, fetched:false });
 
       // update products list too if it exists
       set((state) => ({
@@ -131,7 +136,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       const updatedProduct = response.data.data;
 
       //update the product in store
-      set({ product: updatedProduct });
+      set({ product: updatedProduct, fetched:false });
 
       // update the product list in store
       set((state) => ({
@@ -159,7 +164,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       );
 
       // update the product / modal
-      set({ product: response.data.data });
+      set({ product: response.data.data, fetched:false });
       // update product staes
       const sold = salesNum ?? 0;
       set((state) => ({
@@ -179,6 +184,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
     set({isDeleting:true});
     try{
       await axiosInstance.delete(`/production/${productId}`);
+      set({fetched:false});
       set((state) => ({
       products: state.products.filter((p) => p._id !== productId),
     }));
@@ -205,6 +211,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
         "/production",
         newProduct
       );
+      set({fetched:false});
       set((state) => ({
         products: [response.data.data, ...state.products],
       }));

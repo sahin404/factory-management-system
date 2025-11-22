@@ -11,7 +11,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { useProductStore } from "@/stores/productStore";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TableSkeleton from "../skeletons/TableSkeleton";
 import AddProductQuantity from "./AddProductQuantity";
 import DeleteProductItem from "./DeleteProductItem";
@@ -19,27 +19,29 @@ import Sales from "./Sales";
 import Update from "./Update";
 
 const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, pagination:number}) => {
-  const { products, isLoading, getProducts, resetProductsData } = useProductStore();
+  const { products, isLoading, getProducts} = useProductStore();
+  const [firstLoad, setFirstLoad] = useState(true);
 
   // console.log(searchTerm, pagination);
   const debouncedGetProducts = useCallback(
     debounce((searchTerm:string, pagination:number) => {
       getProducts(searchTerm, pagination);
+      setFirstLoad(false);
     }, 500),
     [getProducts]
   );
 
   useEffect(() => {
-    resetProductsData();
     debouncedGetProducts(searchTerm, pagination);
     // cleanup
     return () => debouncedGetProducts.cancel();
-  }, [searchTerm, pagination, debouncedGetProducts, resetProductsData]);
+  }, [searchTerm, pagination, debouncedGetProducts]);
 
-  if (isLoading) {
-    return <TableSkeleton />;
-  }
+  //skeleton
+  const shouldShowSkeleton = products.length===0 && (isLoading || firstLoad);
+  if(shouldShowSkeleton) return <TableSkeleton></TableSkeleton>
 
+  //not found
   if (!products || products.length === 0) {
     return <p className="text-center py-4">No products available.</p>;
   }
