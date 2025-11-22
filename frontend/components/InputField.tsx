@@ -16,7 +16,7 @@ const InputField = ({searchTerm, setSearchTerm, setCurrentPage}:HeaderInterface)
           setCurrentPage(1);
         }}
         type="text"
-        placeholder="Search employee..."
+        placeholder="Search here..."
         className="w-full px-4 py-2 text-md border rounded outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all duration-200"
       />
     </div>

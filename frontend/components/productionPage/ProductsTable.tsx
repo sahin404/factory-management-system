@@ -18,13 +18,19 @@ import DeleteProductItem from "./DeleteProductItem";
 import Sales from "./Sales";
 import Update from "./Update";
 
-const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, pagination:number}) => {
-  const { products, isLoading, getProducts} = useProductStore();
+const ProductTable = ({
+  searchTerm,
+  pagination,
+}: {
+  searchTerm: string;
+  pagination: number;
+}) => {
+  const { products, isLoading, getProducts } = useProductStore();
   const [firstLoad, setFirstLoad] = useState(true);
 
   // console.log(searchTerm, pagination);
   const debouncedGetProducts = useCallback(
-    debounce((searchTerm:string, pagination:number) => {
+    debounce((searchTerm: string, pagination: number) => {
       getProducts(searchTerm, pagination);
       setFirstLoad(false);
     }, 500),
@@ -38,12 +44,16 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
   }, [searchTerm, pagination, debouncedGetProducts]);
 
   //skeleton
-  const shouldShowSkeleton = products.length===0 && (isLoading || firstLoad);
-  if(shouldShowSkeleton) return <TableSkeleton></TableSkeleton>
+  const shouldShowSkeleton = products.length === 0 && (isLoading || firstLoad);
+  if (shouldShowSkeleton) return <TableSkeleton></TableSkeleton>;
 
   //not found
   if (!products || products.length === 0) {
-    return <p className="text-center py-4">No products available.</p>;
+    return (
+      <div className="text-center py-10 text-gray-500 font-semibold">
+        No products found.
+      </div>
+    );
   }
 
   return (
@@ -69,10 +79,24 @@ const ProductTable = ({ searchTerm, pagination }: {searchTerm: string, paginatio
             <TableCell>BDT {product.price}</TableCell>
             <TableCell>{product.unit}</TableCell>
             <TableCell>{product.quantity} Unit</TableCell>
-            <TableCell><AddProductQuantity productId={product._id || ""}></AddProductQuantity></TableCell>
-            <TableCell> <Sales productId={product._id || ""}></Sales> </TableCell>
-            <TableCell> <Update productId={product._id||""}></Update></TableCell>
-            <TableCell><DeleteProductItem productId={product._id||""}></DeleteProductItem></TableCell>
+            <TableCell>
+              <AddProductQuantity
+                productId={product._id || ""}
+              ></AddProductQuantity>
+            </TableCell>
+            <TableCell>
+              {" "}
+              <Sales productId={product._id || ""}></Sales>{" "}
+            </TableCell>
+            <TableCell>
+              {" "}
+              <Update productId={product._id || ""}></Update>
+            </TableCell>
+            <TableCell>
+              <DeleteProductItem
+                productId={product._id || ""}
+              ></DeleteProductItem>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
