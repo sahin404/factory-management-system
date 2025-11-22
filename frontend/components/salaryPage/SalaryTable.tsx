@@ -53,13 +53,13 @@ const SalaryTable = () => {
 
   return (
     <Table className="min-w-[600px] border border-gray-200">
-      <TableHeader>
-        <TableRow className="bg-gray-100">
-          <TableHead>Serial</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Salary</TableHead>
-          <TableHead>Status</TableHead>
+      <TableHeader className="bg-gray-100">
+        <TableRow className="">
+          <TableHead className="dark:text-black">Serial</TableHead>
+          <TableHead className="dark:text-black">Name</TableHead>
+          <TableHead className="dark:text-black">Email</TableHead>
+          <TableHead className="dark:text-black">Salary</TableHead>
+          <TableHead className="dark:text-black">Status</TableHead>
         </TableRow>
       </TableHeader>
 
