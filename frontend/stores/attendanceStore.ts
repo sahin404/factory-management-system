@@ -5,7 +5,7 @@ interface AttendanceState {
   _id?: string;
   name: string;
   email: string;
-  employeeId: string;
+  empId: string;
   status: string;
   role: string;
 }
@@ -75,13 +75,12 @@ export const useAttendanceStore = create<AttendanceStoreState>((set, get) => ({
   },
 
   // single employee attendance
-  updateAttendance: async (employeeId, status, date) => {
+  updateAttendance: async (empId, status, date) => {
     const prevState = get().attendances;
-
     // optimistic update
     set((state) => ({
       attendances: state.attendances.map((a) =>
-        a.employeeId === employeeId ? { ...a, status } : a
+        a.empId === empId ? { ...a, status } : a
       ),
     }));
 
@@ -89,17 +88,17 @@ export const useAttendanceStore = create<AttendanceStoreState>((set, get) => ({
       const res = await axiosInstance.post<AttendanceResponse>(
         "/attendance/update",
         {
-          employeeId,
+          empId,
           status,
           date,
         }
       );
 
       if (!res.data.success) {
-        // set({ attendances: prevState }); // rollback
+        set({ attendances: prevState }); // rollback
       }
     } catch (err: any) {
-      // set({ attendances: prevState }); // rollback
+      set({ attendances: prevState }); // rollback
       console.error(err.response?.data || err.message);
     }
   },

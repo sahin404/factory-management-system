@@ -54,8 +54,6 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
     }
   };
 
-  console.log(attendances);
-
   // Skeleton loader logic
   const shouldSkeletonOpen =
     attendances.length === 0 && (firstLoad || isLoading);
@@ -86,7 +84,7 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
 
       <TableBody className="font-semibold">
         {attendances.map((emp, index) => (
-          <TableRow key={emp.employeeId}>
+          <TableRow key={emp._id}>
             <TableCell>{(currentPage - 1) * 10 + index + 1}</TableCell>
             <TableCell>{emp.name}</TableCell>
             <TableCell>{emp.role}</TableCell>
@@ -107,11 +105,11 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
                 }
                 onValueChange={(value) => {
                   if (value === "A")
-                    handleAttendanceChange(emp.employeeId, "absent");
+                    handleAttendanceChange(emp.empId, "absent");
                   if (value === "P")
-                    handleAttendanceChange(emp.employeeId, "present");
+                    handleAttendanceChange(emp.empId, "present");
                   if (value === "L")
-                    handleAttendanceChange(emp.employeeId, "leave");
+                    handleAttendanceChange(emp.empId, "leave");
                 }}
               >
                 <ToggleGroupItem
