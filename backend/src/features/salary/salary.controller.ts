@@ -5,15 +5,14 @@ import { addSalaryInformation, getSalaryInformations } from "./salary.service";
 // added salary information
 export const addSalaryController = async (req: Request, res: Response) => {
   try {
-    const { empId, salaryStatus, month } = req.body;
-
+    const { empId, status, month } = req.body;
     // validation
-    if (!empId || !salaryStatus || !month) {
+    if (!empId || !status || !month) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
     // save or update salary info
-    const data = await addSalaryInformation(empId, salaryStatus, month);
+    const data = await addSalaryInformation(empId, status, month);
 
     return res.status(200).json({ success: true, message: "Salary information saved", data });
   } catch (err: any) {

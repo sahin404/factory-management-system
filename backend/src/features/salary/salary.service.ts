@@ -10,12 +10,15 @@ interface SalaryInfoResult {
 // add salary information into daabase
 export const addSalaryInformation = async (
   empId: string,
-  salaryStatus: string,
+  status: string,
   month: string
 ) => {
-  const newData = Salary.findOneAndUpdate(
+
+
+
+  const newData = await Salary.findOneAndUpdate(
     { month, empId },
-    { salaryStatus },
+    { status },
     { upsert: true, new: true }
   );
 
@@ -57,14 +60,15 @@ export const getSalaryInformations = async (
     },
     {
       $project: {
+        _id:0,
         name: 1,
-        employeeId: 1,
+        empId: "$_id",
         email: 1,
         salary: 1,
         month: month,
-        salaryStatus: {
+        status: {
           $ifNull: [
-            { $arrayElemAt: ["$salaryInMonth.salaryStatus", 0] },
+            { $arrayElemAt: ["$salaryInMonth.status", 0] },
             "unpaid",
           ],
         },

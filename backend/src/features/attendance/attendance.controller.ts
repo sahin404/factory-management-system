@@ -8,8 +8,8 @@ export const getAttendanceController = async (req: Request, res: Response) => {
     const { date } = req.query;
     if (!date) return res.status(400).json({ success: false, message: "Date is required" });
 
-    const attendances = await getAttendance(date as string);
-    res.status(200).json({ success: true, message:"Successfully fetched.", data: attendances });
+    const response = await getAttendance(date as string);
+    res.status(200).json({ success: true, data: response.data, total: response.total });
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error" });
@@ -28,9 +28,8 @@ export const updateAttendanceController = async (req: Request, res: Response) =>
     if (!["present", "absent", "leave"].includes(status)) {
       return res.status(400).json({ success: false, message: "Invalid status value" });
     }
-
     const updated = await updateAttendance(employeeId, status as "present" | "absent" | "leave", date);
-
+    
     return res.status(200).json({
       success: true,
       message: "Attendance updated successfully",

@@ -10,7 +10,7 @@ empId: {
     type: String,
     required: true,
   },
-  salaryStatus: {
+  status: {
     type: String,
     default: "unpaid",
     required: true,
