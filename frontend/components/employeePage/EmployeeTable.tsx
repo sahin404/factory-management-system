@@ -25,26 +25,28 @@ const EmployeeTable = ({
   const { employees, getAllEmployees, isLoading } = useEmployeeStore();
 
   const [firstLoad, setFirstLoad] = useState(true);
+  const [pageChanging, setPageChanging] = useState(false);
 
   // debounce fetch
   const debouncedGetEmployees = useCallback(
-   
     debounce(async (term: string, page: number) => {
       await getAllEmployees(term, page);
       setFirstLoad(false); // first fetch done
+      setPageChanging(false);
     }, 500),
     [getAllEmployees]
   );
 
   useEffect(() => {
+    if (!firstLoad) setPageChanging(true);
     debouncedGetEmployees(searchTerm, currentPage);
     return () => debouncedGetEmployees.cancel();
   }, [searchTerm, currentPage, debouncedGetEmployees]);
 
-
-  // skeleton logic
-  const shouldShowSkeleton = employees.length === 0 && (isLoading || firstLoad);
-  if (shouldShowSkeleton) return <TableSkeleton />;
+  // Skeleton loader logic
+  const shouldSkeletonOpen =
+    pageChanging || (employees.length === 0 && (firstLoad || isLoading));
+  if (shouldSkeletonOpen) return <TableSkeleton />;
 
   if (!isLoading && employees.length === 0) {
     return (
@@ -69,23 +71,21 @@ const EmployeeTable = ({
       </TableHeader>
 
       <TableBody className="font-semibold">
-        {
-          employees.map((employee, index) => (
-            <TableRow key={employee._id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{employee.name}</TableCell>
-              <TableCell>{employee.role}</TableCell>
-              <TableCell>{employee.email}</TableCell>
-              <TableCell>{employee.salary}</TableCell>
-              <TableCell>
-                <UpdateEmployee empId={employee._id} />
-              </TableCell>
-              <TableCell>
-                <DeleteEmployee empId={employee._id} />
-              </TableCell>
-            </TableRow>
-          ))
-        }
+        {employees.map((employee, index) => (
+          <TableRow key={employee._id}>
+            <TableCell>{(currentPage - 1) * 10 + index + 1}</TableCell>
+            <TableCell>{employee.name}</TableCell>
+            <TableCell>{employee.role}</TableCell>
+            <TableCell>{employee.email}</TableCell>
+            <TableCell>{employee.salary}</TableCell>
+            <TableCell>
+              <UpdateEmployee empId={employee._id} />
+            </TableCell>
+            <TableCell>
+              <DeleteEmployee empId={employee._id} />
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );

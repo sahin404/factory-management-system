@@ -21,6 +21,7 @@ interface searchProps {
 
 const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
   const [firstLoad, setFirstLoad] = useState(true);
+  const [pageChanging, setPageChanging] = useState(false);
 
   const {
     salaryInformations,
@@ -46,11 +47,13 @@ const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
     debounce(async (month: string, term: string, page: number) => {
       await getSalaryInformations(month, term, page);
       setFirstLoad(false); // first fetch done
+      setPageChanging(false);
     }, 500),
     [getSalaryInformations]
   );
 
   useEffect(() => {
+    if (!firstLoad) setPageChanging(true);
     debouncedGetSalary(month, searchTerm, currentPage);
     return () => debouncedGetSalary.cancel();
   }, [searchTerm, currentPage, debouncedGetSalary]);
@@ -61,10 +64,11 @@ const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
     addSalaryInformation(empId, value, month);
   };
 
-  // Skeleton loader
+  // Skeleton loader logic
   const shouldSkeletonOpen =
-    salaryInformations.length === 0 && (firstLoad || isLoading);
+    pageChanging || (salaryInformations.length === 0 && (firstLoad || isLoading));
   if (shouldSkeletonOpen) return <TableSkeleton />;
+
 
   if (!isLoading && salaryInformations.length === 0) {
     return (
@@ -89,7 +93,7 @@ const SalaryTable = ({ searchTerm, currentPage }: searchProps) => {
       <TableBody className="font-semibold">
         {salaryInformations.map((emp, index) => (
           <TableRow key={emp.empId}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{(currentPage - 1) * 10 + index + 1}</TableCell>
             <TableCell>{emp.name}</TableCell>
             <TableCell>{emp.email}</TableCell>
             <TableCell>{emp.salary}</TableCell>

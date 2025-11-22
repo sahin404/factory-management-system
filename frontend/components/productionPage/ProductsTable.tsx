@@ -27,25 +27,30 @@ const ProductTable = ({
 }) => {
   const { products, isLoading, getProducts } = useProductStore();
   const [firstLoad, setFirstLoad] = useState(true);
+  const [pageChanging, setPageChanging] = useState(false);
 
   // console.log(searchTerm, pagination);
   const debouncedGetProducts = useCallback(
     debounce((searchTerm: string, pagination: number) => {
       getProducts(searchTerm, pagination);
       setFirstLoad(false);
+      setPageChanging(false);
     }, 500),
     [getProducts]
   );
 
   useEffect(() => {
+    if (!firstLoad) setPageChanging(true);
     debouncedGetProducts(searchTerm, pagination);
     // cleanup
     return () => debouncedGetProducts.cancel();
   }, [searchTerm, pagination, debouncedGetProducts]);
 
-  //skeleton
-  const shouldShowSkeleton = products.length === 0 && (isLoading || firstLoad);
-  if (shouldShowSkeleton) return <TableSkeleton></TableSkeleton>;
+  // Skeleton loader logic
+  const shouldSkeletonOpen =
+    pageChanging || (products.length === 0 && (firstLoad || isLoading));
+  if (shouldSkeletonOpen) return <TableSkeleton />;
+
 
   //not found
   if (!products || products.length === 0) {
@@ -74,7 +79,7 @@ const ProductTable = ({
       <TableBody className="font-semibold">
         {products.map((product, indx) => (
           <TableRow key={product._id}>
-            <TableCell>{indx + 1}</TableCell>
+            <TableCell>{(pagination - 1) * 10 + indx + 1}</TableCell>
             <TableCell>{product.name}</TableCell>
             <TableCell>BDT {product.price}</TableCell>
             <TableCell>{product.unit}</TableCell>

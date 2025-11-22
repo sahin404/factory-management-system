@@ -23,7 +23,7 @@ interface AttendanceTableProps {
 
 const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
   const [firstLoad, setFirstLoad] = useState(true);
-
+  const [pageChanging, setPageChanging] = useState(false);
   // Get today
   const today = new Date().toISOString().split("T")[0];
 
@@ -34,12 +34,14 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
   const debouncedGetAttendance = useCallback(
     debounce(async (date: string, term: string, page: number) => {
       await getAllAttendance(date, term, page);
+      setPageChanging(false);
       setFirstLoad(false);
     }, 500),
     [getAllAttendance]
   );
 
   useEffect(() => {
+    if (!firstLoad) setPageChanging(true);
     debouncedGetAttendance(today, searchTerm, currentPage);
     return () => debouncedGetAttendance.cancel();
   }, [searchTerm, currentPage, debouncedGetAttendance, today]);
@@ -56,7 +58,7 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
 
   // Skeleton loader logic
   const shouldSkeletonOpen =
-    attendances.length === 0 && (firstLoad || isLoading);
+    pageChanging || (attendances.length === 0 && (firstLoad || isLoading));
   if (shouldSkeletonOpen) return <TableSkeleton />;
 
   // No data found message
@@ -108,8 +110,7 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
                     handleAttendanceChange(emp.empId, "absent");
                   if (value === "P")
                     handleAttendanceChange(emp.empId, "present");
-                  if (value === "L")
-                    handleAttendanceChange(emp.empId, "leave");
+                  if (value === "L") handleAttendanceChange(emp.empId, "leave");
                 }}
               >
                 <ToggleGroupItem
