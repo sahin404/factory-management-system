@@ -5,7 +5,7 @@ import { getAttendance, updateAttendance } from "./attendance.service";
 // Get attendances for a specific date
 export const getAttendanceController = async (req: Request, res: Response) => {
   try {
-    const { date, search="", page="1" } = req.query;
+    const { date, search, page } = req.query;
     if (!date) return res.status(400).json({ success: false, message: "Date is required" });
     const currentPage = parseInt(page as string) || 1;
     const response = await getAttendance(date as string,search as string, currentPage);
