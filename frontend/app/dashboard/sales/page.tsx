@@ -1,6 +1,14 @@
+import SalesBody from "@/components/salesPage/SalesBody"
+
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      {/* Header */}
+      <h1 className="text-2xl font-semibold">All Sales</h1>
+
+      {/* Body */}
+      <SalesBody></SalesBody>
+    </div>
   )
 }
 
