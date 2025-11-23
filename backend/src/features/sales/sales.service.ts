@@ -12,8 +12,9 @@ interface SalePayload {
 
 // get all sales
 export const getAllSales = async()=>{
-  const response = await Sale.find().sort({createdAt:-1});
-  return response;
+  const data = await Sale.find().sort({createdAt:-1});
+  const total = await Sale.countDocuments();
+  return {data, total};
 }
 
 // add sales
