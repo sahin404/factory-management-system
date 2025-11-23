@@ -8,7 +8,8 @@ export const getAllSalesController = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Successfully fetched the data!",
-      data: response,
+      data: response.data,
+      total:response.total
     });
   } catch (err:any) {
     console.error("Error fetching sales:", err);
