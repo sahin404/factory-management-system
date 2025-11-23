@@ -10,6 +10,13 @@ interface SalePayload {
   buyerMobileNumber: string;
 }
 
+// get all sales
+export const getAllSales = async()=>{
+  const response = await Sale.find().sort({createdAt:-1});
+  return response;
+}
+
+// add sales
 export const addSales = async (payload: SalePayload) => {
   const { productId, productName, unit, totalPrice, buyerName, buyerMobileNumber } = payload;
 
@@ -40,3 +47,5 @@ export const addSales = async (payload: SalePayload) => {
 
   return sale; // return the saved sale
 };
+
+
