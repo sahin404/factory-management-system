@@ -24,9 +24,10 @@ interface SalesTableProps {
   sales: SaleItem[];
   isLoading: boolean;
   firstLoad: boolean;
+  currentPage:number;
 }
 
-const SalesTable = ({ sales, isLoading, firstLoad }: SalesTableProps) => {
+const SalesTable = ({ currentPage, sales, isLoading, firstLoad }: SalesTableProps) => {
   const shouldSkeletonOpen = sales.length === 0 && (firstLoad || isLoading);
   if (shouldSkeletonOpen) return <TableSkeleton />;
 
@@ -40,6 +41,8 @@ const SalesTable = ({ sales, isLoading, firstLoad }: SalesTableProps) => {
           <TableHead>Unit</TableHead>
           <TableHead>Total Price</TableHead>
           <TableHead>Sold Date</TableHead>
+          <TableHead>Delete</TableHead>
+          <TableHead>Recipt</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -53,7 +56,7 @@ const SalesTable = ({ sales, isLoading, firstLoad }: SalesTableProps) => {
         ) : (
           sales.map((sale, index) => (
             <TableRow key={sale._id}>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{((currentPage-1)*10) + index + 1}</TableCell>
               <TableCell>{sale.productName}</TableCell>
               <TableCell>
                 <div className="font-semibold">{sale.buyerName}</div>

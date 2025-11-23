@@ -52,7 +52,7 @@ const SalesBody = () => {
       <SalesHeader filter={filter} setFilter={setFilter} setCurrentPage={setCurrentPage} />
 
       <div className="border border-border rounded">
-        <SalesTable sales={paginatedSales} isLoading={isLoadingSales} firstLoad={firstLoad} />
+        <SalesTable currentPage={currentPage} sales={paginatedSales} isLoading={isLoadingSales} firstLoad={firstLoad} />
       </div>
 
       {filteredSales.length > 0 && (
