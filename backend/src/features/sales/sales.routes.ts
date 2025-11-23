@@ -4,7 +4,7 @@ import { addSalesController } from './sales.controller';
 const salesRouter = express.Router();
 
 
-salesRouter.post('/add/:id', addSalesController);
+salesRouter.post('/add', addSalesController);
 
 
 export default salesRouter;

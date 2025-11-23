@@ -1,31 +1,42 @@
 import Production from "../production/production.model";
 import Sale from "./sales.model";
 
+interface SalePayload {
+  productId: string;
+  productName: string;
+  unit: number;
+  totalPrice: number;
+  buyerName: string;
+  buyerMobileNumber: string;
+}
 
-//add sales
-export const addSales = async (productId: string, salesNum: number) => {
+export const addSales = async (payload: SalePayload) => {
+  const { productId, productName, unit, totalPrice, buyerName, buyerMobileNumber } = payload;
+
+  // find product
   const product = await Production.findById(productId);
   if (!product) throw new Error("Product not found!");
 
-  // Check sufficient stock
-  if (product.quantity < salesNum) {
+  // check stock
+  if (product.quantity < unit) {
     throw new Error("Insufficient stock to complete sale!");
   }
 
-  // change product table
-  product.quantity -= salesNum;
+  // update product quantity
+  product.quantity -= unit;
   await product.save();
 
-  // create newData
-  const newData = {
-    productId:product._id,
-    quantity:salesNum,
-    price:product.price,
-    totalAmount:salesNum*product.price
-  }
+  // create sale record
+  const sale = new Sale({
+    productId,
+    productName,
+    unit,
+    totalPrice,
+    buyerName,
+    buyerMobileNumber,
+  });
 
-  // save the new data into database
-  const data = new Sale(newData);
-  data.save();
-  return product;
+  await sale.save();
+
+  return sale; // return the saved sale
 };

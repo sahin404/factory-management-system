@@ -6,20 +6,27 @@ const saleSchema = new mongoose.Schema({
     ref: "Production",
     required: true,
   },
-  quantity: {
+  productName:{
+    type:String,
+    required:true,
+  },
+  unit: {
     type: Number,
     required: true,
     default: 1,
   },
-  price: {
+  totalPrice: {
     type: Number,
     required: true,
     default: 0,
   },
-  totalAmount: {
-    type: Number,
-    required: true,
-    default: 0,
+  buyerName:{
+    type:String,
+    required:true,
+  },
+  buyerMobileNumber:{
+    type:String,
+    required:true,
   },
   soldAt: {
     type: Date,

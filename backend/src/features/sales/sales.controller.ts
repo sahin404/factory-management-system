@@ -1,17 +1,33 @@
 import { Request, Response } from "express";
 import { addSales } from "./sales.service";
 
-
-// add sales
+// add sales 
 export const addSalesController = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
-    const salesNum = Number(req.body.salesNum);
-    const response = await addSales(id, salesNum);
+    const { productId, unit, totalPrice, buyerName, buyerMobileNumber, productName } = req.body;
+
+    // validation
+    if (!productId || !unit || !totalPrice || !buyerName || !buyerMobileNumber || !productName) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required!",
+      });
+    }
+
+    // call service
+    const sale = await addSales({
+      productId,
+      unit,
+      totalPrice,
+      buyerName,
+      buyerMobileNumber,
+      productName,
+    });
+
     return res.status(201).json({
       success: true,
       message: "Sale recorded successfully!",
-      data: response,
+      data: sale,
     });
   } catch (err: any) {
     console.error(err);
