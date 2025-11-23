@@ -17,6 +17,7 @@ const SalesBody = () => {
       <div>
         <SalesPagination></SalesPagination>
       </div>
+      
     </div>
   )
 }
