@@ -19,6 +19,7 @@ interface Sale {
   buyerName: string;
   buyerMobileNumber: string;
   createdAt: string;
+  soldAt: string;
 }
 
 interface SalesStore {
@@ -37,7 +38,6 @@ export const useSalesStore = create<SalesStore>((set) => ({
   isLoadingSales: false,
   isAddingSale: false,
 
-  // 🔹 FETCH ALL SALES
   getAllSales: async () => {
     set({ isLoadingSales: true });
     try {
