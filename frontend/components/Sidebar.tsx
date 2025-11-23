@@ -12,6 +12,7 @@ import {
   DollarSign,
   FileText,
   Package,
+  ChartLine
 } from "lucide-react";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 
@@ -33,9 +34,15 @@ const Sidebar = () => {
     { id: 1, name: "Overview", link: "/dashboard/overview/admin", icon: Home },
     {
       id: 7,
-      name: "Productions & Sales",
+      name: "Productions",
       link: "/dashboard/production",
       icon: Package,
+    },
+    {
+      id:5,
+      name:"Sales",
+      link:"/dashboard/sales",
+      icon: ChartLine
     },
     { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
     { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },
@@ -53,9 +60,15 @@ const Sidebar = () => {
     },
     {
       id: 5,
-      name: "Productions & Sales",
+      name: "Productions",
       link: "/dashboard/production",
       icon: Package,
+    },
+    {
+      id:4,
+      name:"Sales",
+      link:"/dashboard/sales",
+      icon: ChartLine
     },
     { id: 2, name: "Attendance", link: "/dashboard/attendance", icon: Clock },
     { id: 3, name: "Employees", link: "/dashboard/employee", icon: Users },

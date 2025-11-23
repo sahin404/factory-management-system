@@ -24,7 +24,6 @@ export interface ProductStore {
   isLoading: boolean;
   isLoadingProductById: boolean;
   isUpdatingQuantity: boolean;
-  isAddingSales: boolean;
   isUpdatingProduct: boolean;
   isDeleting:boolean;
   isAdding:boolean,
@@ -35,7 +34,6 @@ export interface ProductStore {
     productId?: string,
     quantity?: number
   ) => Promise<void>;
-  addSales: (productId?: string, salesNum?: number) => Promise<void>;
   updateProduct: (productId?: string, data?: Product) => Promise<void>;
   deleteProductById:(productId?:string)=>Promise<void>;
   addProduct:(newProduct?:Product)=>Promise<void>;
@@ -48,7 +46,6 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   product: null,
   isLoadingProductById: true,
   isUpdatingQuantity: false,
-  isAddingSales: false,
   isUpdatingProduct: false,
   isDeleting:false,
   isAdding:false,
@@ -153,32 +150,6 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       set({ isUpdatingProduct: false });
     }
   },
-
-  // add sales
-  addSales: async (productId?: string, salesNum?: number) => {
-    set({ isAddingSales: true });
-    try {
-      const response = await axiosInstance.post<{ data: Product }>(
-        `/sales/add/${productId}`,
-        { salesNum }
-      );
-
-      // update the product / modal
-      set({ product: response.data.data, fetched:false });
-      // update product staes
-      const sold = salesNum ?? 0;
-      set((state) => ({
-        products: state.products.map((p) =>
-          p._id === productId ? { ...p, quantity: p.quantity - sold } : p
-        ),
-      }));
-    } catch (err) {
-      console.log("An error occured to adding sales.", err);
-    } finally {
-      set({ isAddingSales: false });
-    }
-  },
-
   // delete a product item
   deleteProductById: async(productId?:string)=>{
     set({isDeleting:true});

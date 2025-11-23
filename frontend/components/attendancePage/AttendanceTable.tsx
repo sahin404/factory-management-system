@@ -24,6 +24,7 @@ interface AttendanceTableProps {
 const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [pageChanging, setPageChanging] = useState(false);
+  
   // Get today
   const today = new Date().toISOString().split("T")[0];
 
