@@ -28,7 +28,7 @@ function Login5() {
       if(user.role === 'admin') router.push('/dashboard/overview/admin');
       if(user.role === 'manager') router.push('/dashboard/overview/manager');
       if(user.role === 'accountant') router.push('/dashboard/overview/accountant');
-      if(user.role === 'employee') router.push('/dashboard/overview/employee');
+      if(user.role === 'worker') router.push('/dashboard/overview/worker');
     }
   }, [user, router]);
 
