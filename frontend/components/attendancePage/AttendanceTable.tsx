@@ -72,7 +72,7 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
   }
 
   return (
-    <Table className="min-w-[600px] border border-gray-200">
+    <Table className="min-w-[600px] border">
       <TableHeader className="">
         <TableRow>
           <TableHead>Serial</TableHead>
