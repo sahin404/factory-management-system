@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addSales, getAllSales } from "./sales.service";
+import { addSales, deleteSale, getAllSales } from "./sales.service";
 
 // get all sales
 export const getAllSalesController = async (req: Request, res: Response) => {
@@ -9,9 +9,9 @@ export const getAllSalesController = async (req: Request, res: Response) => {
       success: true,
       message: "Successfully fetched the data!",
       data: response.data,
-      total:response.total
+      total: response.total,
     });
-  } catch (err:any) {
+  } catch (err: any) {
     console.error("Error fetching sales:", err);
 
     return res.status(500).json({
@@ -69,5 +69,23 @@ export const addSalesController = async (req: Request, res: Response) => {
       success: false,
       message: err.message || "Failed to record sale!",
     });
+  }
+};
+
+// delete sales
+export const deleteSalesController = async (req: Request, res: Response) => {
+  try {
+    const saleId = req.params.id;
+    await deleteSale(saleId);
+    return res.status(200).json({
+      success: true,
+      message: "Sale Deleted successfully!",
+    });
+  } catch (err: any) {
+    return res.status(400).json({
+      success: false,
+      message: "Something went wront to delete sale.",
+    });
+    console.log(err.message);
   }
 };
