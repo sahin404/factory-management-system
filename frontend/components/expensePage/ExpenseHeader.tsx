@@ -23,7 +23,7 @@ const ExpenseHeader = ({ filter, setFilter, setCurrentPage }:HeaderProps) => {
       {/* Filter Dropdown */}
       <div className="w-44">
         <Select value={filter} onValueChange={(value) => { setFilter(value); setCurrentPage(1) }}>
-          <SelectTrigger className="bg-white border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-gray-400">
+          <SelectTrigger className="bg-white border border-gray-300 dark:text-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-gray-400">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
 
