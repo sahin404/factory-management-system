@@ -50,3 +50,7 @@ export const addSales = async (payload: SalePayload) => {
 };
 
 
+//delete sales
+export const deleteSale =async(saleId:string)=>{
+  await Sale.findByIdAndDelete(saleId);
+}
