@@ -60,7 +60,7 @@ const DownloadReceipt = ({ sale }: DownloadProps) => {
     <Button
     variant={"outline"}
       onClick={handleDownload}
-      className="text-blue-600 cursor-pointer"
+      className="text-blue-600 dark:text-gray-300 cursor-pointer"
     >
         <Download></Download>
       Download PDF

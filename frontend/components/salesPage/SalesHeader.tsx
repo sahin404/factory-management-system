@@ -23,7 +23,7 @@ const SalesHeader = ({ filter, setFilter, setCurrentPage }: SalesHeaderProps) =>
           value={filter}
           onValueChange={(value) => { setFilter(value); setCurrentPage(1); }}
         >
-          <SelectTrigger className="bg-white border border-gray-300 text-gray-700 rounded-lg focus:ring-2 focus:ring-gray-400">
+          <SelectTrigger className="bg-white border border-gray-300 text-gray-700 dark:text-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400">
             <SelectValue placeholder="All" />
           </SelectTrigger>
 
