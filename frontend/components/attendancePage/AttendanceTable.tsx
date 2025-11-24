@@ -73,13 +73,13 @@ const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
 
   return (
     <Table className="min-w-[600px] border border-gray-200">
-      <TableHeader className="bg-gray-100">
+      <TableHeader className="">
         <TableRow>
-          <TableHead className="dark:text-black">Serial</TableHead>
-          <TableHead className="dark:text-black">Name</TableHead>
-          <TableHead className="dark:text-black">Designation</TableHead>
-          <TableHead className="dark:text-black">Email</TableHead>
-          <TableHead className="dark:text-black">
+          <TableHead>Serial</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Designation</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>
             Status <div className="text-xs text-gray-400">{today}</div>
           </TableHead>
         </TableRow>
