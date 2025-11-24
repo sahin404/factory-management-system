@@ -9,6 +9,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import TableSkeleton from "../skeletons/TableSkeleton";
+import DeleteSales from "./DeleteSales";
+import DownloadReceipt from "./DownloadReceipt";
 
 export interface SaleItem {
   _id: string;
@@ -65,6 +67,8 @@ const SalesTable = ({ currentPage, sales, isLoading, firstLoad }: SalesTableProp
               <TableCell>{sale.unit}</TableCell>
               <TableCell>{sale.totalPrice} TK</TableCell>
               <TableCell>{new Date(sale.soldAt).toLocaleDateString()}</TableCell>
+              <TableCell> <DeleteSales saleId = {sale._id}></DeleteSales> </TableCell> 
+              <TableCell> <DownloadReceipt></DownloadReceipt> </TableCell> 
             </TableRow>
           ))
         )}

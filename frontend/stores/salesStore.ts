@@ -27,9 +27,11 @@ interface SalesStore {
   total: number;
   isLoadingSales: boolean;
   isAddingSale: boolean;
+  isDeleting:boolean;
 
   getAllSales: () => Promise<void>;
   addNewSale: (data: SalePayload) => Promise<void>;
+  deleteSale:(id:string) => void;
 }
 
 export const useSalesStore = create<SalesStore>((set) => ({
@@ -37,7 +39,9 @@ export const useSalesStore = create<SalesStore>((set) => ({
   total: 0,
   isLoadingSales: false,
   isAddingSale: false,
+  isDeleting:false,
 
+  // get all sales
   getAllSales: async () => {
     set({ isLoadingSales: true });
     try {
@@ -71,4 +75,20 @@ export const useSalesStore = create<SalesStore>((set) => ({
       set({ isAddingSale: false });
     }
   },
+
+  // delete a sale
+  deleteSale: async(saleId)=>{
+    set({isDeleting:true});
+    try{
+      await axiosInstance.delete(`/sales/${saleId}`);
+    }
+    catch(err){
+      console.log('Something went wrong.');
+    }
+    finally{
+      set({isDeleting:false});
+    }
+  }
+
+
 }));
