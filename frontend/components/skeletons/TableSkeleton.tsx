@@ -19,7 +19,7 @@ const TableSkeleton = () => {
             <TableRow key={index}>
               {[...Array(7)].map((_, i) => (
                 <TableCell key={i} className="py-3">
-                  <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
                 </TableCell>
               ))}
             </TableRow>
