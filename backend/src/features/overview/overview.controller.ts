@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getPresentEmployees, getTotalEmployees } from "./overview.service";
+import { getPresentEmployees, getSalaryStatus, getTotalEmployees } from "./overview.service";
 
 // get total employees
 export const getTotalEmployeesController = async (
@@ -46,4 +46,35 @@ export const getPresentEmployeesController = async(req:Request, res:Response)=>{
       error: err,
     });
   }
+}
+
+// get salary status
+export const getSalaryStatusController=async(req:Request, res:Response)=>{
+     try {
+        const month = req.params.month;
+
+        if (!month) {
+            return res.status(400).json({
+                success: false,
+                message: "Month is required",
+            });
+        }
+
+        const { paidCount, unpaidCount } = await getSalaryStatus(month);
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                paidCount,
+                unpaidCount,
+            },
+        });
+
+    } catch (err) {
+        console.error("Error getting salary status:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch salary status",
+        });
+    }
 }
