@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getPresentEmployees, getProductsStock, getSalaryStatus, getSales, getTotalEmployees } from "./overview.service";
+import { getExpenses, getPresentEmployees, getProductsStock, getSalaryStatus, getSales, getTotalEmployees } from "./overview.service";
 
 // get total employees
 export const getTotalEmployeesController = async (
@@ -122,5 +122,16 @@ export const getSalesController = async (req: Request, res: Response) => {
       success: false,
       message: "Failed to fetch sales"
     });
+  }
+};
+
+// get expenses
+export const getExpensesController = async (req: Request, res: Response) => {
+  try {
+    const result = await getExpenses();
+    res.status(200).json({ success: true, data: result });
+  } catch (err) {
+    console.error("Failed to get expenses:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch expenses" });
   }
 };

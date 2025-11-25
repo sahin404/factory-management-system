@@ -1,8 +1,14 @@
 import Attendance from "../attendance/attendance.model";
 import User from "../auth/auth.model"
+import Expense from "../expense/expense.model";
 import Production from "../production/production.model";
 import Salary from "../salary/salary.model";
 import Sale from "../sales/sales.model";
+
+interface ExpenseSummary {
+  totalCount: number;
+  totalAmount: number;
+}
 
 // get total employees
 export const getTotalEmployees = async()=>{
@@ -68,4 +74,22 @@ export const getSales = async () => {
     todaySales,
     monthSales
   };
+};
+
+// get expenses
+export const getExpenses = async (): Promise<ExpenseSummary> => {
+  const today = new Date();
+
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
+  // DB query
+  const expenses = await Expense.find({
+    date: { $gte: firstDay.toISOString(), $lt: lastDay.toISOString() },
+  });
+
+  const totalCount = expenses.length;
+  const totalAmount = expenses.reduce((acc, exp) => acc + exp.amount, 0);
+
+  return { totalCount, totalAmount };
 };

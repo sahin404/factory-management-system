@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { getPresentEmployeesController, getProductsStockController, getSalaryStatusController, getSalesController, getTotalEmployeesController } from './overview.controller';
+import { getExpensesController, getPresentEmployeesController, getProductsStockController, getSalaryStatusController, getSalesController, getTotalEmployeesController } from './overview.controller';
 
 const overviewRouter = Router();
 
@@ -8,5 +8,6 @@ overviewRouter.get('/totalPresentEmployees/:date', getPresentEmployeesController
 overviewRouter.get('/salaryStatus/:month', getSalaryStatusController);
 overviewRouter.get('/productsStock', getProductsStockController);
 overviewRouter.get("/getSales", getSalesController);
+overviewRouter.get("/expenses", getExpensesController);
 
 export default overviewRouter;
