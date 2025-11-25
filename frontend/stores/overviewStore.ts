@@ -1,49 +1,80 @@
-import axiosInstance from '@/lib/api';
-import {create} from 'zustand';
+import axiosInstance from "@/lib/api";
+import { create } from "zustand";
 
-interface OverviewState{
-    totalEmployees: number;
-    totalPresentEmployees:number;
-    gettingTotalEmployees:boolean;
-    gettingPresentEmployees:boolean;
+interface OverviewState {
+  totalEmployees: number;
+  totalPresentEmployees: number;
+  gettingTotalEmployees: boolean;
+  gettingPresentEmployees: boolean;
+  totalPaid: number;
+  totalUnpaid: number;
+  gettingSalaryStatus: boolean;
 
-    getTotalEmployees: ()=>void;
-    getPresentEmployees:(date:string)=>void;
+  getTotalEmployees: () => void;
+  getPresentEmployees: (date: string) => void;
+  getSalaryStatus: (month: string) => void;
 }
 
-export const useOverviewStore = create<OverviewState>((set)=>({
-    totalEmployees:0,
-    totalPresentEmployees:0,
-    gettingPresentEmployees:false,
-    gettingTotalEmployees:false,
+export const useOverviewStore = create<OverviewState>((set) => ({
+  totalEmployees: 0,
+  totalPresentEmployees: 0,
+  gettingPresentEmployees: false,
+  gettingTotalEmployees: false,
+  totalPaid: 0,
+  totalUnpaid: 0,
+  gettingSalaryStatus: false,
 
-    //get total employees
-    getTotalEmployees: async()=>{
-        set({gettingTotalEmployees:true})
-        try{
-            const response = await axiosInstance.get<{data:number}>('/overview/totalEmployees');
-            set({totalEmployees:response.data.data});
-        }
-        catch(err:any){
+  //get total employees
+  getTotalEmployees: async () => {
+    set({ gettingTotalEmployees: true });
+    try {
+      const response = await axiosInstance.get<{ data: number }>(
+        "/overview/totalEmployees"
+      );
+      set({ totalEmployees: response.data.data });
+    } catch (err: any) {
+    } finally {
+      set({ gettingTotalEmployees: false });
+    }
+  },
 
-        }
-        finally{
-            set({gettingTotalEmployees:false})
-        }
-    },
+  //get present employee
+  getPresentEmployees: async (date) => {
+    set({ gettingPresentEmployees: true });
+    try {
+      const response = await axiosInstance.get<{ data: number }>(
+        `/overview/totalPresentEmployees/${date}`
+      );
+      set({ totalPresentEmployees: response.data.data });
+    } catch (err) {
+      console.error("Failed to get present employees", err);
+      set({ totalPresentEmployees: 0 });
+    } finally {
+      set({ gettingPresentEmployees: false });
+    }
+  },
 
-    //get present employee
-     getPresentEmployees: async (date) => {
-        set({ gettingPresentEmployees: true });
-        try {
-            const response = await axiosInstance.get<{ data: number }>(`/overview/totalPresentEmployees/${date}`);
-            set({ totalPresentEmployees: response.data.data });
-        } catch (err) {
-            console.error("Failed to get present employees", err);
-            set({ totalPresentEmployees: 0 });
-        } finally {
-            set({ gettingPresentEmployees: false });
-        }
-    },
+  // get salary status
+  getSalaryStatus: async (month) => {
+    set({ gettingSalaryStatus: true });
+    try {
+      const response = await axiosInstance.get<{
+        data: { paidCount: number; unpaidCount: number };
+      }>(`/overview/salaryStatus/${month}`);
 
-}))
+      set({
+        totalPaid: response.data.data.paidCount,
+        totalUnpaid: response.data.data.unpaidCount,
+      });
+    } catch (err: any) {
+      console.log("Failed to get salary status", err);
+      set({
+        totalPaid: 0,
+        totalUnpaid: 0,
+      });
+    } finally {
+      set({ gettingSalaryStatus: false });
+    }
+  },
+  
+}));

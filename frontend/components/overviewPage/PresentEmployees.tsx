@@ -18,6 +18,9 @@ const PresentEmployees = () => {
     getPresentEmployees(today);
   }, [today]);
 
+
+  // todo: loading
+
   return (
     <div className="
       bg-white dark:bg-[#0f0f0f]
