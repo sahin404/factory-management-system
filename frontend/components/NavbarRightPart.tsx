@@ -1,17 +1,24 @@
 'use client'
 
-import { LogOut, Moon, Sun } from "lucide-react";
+import { Loader2Icon, LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeSwitch } from "./ui/theme-switch";
 import { useAuthStore } from "@/stores/authStore";
+import { useState } from "react";
+import Modal from "./ui/modal";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
-    
-    const {logout} = useAuthStore();
+    const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+    const {logout, loggingOut} = useAuthStore();
+    const router = useRouter();
 
-    const handleLogout = ()=>{
-        logout();
+    const handleLogout = async()=>{
+        await logout();
+        router.push('/login');
+        toast.success("Logged out successfully!");
     }
   
     return (
@@ -54,11 +61,64 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
 
       {/* Logout button*/}
       <div>
-        <Button className="hover:cursor-pointer bg-red-600 hover:cursor-pointer hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700 text-white" onClick={handleLogout} variant="destructive">
+        <Button className="hover:cursor-pointer bg-red-600 hover:cursor-pointer hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700 text-white" onClick={()=>setIsLogoutOpen(true)} variant="destructive">
           {" "}
           <LogOut /> Logout
         </Button>
       </div>
+
+      {/* Modal */}
+       <Modal
+        isOpen={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+        title="Confirm Logout"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <svg
+                className="h-10 w-10 text-orange-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Logout Confirmation
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Are you sure you want to logout? You will need to sign in again
+                to access your account.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-3">
+            <Button onClick={() => setIsLogoutOpen(false)} variant="secondary">
+              Stay Logged In
+            </Button>
+            <Button
+            disabled={loggingOut}
+              onClick={handleLogout}
+              variant="default"
+              className="bg-orange-500 hover:bg-orange-600"
+            >
+              {
+                loggingOut? <div className="flex items-center"> Loading <Loader2Icon className="animate-spin"></Loader2Icon> </div>:<div>Logout</div>
+              }
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

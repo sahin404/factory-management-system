@@ -35,6 +35,7 @@ interface AuthState {
   isLoggingIn: boolean;
   errorMessage: string;
   isSigningUp: boolean;
+  loggingOut:boolean;
   checkCurrentUser: () => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
   signup: (data: User) => Promise<SignupResponse | null>;
@@ -48,6 +49,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoggingIn: false,
   errorMessage: "",
   isSigningUp: false,
+  loggingOut:false,
 
   // check current user
   checkCurrentUser: async () => {
@@ -110,14 +112,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   //logout
   logout: async () => {
+    set({loggingOut:true});
     try {
       const response = await axiosInstance.post<{data:any}>("/auth/logout");
       set({ user: null });
-      toast.success("Logged out successfully!");
+      
       return response.data.data;
     } catch (err: any) {
       console.log(err.response?.data || err.message);
       toast.error("Failed to logout!");
+    }
+    finally{
+      set({loggingOut:false});
     }
   },
 }));
