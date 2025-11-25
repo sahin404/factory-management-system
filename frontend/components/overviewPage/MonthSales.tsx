@@ -3,6 +3,7 @@
 import { useOverviewStore } from "@/stores/overviewStore";
 import { useEffect } from "react";
 import { Loader2, BarChart2 } from "lucide-react";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 const MonthSales = () => {
   const { salesMonth, gettingSales, getSales } = useOverviewStore();
@@ -10,6 +11,11 @@ const MonthSales = () => {
   useEffect(() => {
     getSales();
   }, []);
+
+  
+  const shouldOpenSkeleton = salesMonth.count===null || gettingSales;
+  if(shouldOpenSkeleton) return <CardSkeleton></CardSkeleton>
+  
 
   return (
     <div className="

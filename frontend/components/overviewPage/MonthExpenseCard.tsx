@@ -3,6 +3,7 @@
 import { useOverviewStore } from "@/stores/overviewStore";
 import { useEffect } from "react";
 import { Loader2, FileText } from "lucide-react";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 const MonthExpenseCard = () => {
   const { expenses, gettingExpenses, getExpenses } = useOverviewStore();
@@ -10,6 +11,9 @@ const MonthExpenseCard = () => {
   useEffect(() => {
     getExpenses();
   }, []);
+  
+  const shouldOpenSkeleton = expenses.totalCount === null || gettingExpenses;
+  if(shouldOpenSkeleton) return <CardSkeleton></CardSkeleton>
 
   return (
     <div className="

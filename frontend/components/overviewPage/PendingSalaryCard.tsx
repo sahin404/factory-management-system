@@ -3,6 +3,7 @@
 import { useOverviewStore } from "@/stores/overviewStore";
 import { useEffect, useState } from "react";
 import { Loader2, AlertTriangle } from "lucide-react";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 const PendingSalaryCard = () => {
   const {
@@ -30,6 +31,10 @@ const PendingSalaryCard = () => {
     // Call API
     getSalaryStatus(monthString);
   }, []);
+
+  //loading
+  const shouldOpenSkeleton = totalPaid === null || totalUnpaid === null ||  gettingSalaryStatus;
+  if(shouldOpenSkeleton) return <CardSkeleton></CardSkeleton>
 
   return (
     <div className="

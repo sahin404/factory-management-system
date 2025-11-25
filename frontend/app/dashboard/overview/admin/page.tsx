@@ -17,7 +17,7 @@ const adminPage = () => {
       </div>
 
       {/* row 2 */}
-      <div> 
+      <div className="row-span-2"> 
         <TotalStockCard></TotalStockCard>
       </div>
 

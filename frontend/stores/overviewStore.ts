@@ -7,25 +7,25 @@ interface Product {
 }
 
 interface SalesData {
-  count: number;
-  total: number;
+  count: number | null;
+  total: number | null;
 }
 
 interface ExpenseSummary {
-  totalCount: number;
+  totalCount: number | null;
   totalAmount: number;
 }
 
 
 interface OverviewState {
-  totalEmployees: number;
-  totalPresentEmployees: number;
+  totalEmployees: number | null;
+  totalPresentEmployees: number | null;
   gettingTotalEmployees: boolean;
   gettingPresentEmployees: boolean;
-  totalPaid: number;
-  totalUnpaid: number;
+  totalPaid: number | null;
+  totalUnpaid: number | null;
   gettingSalaryStatus: boolean;
-  products: Product[];
+  products: Product[] | null;
   gettingProducts: boolean;
 
   salesToday: SalesData;
@@ -44,21 +44,21 @@ interface OverviewState {
 }
 
 export const useOverviewStore = create<OverviewState>((set) => ({
-  totalEmployees: 0,
-  totalPresentEmployees: 0,
+  totalEmployees: null,
+  totalPresentEmployees: null,
   gettingPresentEmployees: false,
   gettingTotalEmployees: false,
-  totalPaid: 0,
-  totalUnpaid: 0,
+  totalPaid: null,
+  totalUnpaid: null,
   gettingSalaryStatus: false,
-  products: [],
+  products: null,
   gettingProducts: false,
 
-  salesToday: { count: 0, total: 0 },
-  salesMonth: { count: 0, total: 0 },
+  salesToday: { count: null, total: null },
+  salesMonth: { count: null, total: null},
   gettingSales: false,
 
-  expenses: { totalCount: 0, totalAmount: 0 },
+  expenses: { totalCount: null, totalAmount: 0 },
   gettingExpenses: false,
 
   //get total employees

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useOverviewStore } from "@/stores/overviewStore";
 import { Loader2 } from "lucide-react";
 import React from "react";
+import TotalStockCardSkeleton from "../skeletons/TotalStockSkeleton";
 
 const TotalStockCard = () => {
   const { products, gettingProducts, getProductsStock } = useOverviewStore();
@@ -11,6 +12,10 @@ const TotalStockCard = () => {
   useEffect(() => {
     getProductsStock();
   }, [getProductsStock]);
+
+
+  const shouldOpenSkeleton = products === null || gettingProducts;
+  if(shouldOpenSkeleton) return <TotalStockCardSkeleton></TotalStockCardSkeleton>
 
   return (
     <div className="

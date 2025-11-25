@@ -1,19 +1,23 @@
 "use client";
 
 import { useOverviewStore } from "@/stores/overviewStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Users } from "lucide-react";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 const TotalEmployeesCard = () => {
   const { totalEmployees, getTotalEmployees, gettingTotalEmployees } =
     useOverviewStore();
-
+ 
   useEffect(() => {
     getTotalEmployees();
+    
   }, []);
 
 
-  // Todo: loading
+  //loading
+  const shouldOpenSkeleton = totalEmployees === null || gettingTotalEmployees;
+  if(shouldOpenSkeleton) return <CardSkeleton></CardSkeleton>
 
   return (
     <div className="

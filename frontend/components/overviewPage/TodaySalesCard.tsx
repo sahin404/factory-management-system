@@ -3,6 +3,7 @@
 import { useOverviewStore } from "@/stores/overviewStore";
 import { useEffect } from "react";
 import { Loader2, ShoppingCart } from "lucide-react";
+import CardSkeleton from "../skeletons/CardSkeleton";
 
 const TodaySalesCard = () => {
   const { salesToday, gettingSales, getSales } = useOverviewStore();
@@ -10,6 +11,10 @@ const TodaySalesCard = () => {
   useEffect(() => {
     getSales();
   }, []);
+
+  const shouldOpenSkeleton = salesToday.count===null || gettingSales;
+  if(shouldOpenSkeleton) return <CardSkeleton></CardSkeleton>
+  
 
   return (
     <div className="
