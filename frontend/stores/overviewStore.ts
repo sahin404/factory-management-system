@@ -1,6 +1,11 @@
 import axiosInstance from "@/lib/api";
 import { create } from "zustand";
 
+interface Product {
+  name: string;
+  quantity: number;
+}
+
 interface OverviewState {
   totalEmployees: number;
   totalPresentEmployees: number;
@@ -9,10 +14,13 @@ interface OverviewState {
   totalPaid: number;
   totalUnpaid: number;
   gettingSalaryStatus: boolean;
+  products: Product[];
+  gettingProducts: boolean;
 
   getTotalEmployees: () => void;
   getPresentEmployees: (date: string) => void;
   getSalaryStatus: (month: string) => void;
+  getProductsStock: () => void;
 }
 
 export const useOverviewStore = create<OverviewState>((set) => ({
@@ -23,7 +31,8 @@ export const useOverviewStore = create<OverviewState>((set) => ({
   totalPaid: 0,
   totalUnpaid: 0,
   gettingSalaryStatus: false,
-
+  products: [],
+  gettingProducts: false,
   //get total employees
   getTotalEmployees: async () => {
     set({ gettingTotalEmployees: true });
@@ -76,5 +85,18 @@ export const useOverviewStore = create<OverviewState>((set) => ({
       set({ gettingSalaryStatus: false });
     }
   },
-  
+
+  // get productrs stock
+  getProductsStock: async () => {
+    set({ gettingProducts: true });
+    try {
+      const response = await axiosInstance.get<{ data: Product[] }>("/overview/productsStock");
+      set({ products: response.data.data });
+    } catch (err) {
+      console.error("Failed to fetch products stock:", err);
+      set({ products: [] });
+    } finally {
+      set({ gettingProducts: false });
+    }
+  }
 }));
