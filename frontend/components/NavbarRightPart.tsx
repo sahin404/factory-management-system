@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Loader2Icon, LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
@@ -11,17 +11,18 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
-    const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-    const {logout, loggingOut} = useAuthStore();
-    const router = useRouter();
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const { logout, loggingOut } = useAuthStore();
+  const router = useRouter();
 
-    const handleLogout = async()=>{
-        await logout();
-        router.push('/login');
-        toast.success("Logged out successfully!");
-    }
-  
-    return (
+  const handleLogout = async () => {
+    await logout();
+    setIsLogoutOpen(false); 
+    router.push("/login"); 
+    toast.success("Logged out successfully!");
+  };
+
+  return (
     <div className="flex items-center gap-3">
       {/* dark mood */}
       <div>
@@ -61,14 +62,18 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
 
       {/* Logout button*/}
       <div>
-        <Button className="hover:cursor-pointer bg-red-600 hover:cursor-pointer hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700 text-white" onClick={()=>setIsLogoutOpen(true)} variant="destructive">
+        <Button
+          className="hover:cursor-pointer bg-red-600 hover:cursor-pointer hover:bg-red-700 dark:bg-red-800 dark:hover:bg-red-700 text-white"
+          onClick={() => setIsLogoutOpen(true)}
+          variant="destructive"
+        >
           {" "}
           <LogOut /> Logout
         </Button>
       </div>
 
       {/* Modal */}
-       <Modal
+      <Modal
         isOpen={isLogoutOpen}
         onClose={() => setIsLogoutOpen(false)}
         title="Confirm Logout"
@@ -107,14 +112,19 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
               Stay Logged In
             </Button>
             <Button
-            disabled={loggingOut}
+              disabled={loggingOut}
               onClick={handleLogout}
               variant="default"
               className="bg-orange-500 hover:bg-orange-600"
             >
-              {
-                loggingOut? <div className="flex items-center"> Loading <Loader2Icon className="animate-spin"></Loader2Icon> </div>:<div>Logout</div>
-              }
+              {loggingOut ? (
+                <div className="flex items-center">
+                  {" "}
+                  Loading <Loader2Icon className="animate-spin"></Loader2Icon>{" "}
+                </div>
+              ) : (
+                <div>Logout</div>
+              )}
             </Button>
           </div>
         </div>
