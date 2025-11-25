@@ -79,3 +79,26 @@ export const checkAuth = async(req:Request, res:Response)=>{
     console.log("No logged in user found!", err);
   }
 }
+
+// logout
+export const logoutController = async (req: Request, res: Response) => {
+  try {
+    // Clear the authToken cookie
+    res.clearCookie('authToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully!",
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+    console.log("Error occurred during logout", err);
+  }
+};
