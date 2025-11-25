@@ -6,6 +6,11 @@ interface Product {
   quantity: number;
 }
 
+interface SalesData {
+  count: number;
+  total: number;
+}
+
 interface OverviewState {
   totalEmployees: number;
   totalPresentEmployees: number;
@@ -17,10 +22,15 @@ interface OverviewState {
   products: Product[];
   gettingProducts: boolean;
 
+  salesToday: SalesData;
+  salesMonth: SalesData;
+  gettingSales: boolean;
+
   getTotalEmployees: () => void;
   getPresentEmployees: (date: string) => void;
   getSalaryStatus: (month: string) => void;
   getProductsStock: () => void;
+  getSales: () => void;
 }
 
 export const useOverviewStore = create<OverviewState>((set) => ({
@@ -33,6 +43,11 @@ export const useOverviewStore = create<OverviewState>((set) => ({
   gettingSalaryStatus: false,
   products: [],
   gettingProducts: false,
+
+  salesToday: { count: 0, total: 0 },
+  salesMonth: { count: 0, total: 0 },
+  gettingSales: false,
+
   //get total employees
   getTotalEmployees: async () => {
     set({ gettingTotalEmployees: true });
@@ -90,7 +105,9 @@ export const useOverviewStore = create<OverviewState>((set) => ({
   getProductsStock: async () => {
     set({ gettingProducts: true });
     try {
-      const response = await axiosInstance.get<{ data: Product[] }>("/overview/productsStock");
+      const response = await axiosInstance.get<{ data: Product[] }>(
+        "/overview/productsStock"
+      );
       set({ products: response.data.data });
     } catch (err) {
       console.error("Failed to fetch products stock:", err);
@@ -98,5 +115,30 @@ export const useOverviewStore = create<OverviewState>((set) => ({
     } finally {
       set({ gettingProducts: false });
     }
-  }
+  },
+
+   // get sales
+  getSales: async () => {
+    set({ gettingSales: true });
+    try {
+      const response = await axiosInstance.get<{
+        data: { today: SalesData; month: SalesData };
+      }>("/overview/getSales");
+
+      set({
+        salesToday: response.data.data.today,
+        salesMonth: response.data.data.month,
+      });
+    } catch (err) {
+      set({
+        salesToday: { count: 0, total: 0 },
+        salesMonth: { count: 0, total: 0 },
+      });
+      console.error("Failed to fetch sales", err);
+    } finally {
+      set({ gettingSales: false });
+    }
+  },
+
+  
 }));
