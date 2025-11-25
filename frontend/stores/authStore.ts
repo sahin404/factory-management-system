@@ -39,7 +39,7 @@ interface AuthState {
   login: (data: { email: string; password: string }) => Promise<void>;
   signup: (data: User) => Promise<SignupResponse | null>;
   //  signup: (data: User) => Promise<SignupResponse | null>;
-  //   logout: () => Promise<void>;
+  logout: () => Promise<any>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -105,6 +105,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return err?.response.data;
     } finally {
       set({ isSigningUp: false });
+    }
+  },
+
+  //logout
+  logout: async () => {
+    try {
+      const response = await axiosInstance.post<{data:any}>("/auth/logout");
+      set({ user: null });
+      toast.success("Logged out successfully!");
+      return response.data.data;
+    } catch (err: any) {
+      console.log(err.response?.data || err.message);
+      toast.error("Failed to logout!");
     }
   },
 }));

@@ -4,11 +4,14 @@ import { LogOut, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeSwitch } from "./ui/theme-switch";
+import { useAuthStore } from "@/stores/authStore";
 
 const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
     
+    const {logout} = useAuthStore();
+
     const handleLogout = ()=>{
-        console.log('hi');
+        logout();
     }
   
     return (
