@@ -16,8 +16,8 @@ export const useOverviewStore = create<OverviewState>((set)=>({
     getTotalEmployees: async()=>{
         set({gettingTotalEmployees:true})
         try{
-            const response = await axiosInstance.get<{data:{totalEmployee:number}}>('/overview/totalEmployee');
-            set({totalEmployees:response.data.data.totalEmployee});
+            const response = await axiosInstance.get<{data:number}>('/overview/totalEmployees');
+            set({totalEmployees:response.data.data});
         }
         catch(err:any){
 
