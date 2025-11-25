@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getPresentEmployees, getSalaryStatus, getTotalEmployees } from "./overview.service";
+import { getPresentEmployees, getProductsStock, getSalaryStatus, getTotalEmployees } from "./overview.service";
 
 // get total employees
 export const getTotalEmployeesController = async (
@@ -78,3 +78,21 @@ export const getSalaryStatusController=async(req:Request, res:Response)=>{
         });
     }
 }
+
+// get prodcuts stock
+export const getProductsStockController = async (req: Request, res: Response) => {
+  try {
+    const products = await getProductsStock();
+
+    return res.status(200).json({
+      success: true,
+      data: products
+    });
+  } catch (err) {
+    console.error("Failed to fetch products stock:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while fetching product stock"
+    });
+  }
+};

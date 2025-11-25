@@ -1,5 +1,6 @@
 import Attendance from "../attendance/attendance.model";
 import User from "../auth/auth.model"
+import Production from "../production/production.model";
 import Salary from "../salary/salary.model";
 
 // get total employees
@@ -28,4 +29,14 @@ export const getSalaryStatus = async(month:string)=>{
     const unpaidCount = total-1-paidCount;
 
     return {paidCount, unpaidCount};
+}
+
+// get products stock
+export const getProductsStock = async()=>{
+    const products = Production.find({},{
+        name:1,
+        quantity:1,
+        _id:0
+    });
+    return products;
 }
