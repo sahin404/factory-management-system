@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getPresentEmployees, getProductsStock, getSalaryStatus, getTotalEmployees } from "./overview.service";
+import { getPresentEmployees, getProductsStock, getSalaryStatus, getSales, getTotalEmployees } from "./overview.service";
 
 // get total employees
 export const getTotalEmployeesController = async (
@@ -93,6 +93,34 @@ export const getProductsStockController = async (req: Request, res: Response) =>
     return res.status(500).json({
       success: false,
       message: "Something went wrong while fetching product stock"
+    });
+  }
+};
+
+// get sales
+export const getSalesController = async (req: Request, res: Response) => {
+  try {
+    const { todaySales, monthSales } = await getSales();
+
+    // Count & total amount
+    const todayCount = todaySales.length;
+    const todayTotal = todaySales.reduce((acc, sale) => acc + sale.totalPrice, 0);
+
+    const monthCount = monthSales.length;
+    const monthTotal = monthSales.reduce((acc, sale) => acc + sale.totalPrice, 0);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        today: { count: todayCount, total: todayTotal },
+        month: { count: monthCount, total: monthTotal }
+      }
+    });
+  } catch (err) {
+    console.error("Failed to get sales:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch sales"
     });
   }
 };

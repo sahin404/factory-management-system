@@ -2,6 +2,7 @@ import Attendance from "../attendance/attendance.model";
 import User from "../auth/auth.model"
 import Production from "../production/production.model";
 import Salary from "../salary/salary.model";
+import Sale from "../sales/sales.model";
 
 // get total employees
 export const getTotalEmployees = async()=>{
@@ -40,3 +41,31 @@ export const getProductsStock = async()=>{
     });
     return products;
 }
+
+// get sales
+export const getSales = async () => {
+  const today = new Date();
+
+  // Start & end of today
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+  // Start & end of this month
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+
+  // Today sales
+  const todaySales = await Sale.find({
+    createdAt: { $gte: startOfDay, $lt: endOfDay }
+  });
+
+  // This month sales
+  const monthSales = await Sale.find({
+    createdAt: { $gte: startOfMonth, $lt: endOfMonth }
+  });
+
+  return {
+    todaySales,
+    monthSales
+  };
+};
