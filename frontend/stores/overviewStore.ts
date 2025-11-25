@@ -3,13 +3,18 @@ import {create} from 'zustand';
 
 interface OverviewState{
     totalEmployees: number;
+    totalPresentEmployees:number;
     gettingTotalEmployees:boolean;
+    gettingPresentEmployees:boolean;
 
     getTotalEmployees: ()=>void;
+    getPresentEmployees:(date:string)=>void;
 }
 
 export const useOverviewStore = create<OverviewState>((set)=>({
     totalEmployees:0,
+    totalPresentEmployees:0,
+    gettingPresentEmployees:false,
     gettingTotalEmployees:false,
 
     //get total employees
@@ -25,5 +30,20 @@ export const useOverviewStore = create<OverviewState>((set)=>({
         finally{
             set({gettingTotalEmployees:false})
         }
-    }
+    },
+
+    //get present employee
+     getPresentEmployees: async (date) => {
+        set({ gettingPresentEmployees: true });
+        try {
+            const response = await axiosInstance.get<{ data: number }>(`/overview/totalPresentEmployees/${date}`);
+            set({ totalPresentEmployees: response.data.data });
+        } catch (err) {
+            console.error("Failed to get present employees", err);
+            set({ totalPresentEmployees: 0 });
+        } finally {
+            set({ gettingPresentEmployees: false });
+        }
+    },
+
 }))
