@@ -11,6 +11,12 @@ interface SalesData {
   total: number;
 }
 
+interface ExpenseSummary {
+  totalCount: number;
+  totalAmount: number;
+}
+
+
 interface OverviewState {
   totalEmployees: number;
   totalPresentEmployees: number;
@@ -26,11 +32,15 @@ interface OverviewState {
   salesMonth: SalesData;
   gettingSales: boolean;
 
+  expenses: ExpenseSummary;
+  gettingExpenses: boolean;
+
   getTotalEmployees: () => void;
   getPresentEmployees: (date: string) => void;
   getSalaryStatus: (month: string) => void;
   getProductsStock: () => void;
   getSales: () => void;
+  getExpenses: () => void;
 }
 
 export const useOverviewStore = create<OverviewState>((set) => ({
@@ -47,6 +57,9 @@ export const useOverviewStore = create<OverviewState>((set) => ({
   salesToday: { count: 0, total: 0 },
   salesMonth: { count: 0, total: 0 },
   gettingSales: false,
+
+  expenses: { totalCount: 0, totalAmount: 0 },
+  gettingExpenses: false,
 
   //get total employees
   getTotalEmployees: async () => {
@@ -140,5 +153,18 @@ export const useOverviewStore = create<OverviewState>((set) => ({
     }
   },
 
-  
+  // get expenses
+   getExpenses: async () => {
+    set({ gettingExpenses: true });
+    try {
+      const response = await axiosInstance.get<{ data: ExpenseSummary }>("/overview/expenses");
+      set({ expenses: response.data.data });
+    } catch (err) {
+      console.error("Failed to fetch expenses:", err);
+      set({ expenses: { totalCount: 0, totalAmount: 0 } });
+    } finally {
+      set({ gettingExpenses: false });
+    }
+  },
+
 }));

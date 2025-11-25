@@ -1,4 +1,3 @@
-import ChartCard from "@/components/overviewPage/ChartCard"
 import MonthExpenseCard from "@/components/overviewPage/MonthExpenseCard"
 import MonthSales from "@/components/overviewPage/MonthSales"
 import PendingSalaryCard from "@/components/overviewPage/PendingSalaryCard"
@@ -32,12 +31,6 @@ const adminPage = () => {
       <div>
         <MonthExpenseCard></MonthExpenseCard>
       </div>
-
-      {/* Row 5 */}
-      <div>
-        <ChartCard></ChartCard>
-      </div>
-
     </div>
   )
 }
