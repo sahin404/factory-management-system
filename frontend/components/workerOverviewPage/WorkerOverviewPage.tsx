@@ -30,7 +30,7 @@ const WorkerOverviewPage = () => {
     if (!user && !isLoading) checkCurrentUser();
   }, [user, isLoading, checkCurrentUser]);
 
-  if (isLoading) return <WorkerOverviewSkeleton></WorkerOverviewSkeleton>
+  if (isLoading) return <WorkerOverviewSkeleton />;
   if (!user) return null;
 
   const formattedDate = new Date(user.createdAt).toLocaleDateString("en-US", {
@@ -46,9 +46,9 @@ const WorkerOverviewPage = () => {
   }).format(user.salary);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-start justify-center pt-12 p-6">
-      <div className="w-full max-w-md bg-white rounded-xl border border-gray-200 shadow-sm p-6">
- 
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-start justify-center pt-12 p-6">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+        
         <div className="flex flex-col items-center mb-6">
           <div className="relative">
             <Image
@@ -56,19 +56,18 @@ const WorkerOverviewPage = () => {
               alt={user.name}
               width={96}
               height={96}
-              className="w-24 h-24 rounded-full object-cover"
+              className="w-24 h-24 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
             />
             {user.isActive && (
               <BadgeCheck className="absolute bottom-0 right-0 w-6 h-6 text-green-500" />
             )}
           </div>
-          <h2 className="mt-3 text-2xl font-semibold">{user.name}</h2>
-          <span className="px-3 py-1 mt-1 rounded-full bg-gray-100 text-gray-800 text-xs capitalize">
+          <h2 className="mt-3 text-2xl font-semibold text-gray-900 dark:text-gray-100">{user.name}</h2>
+          <span className="px-3 py-1 mt-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs capitalize">
             {user.role}
           </span>
         </div>
 
-        {/* Profile Details */}
         <div className="space-y-4">
           <Detail label="Email" value={user.email} />
           <Detail label="Employee ID" value={user.employeeId} />
@@ -81,11 +80,10 @@ const WorkerOverviewPage = () => {
   );
 };
 
-// Simple Detail Row
 const Detail = ({ label, value }: { label: string; value: string | number }) => (
-  <div className="flex justify-between p-2 border-b border-gray-100 last:border-none">
-    <span className="text-gray-500 text-sm">{label}</span>
-    <span className="text-gray-700 font-medium">{value}</span>
+  <div className="flex justify-between p-2 border-b border-gray-100 dark:border-gray-700 last:border-none">
+    <span className="text-gray-500 dark:text-gray-400 text-sm">{label}</span>
+    <span className="text-gray-700 dark:text-gray-100 font-medium">{value}</span>
   </div>
 );
 
