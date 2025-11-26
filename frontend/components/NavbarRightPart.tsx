@@ -115,7 +115,7 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
               disabled={loggingOut}
               onClick={handleLogout}
               variant="default"
-              className="bg-orange-500 hover:bg-orange-600"
+              className="bg-orange-500 hover:cursor-pointer hover:bg-orange-600"
             >
               {loggingOut ? (
                 <div className="flex items-center">
