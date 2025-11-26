@@ -6,14 +6,13 @@ import {
   updateEmployeeController,
 } from './employee.controller';
 import { verifyToken } from '../../middlewares/auth.middleware';
-import { verifyAdmin } from '../../middlewares/adminVerify.middlware';
-import { verifyManager } from '../../middlewares/managerVerify.middleware';
+import { verifyRoles } from '../../middlewares/verifyRoles.middleware';
 
 const router = express.Router();
 
-router.get('/', verifyToken, verifyAdmin, verifyManager, getAllEmployeeController);
-router.get('/:id', verifyToken, verifyAdmin, verifyManager, getSingleEmployeeController);
-router.delete('/:id',verifyToken, verifyAdmin, verifyManager, deleteEmployeeController);
-router.put('/:id',verifyToken, verifyAdmin, verifyManager, updateEmployeeController);
+router.get('/', verifyToken, verifyRoles("admin", "manager"), getAllEmployeeController);
+router.get('/:id', verifyToken, verifyRoles("admin", "manager"), getSingleEmployeeController);
+router.delete('/:id',verifyToken, verifyRoles("admin", "manager"), deleteEmployeeController);
+router.put('/:id',verifyToken, verifyRoles("admin", "manager"), updateEmployeeController);
 
 export default router;

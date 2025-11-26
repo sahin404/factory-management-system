@@ -1,15 +1,14 @@
 import express from 'express';
 import { addSalesController, deleteSalesController, getAllSalesController } from './sales.controller';
-import { verifyManager } from '../../middlewares/managerVerify.middleware';
-import { verifyAdmin } from '../../middlewares/adminVerify.middlware';
 import { verifyToken } from '../../middlewares/auth.middleware';
+import { verifyRoles } from '../../middlewares/verifyRoles.middleware';
 
 const salesRouter = express.Router();
 
 
-salesRouter.get('/',  verifyToken, verifyAdmin, verifyManager, getAllSalesController);
-salesRouter.post('/add', verifyToken, verifyAdmin, verifyManager, addSalesController);
-salesRouter.delete('/:id', verifyToken, verifyAdmin, verifyManager, deleteSalesController);
+salesRouter.get('/',  verifyToken, verifyRoles("admin", "manager"), getAllSalesController);
+salesRouter.post('/add', verifyToken, verifyRoles("admin", "manager"), addSalesController);
+salesRouter.delete('/:id', verifyToken, verifyRoles("admin", "manager"), deleteSalesController);
 
 
 export default salesRouter;

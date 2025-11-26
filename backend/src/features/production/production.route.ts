@@ -1,16 +1,15 @@
 import express from "express";
 import { addProductController, deleteProductByIdController, getProductByIdController, getProductController, updateAllFieldsController, updateProductQuantityController} from "./production.controller";
 import { verifyToken } from "../../middlewares/auth.middleware";
-import { verifyAdmin } from "../../middlewares/adminVerify.middlware";
-import { verifyManager } from "../../middlewares/managerVerify.middleware";
+import { verifyRoles } from "../../middlewares/verifyRoles.middleware";
 
 const productRouter = express.Router();
 
-productRouter.get("/", verifyToken, verifyAdmin, verifyManager, getProductController);
-productRouter.get("/:id", verifyToken, verifyAdmin, verifyManager, getProductByIdController);
-productRouter.patch("/:id", verifyToken, verifyAdmin, verifyManager, updateProductQuantityController);
-productRouter.put("/:id", verifyToken, verifyAdmin, verifyManager, updateAllFieldsController);
-productRouter.delete("/:id", verifyToken, verifyAdmin, verifyManager, deleteProductByIdController);
-productRouter.post("/", verifyToken, verifyAdmin, verifyManager, addProductController);
+productRouter.get("/", verifyToken, verifyRoles("admin", "manager"), getProductController);
+productRouter.get("/:id", verifyToken, verifyRoles("admin", "manager"), getProductByIdController);
+productRouter.patch("/:id", verifyToken, verifyRoles("admin", "manager"), updateProductQuantityController);
+productRouter.put("/:id", verifyToken, verifyRoles("admin", "manager"), updateAllFieldsController);
+productRouter.delete("/:id", verifyToken, verifyRoles("admin", "manager"), deleteProductByIdController);
+productRouter.post("/", verifyToken, verifyRoles("admin", "manager"), addProductController);
 
 export default productRouter;

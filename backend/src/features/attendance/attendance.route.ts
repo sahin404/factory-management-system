@@ -1,12 +1,11 @@
 import { Router } from "express";
 import { getAttendanceController, updateAttendanceController } from "./attendance.controller";
-import { verifyManager } from "../../middlewares/managerVerify.middleware";
-import { verifyAdmin } from "../../middlewares/adminVerify.middlware";
 import { verifyToken } from "../../middlewares/auth.middleware";
+import { verifyRoles } from "../../middlewares/verifyRoles.middleware";
 
 const attendanceRouter = Router();
 
-attendanceRouter.get("/", verifyToken, verifyAdmin, verifyManager, getAttendanceController);
-attendanceRouter.post("/update",verifyToken, verifyAdmin, verifyManager, updateAttendanceController);
+attendanceRouter.get("/", verifyToken, verifyRoles("admin", "manager"), getAttendanceController);
+attendanceRouter.post("/update",verifyToken, verifyRoles("admin", "manager"), updateAttendanceController);
 
 export default attendanceRouter;

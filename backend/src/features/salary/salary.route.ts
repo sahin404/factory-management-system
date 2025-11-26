@@ -1,13 +1,12 @@
 import express from "express";
 import { addSalaryController, getSalaryController } from "./salary.controller";
 import { verifyToken } from "../../middlewares/auth.middleware";
-import { verifyAdmin } from "../../middlewares/adminVerify.middlware";
-import { verifyAccountant } from "../../middlewares/accountantVerify.middleware";
+import { verifyRoles } from "../../middlewares/verifyRoles.middleware";
 
 const salaryRouter = express.Router();
 
-salaryRouter.post("/", verifyToken, verifyAdmin, verifyAccountant, addSalaryController);
-salaryRouter.get("/",  verifyToken, verifyAdmin, verifyAccountant, getSalaryController);
+salaryRouter.post("/", verifyToken, verifyRoles("admin", "accountant"), addSalaryController);
+salaryRouter.get("/",  verifyToken, verifyRoles("admin", "accountant"), getSalaryController);
 
 
 export default salaryRouter;
