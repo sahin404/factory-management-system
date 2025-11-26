@@ -108,7 +108,7 @@ const NavbarRightPart = ({ name, image }: { name: string; image: string }) => {
           </div>
 
           <div className="flex justify-end space-x-3">
-            <Button onClick={() => setIsLogoutOpen(false)} variant="secondary">
+            <Button className="hover:cursor-pointer" onClick={() => setIsLogoutOpen(false)} variant="secondary">
               Stay Logged In
             </Button>
             <Button

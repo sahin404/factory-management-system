@@ -1,8 +1,12 @@
 
+import WorkerOverviewPage from "@/components/workerOverviewPage/WorkerOverviewPage"
+import { useAuthStore } from "@/stores/authStore"
+
 const workerPage = () => {
+  
   return (
     <div>
-        WorkerPage
+        <WorkerOverviewPage></WorkerOverviewPage>
     </div>
   )
 }
