@@ -21,15 +21,44 @@ interface AttendanceTableProps {
   currentPage: number;
 }
 
+// get local date
+const getLocalISODate = (): string => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 const AttendanceTable = ({ searchTerm, currentPage }: AttendanceTableProps) => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [pageChanging, setPageChanging] = useState(false);
-  
-  // Get today
-  const today = new Date().toISOString().split("T")[0];
+  const [today, setToday] = useState(getLocalISODate());
 
   const { attendances, isLoading, getAllAttendance, updateAttendance } =
     useAttendanceStore();
+
+  // automatic date update after 12am
+  useEffect(() => {
+    const now = new Date();
+    const nextDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1
+    );
+    const timeUntilMidnight = nextDay.getTime() - now.getTime() + 1000;
+
+    const timeoutId = setTimeout(() => {
+      setToday(getLocalISODate());
+      const intervalId = setInterval(() => {
+        setToday(getLocalISODate());
+      }, 60000);
+      return () => clearInterval(intervalId);
+    }, timeUntilMidnight);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   // Debounced fetch for attendance data
   const debouncedGetAttendance = useCallback(
