@@ -55,7 +55,7 @@ const Sidebar = () => {
   ];
 
   const WorkerMenus: MenuItem[] = [
-    { id: 1, name: "Overview", link: "/dashboard/overview/employee", icon: Home },
+    { id: 1, name: "Overview", link: "/dashboard/overview/worker", icon: Home },
   ];
 
   // Choose menus based on role
