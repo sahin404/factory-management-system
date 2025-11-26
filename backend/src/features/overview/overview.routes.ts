@@ -1,13 +1,14 @@
 import {Router} from 'express'
 import { getExpensesController, getPresentEmployeesController, getProductsStockController, getSalaryStatusController, getSalesController, getTotalEmployeesController } from './overview.controller';
+import { verifyToken } from '../../middlewares/auth.middleware';
 
 const overviewRouter = Router();
 
-overviewRouter.get('/totalEmployees', getTotalEmployeesController); 
-overviewRouter.get('/totalPresentEmployees/:date', getPresentEmployeesController);
-overviewRouter.get('/salaryStatus/:month', getSalaryStatusController);
-overviewRouter.get('/productsStock', getProductsStockController);
-overviewRouter.get("/getSales", getSalesController);
-overviewRouter.get("/expenses", getExpensesController);
+overviewRouter.get('/totalEmployees', verifyToken,  getTotalEmployeesController); 
+overviewRouter.get('/totalPresentEmployees/:date', verifyToken, getPresentEmployeesController);
+overviewRouter.get('/salaryStatus/:month', verifyToken, getSalaryStatusController);
+overviewRouter.get('/productsStock', verifyToken, getProductsStockController);
+overviewRouter.get("/getSales", verifyToken, getSalesController);
+overviewRouter.get("/expenses", verifyToken, getExpensesController);
 
 export default overviewRouter;
