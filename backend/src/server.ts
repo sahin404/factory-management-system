@@ -40,5 +40,5 @@ app.get('/', (req,res)=>{
 const port = process.env.PORT || 5000;
 app.listen(port, async()=>{
     await dbConncet();
-    console.log('Server running at port', port);
+    console.log('Server running at port:', port);
 })
