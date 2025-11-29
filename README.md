@@ -20,7 +20,7 @@ The architecture enforces strict **Role-Based Access Control**, ensuring that on
 
 | Type | Link |
 | :--- | :--- |
-| **Live Demonstration** | [Watch Demo Video](https://www.youtube.com/watch?v=dQw4w9WgXcQ) |
+| **Live Demonstration** | [Watch Demo Video](#) |
 | **Detailed Requirements** | [Functional Requirements Document](https://docs.google.com/document/d/1SSkYHOlTGhLmE5sCAMOAN-nuqd0IuU1FkTonvQ0SfmA/edit?tab=t.0) |
 | **Source Code Repository** | [GitHub Repository](https://github.com/sahin404/factory-management-system) |
 
