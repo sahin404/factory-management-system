@@ -89,7 +89,7 @@ You must have the following software installed on your machine:
 
 ---
 
-## API Endpoints Reference
+## API Endpoints
 
 The backend implements protected routes using `verifyToken` (JWT Authentication) and `verifyRoles` (Role-Based Authorization), ensuring security and adherence to the defined requirements.
 
