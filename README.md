@@ -53,12 +53,12 @@ You must have the following software installed on your machine:
 
 ### 1. Backend Setup (API Server)
 
-1.  **Clone the Repository**
+1. **Clone the Repository**
     ```bash
     git clone https://github.com/sahin404/factory-management-system
     ```
 
-2.  **Configure Environment Variables**
+2. **Configure Environment Variables**
 
     Navigate to the `backend` directory and create a file named **`.env`** inside this folder. Add the following configuration:
 
@@ -69,7 +69,7 @@ You must have the following software installed on your machine:
     NODE_ENV=development
     ```
 
-3.  **Run the Backend**
+3. **Run the Backend**
     ```bash
     cd backend
     npm install
@@ -79,13 +79,26 @@ You must have the following software installed on your machine:
 
 ### 2. Frontend Setup (Client Application)
 
-1.  **Run the Frontend**
+1. **Run the Frontend**
     ```bash
     cd frontend
     npm install
     npm run dev
     ```
     The frontend application will typically run on a separate port (e.g., `http://localhost:3001`).
+
+---
+
+## Login Credentials (After Running the Project)
+
+Use the following test accounts to access the system:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | admin@gmail.com | 12345678 |
+| **Manager** | manager@gmail.com | 12345678 |
+| **Accountant** | accountant@gmail.com | 12345678 |
+| **Worker** | worker@gmail.com | 12345678 |
 
 ---
 
@@ -97,7 +110,7 @@ The backend implements protected routes using `verifyToken` (JWT Authentication)
 
 | Module | Method | Endpoint | Access Roles | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Auth** | `POST` | `/api/auth/signup` | Admin/Manager for new account creation) | Register a new user. |
+| **Auth** | `POST` | `/api/auth/signup` | Admin/Manager | Register a new user. |
 | **Auth** | `POST` | `/api/auth/login` | Public | Authenticate and receive JWT. |
 | **Auth** | `GET` | `/api/auth/me` | All (Authenticated) | Get current user's details. |
 | **Auth** | `POST` | `/api/auth/logout` | All (Authenticated) | Log out the user. |
@@ -121,10 +134,10 @@ The backend implements protected routes using `verifyToken` (JWT Authentication)
 | **Production**| `GET` | `/api/product` | Admin, Manager | Get all products (with search/pagination). |
 | **Production**| `GET` | `/api/product/:id` | Admin, Manager | Get single product by ID. |
 | **Production**| `PATCH` | `/api/product/:id` | Admin, Manager | Update product quantity/stock. |
-| **Production**| `PUT` | `/api/product/:id` | Admin, Manager | Update all product fields (price, details). |
+| **Production**| `PUT` | `/api/product/:id` | Admin, Manager | Update all product fields. |
 | **Production**| `DELETE` | `/api/product/:id` | Admin, Manager | Delete a product. |
 | **Sales** | `POST` | `/api/sales/add` | Admin, Manager | Record a new sales transaction. |
-| **Sales** | `GET` | `/api/sales` | Admin, Manager | View all sales records (with reports). |
+| **Sales** | `GET` | `/api/sales` | Admin, Manager | View all sales records. |
 | **Sales** | `DELETE` | `/api/sales/:id` | Admin, Manager | Delete a sales record. |
 
 ### Financials (`/api/expense`, `/api/salary`)
@@ -132,7 +145,7 @@ The backend implements protected routes using `verifyToken` (JWT Authentication)
 | Module | Method | Endpoint | Access Roles | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **Expense** | `POST` | `/api/expense` | Admin, Accountant | Add a new expense entry. |
-| **Expense** | `GET` | `/api/expense` | Admin, Accountant | Get all expenses (with filtering/sorting). |
+| **Expense** | `GET` | `/api/expense` | Admin, Accountant | Get all expenses. |
 | **Expense** | `DELETE` | `/api/expense/:id` | Admin, Accountant | Delete an expense entry. |
 | **Salary** | `POST` | `/api/salary` | Admin, Accountant | Set employee salary as paid/unpaid. |
 | **Salary** | `GET` | `/api/salary` | Admin, Accountant | Get salary processing list. |
@@ -141,18 +154,16 @@ The backend implements protected routes using `verifyToken` (JWT Authentication)
 
 | Module | Method | Endpoint | Access Roles | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Overview** | `GET` | `/api/overview/totalEmployees` | All (Authenticated) | Get total number of employees. |
-| **Overview** | `GET` | `/api/overview/totalPresentEmployees/:date` | All (Authenticated) | Get total employees present on a specific date. |
-| **Overview** | `GET` | `/api/overview/salaryStatus/:month` | All (Authenticated) | Get salary payment status for a given month. |
-| **Overview** | `GET` | `/api/overview/productsStock` | All (Authenticated) | Get a summary of product stock levels. |
-| **Overview** | `GET` | `/api/overview/getSales` | All (Authenticated) | Get summary sales data. |
-| **Overview** | `GET` | `/api/overview/expenses` | All (Authenticated) | Get summary expense data. |
+| **Overview** | `GET` | `/api/overview/totalEmployees` | All | Get total number of employees. |
+| **Overview** | `GET` | `/api/overview/totalPresentEmployees/:date` | All | Get total employees present for a date. |
+| **Overview** | `GET` | `/api/overview/salaryStatus/:month` | All | Get salary status for a month. |
+| **Overview** | `GET` | `/api/overview/productsStock` | All | Get product stock summary. |
+| **Overview** | `GET` | `/api/overview/getSales` | All | Get summary sales data. |
+| **Overview** | `GET` | `/api/overview/expenses` | All | Get summary expense data. |
 
 ---
 
 ## Screenshots
-
-The following are visual glimpses of the application's key screens.
 
 ### 1. Login Screen
 ![Login Page](https://github.com/sahin404/factory-management-system/blob/main/frontend/public/sample0.png?raw=true)
@@ -162,13 +173,12 @@ The following are visual glimpses of the application's key screens.
 
 ---
 
-> **Note:** The images above provide a brief glimpse of the **Login Screen** and the **Admin Dashboard** overview. To see the live functionalities of the **Attendance Module**, **Production & Sales** flow, and other detailed views, please watch the full demonstration video: [Watch Demo Video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+> **Note:** The images above provide a brief glimpse of the **Login Screen** and **Admin Dashboard**. To see the full functionalities of the system, please watch the complete demonstration video:  
+> 👉 [Watch Demo Video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 ---
 
 ## Contact and Author
-
-This project was developed by:
 
 | Detail | Information |
 | :--- | :--- |
