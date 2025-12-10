@@ -20,7 +20,7 @@ The architecture enforces strict **Role-Based Access Control**, ensuring that on
 
 | Type | Link |
 | :--- | :--- |
-| **Live Demonstration** | [Watch Demo Video](#) |
+| **Live Demonstration** | [Watch Demo Video](https://drive.google.com/file/d/1rX5WYQVxJQ6yJ6ckYFpTFudsqIYyIHDo/view?usp=drive_link) |
 | **Detailed Requirements** | [Functional Requirements Document](https://docs.google.com/document/d/1SSkYHOlTGhLmE5sCAMOAN-nuqd0IuU1FkTonvQ0SfmA/edit?tab=t.0) |
 | **Source Code Repository** | [GitHub Repository](https://github.com/sahin404/factory-management-system) |
 
@@ -174,7 +174,7 @@ The backend implements protected routes using `verifyToken` (JWT Authentication)
 ---
 
 > **Note:** The images above provide a brief glimpse of the **Login Screen** and **Admin Dashboard**. To see the full functionalities of the system, please watch the complete demonstration video:  
-> 👉 [Watch Demo Video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+> 👉 [Watch Demo Video](https://drive.google.com/file/d/1rX5WYQVxJQ6yJ6ckYFpTFudsqIYyIHDo/view?usp=drive_link)
 
 ---
 
